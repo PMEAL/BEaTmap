@@ -9,14 +9,14 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 import seaborn as sns
-import util
+from beatmap import utils as util
 
 def experimental_data_plot(df, file_name):
     """Creates a scatter plot of experimental data.
 
     Typical isotherm presentation where
     x-axis is relative pressure, y-axis is specific amount adsorbed.
-    
+
     Parameters
     __________
     df : dataframe
@@ -24,7 +24,7 @@ def experimental_data_plot(df, file_name):
 
     file_name : str
         file name used to import .csv data, this function uses it to name the output .png file
-        
+
     Returns
     _______
     none
@@ -52,7 +52,7 @@ def experimental_data_1stderiv_plot(df, file_name):
     dn/drelp, computed from experimental data
     x-axis is relative pressure, y-axis is dndrelp
     this plot is to aid in isotherm type identification
-    
+
     Parameters
     __________
     df : dataframe
@@ -60,7 +60,7 @@ def experimental_data_1stderiv_plot(df, file_name):
 
     file_name : str
         file name used to import .csv data, this function uses it to name the output .png file
-        
+
     Returns
     _______
     none
@@ -84,7 +84,7 @@ def ssa_heatmap(df, sa, file_name, gradient = 'Greens'):
     """Creates a heatmap of specific surface areas.
 
     Shading corresponds to specific surface area, normalized for the minimum and maximum spec sa values.
-    
+
     Parameters
     __________
     df : dataframe
@@ -96,7 +96,7 @@ def ssa_heatmap(df, sa, file_name, gradient = 'Greens'):
 
     file_name : str
         file name used to import .csv data, this function uses it to name the output .png file
-        
+
     Returns
     _______
     none
@@ -105,11 +105,11 @@ def ssa_heatmap(df, sa, file_name, gradient = 'Greens'):
     *CHANGE OUTPUT LOC BEFORE PACKAGING?!*
 
     """
-    
+
     if np.any(sa) == False:
         print('No valid relative pressure ranges. Specific surface area heat map not created.')
         return
-    
+
     # finding max and min sa to normalize heatmap colours
     samax, sa_max_idx, samin, sa_min_idx = util.max_min(sa)
     hm_labels = round(df.relp * 100, 1)
@@ -122,7 +122,7 @@ def ssa_heatmap(df, sa, file_name, gradient = 'Greens'):
     plt.xticks(rotation=45, horizontalalignment='right')
     plt.xlabel('Start Relative Pressure')
     plt.yticks(rotation=45, horizontalalignment='right')
-    plt.ylabel('End Relative Pressure') 
+    plt.ylabel('End Relative Pressure')
     fig.savefig('ssa_heatmap_%s.png' % (file_name[:-4]), bbox_inches='tight')
     print('Specific surface area heatmap saved as: ssa_heatmap_%s.png' % (file_name[:-4]))
     return
@@ -133,7 +133,7 @@ def theta_heatmap(df, theta, file_name, gradient = 'PiYG', center = 1):
 
     Shading corresponds to theta, normalized for the minimum and maximum theta values, 0 = white
     Can be used to explore correlation between theta in BET analysis and BET specific surface area
-    
+
     Parameters
     __________
     df : dataframe
@@ -145,7 +145,7 @@ def theta_heatmap(df, theta, file_name, gradient = 'PiYG', center = 1):
 
     file_name : str
         file name used to import .csv data, this function uses it to name the output .png file
-        
+
     Returns
     _______
     none
@@ -154,11 +154,11 @@ def theta_heatmap(df, theta, file_name, gradient = 'PiYG', center = 1):
     *CHANGE OUTPUT LOC BEFORE PACKAGING?!*
 
     """
-    
+
     if np.any(theta) == False:
         print('No valid relative pressure ranges. Theta heat map not created.')
         return
-    
+
     thetamax, theta_max_idx, thetamin, theta_min_idx = util.max_min(theta)
     hm_labels = round(df.relp * 100, 1)
     fig, (ax) = plt.subplots(1, 1, figsize=(13, 13))
@@ -181,7 +181,7 @@ def err_heatmap(df, err, file_name, gradient = 'Greys'):
 
     Shading corresponds to theta, normalized for the minimum and maximum theta values, 0 = white
     Can be used to explore correlation between error in BET analysis and BET specific surface area
-    
+
     Parameters
     __________
     df : dataframe
@@ -193,7 +193,7 @@ def err_heatmap(df, err, file_name, gradient = 'Greys'):
 
     file_name : str
         file name used to import .csv data, this function uses it to name the output .png file
-        
+
     Returns
     _______
     none
@@ -202,11 +202,11 @@ def err_heatmap(df, err, file_name, gradient = 'Greys'):
     *CHANGE OUTPUT LOC BEFORE PACKAGING?!*
 
     """
-    
+
     if np.any(err) == False:
         print('No valid relative pressure ranges. Error heat map not created.')
         return
-    
+
     errormax, error_max_idx, errormin, error_min_idx = util.max_min(err)
 
     hm_labels = round(df.relp * 100, 1)
@@ -223,14 +223,14 @@ def err_heatmap(df, err, file_name, gradient = 'Greys'):
     fig.savefig('error_heatmap_%s.png' % (file_name[:-4]), bbox_inches='tight')
     print('Error heatmap saved as: error_heatmap_%s.png' % (file_name[:-4]))
     return
-    
-    
+
+
 def diff_heatmap(df, diff, file_name, gradient = 'PuOr', center = 0):
     """Creates a heatmap of error values.
 
     Shading corresponds to theta, normalized for the minimum and maximum theta values, 0 = white
     Can be used to explore correlation between error in BET analysis and BET specific surface area
-    
+
     Parameters
     __________
     df : dataframe
@@ -242,7 +242,7 @@ def diff_heatmap(df, diff, file_name, gradient = 'PuOr', center = 0):
 
     file_name : str
         file name used to import .csv data, this function uses it to name the output .png file
-        
+
     Returns
     _______
     none
@@ -253,7 +253,7 @@ def diff_heatmap(df, diff, file_name, gradient = 'PuOr', center = 0):
     if np.any(diff) == False:
         print('No valid relative pressure ranges. Difference heat map not created.')
         return
-    
+
     diffmax, diff_max_idx, diffmin, diff_min_idx = util.max_min(diff)
 
     hm_labels = round(df.relp * 100, 1)
@@ -270,7 +270,7 @@ def diff_heatmap(df, diff, file_name, gradient = 'PuOr', center = 0):
     fig.savefig('diff_heatmap_%s.png' % (file_name[:-4]), bbox_inches='tight')
     print('Difference heatmap saved as: diff_heatmap_%s.png' % (file_name[:-4]))
     return
-    
+
 
 def bet_combo_plot(c, err, df, file_name): #requires masked c and error array
     """Creates two BET plots, for the minimum and maxium error data sets.
@@ -279,7 +279,7 @@ def bet_combo_plot(c, err, df, file_name): #requires masked c and error array
     Line is fit using scipy.stats.linregress
     Equation for best fit line and corresponding R value are annotated on plots
     Image is 2 by 1, two BET plots arranged horizontally in one image
-    
+
     Parameters
     __________
     c : array
@@ -297,7 +297,7 @@ def bet_combo_plot(c, err, df, file_name): #requires masked c and error array
 
     file_name : str
         file name used to import .csv data, this function uses it to name the output .png file
-        
+
     Returns
     _______
     none
@@ -306,11 +306,11 @@ def bet_combo_plot(c, err, df, file_name): #requires masked c and error array
     *CHANGE OUTPUT LOC BEFORE PACKAGING?!*
 
     """
-    
+
     if np.any(err) == False:
         print('No valid relative pressure ranges. BET combo plot not created.')
         return
-    
+
     err_max, err_max_idx, err_min, err_min_idx = util.max_min(err)
 
     min_start = int(err_min_idx[1])
@@ -329,7 +329,7 @@ def bet_combo_plot(c, err, df, file_name): #requires masked c and error array
     min_linex[1] = df.relp[min_stop] + .01
 
     figure, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10))
-    
+
     ax1.set_title('BET Plot - Data Points for Minimum Error C')
     ax1.set_xlim(min_linex[0]-.01, min_linex[1]+.01)
     ax1.set_ylabel('1/[n(1-Po/P)]')
@@ -368,7 +368,7 @@ def bet_combo_plot(c, err, df, file_name): #requires masked c and error array
     ax2.annotate('Linear Regression: \nm = %.3f \nb = %.3f \nR = %.3f'
                  % (slope, intercept, r_value),
                  bbox=dict(boxstyle="round", fc='white', ec="gray", alpha=1),
-                 textcoords='axes fraction', xytext=(.775, .018), 
+                 textcoords='axes fraction', xytext=(.775, .018),
                  xy=(df.relp[max_stop], df.bet[max_start + 1]), size=11)
     figure.savefig('betplot_%s.png' % (file_name[:-4]), bbox_inches='tight')
     print('BET plot saved as: betplot_%s.png' % (file_name[:-4]))
@@ -387,7 +387,7 @@ def bet_iso_combo_plot(c, err, sa, nm, df, file_name): #requires masked c, err, 
     Line is fit using scipy.stats.linregress
     Equation for best fit line and corresponding R value are annotated on plots
     See documentation for more information on this plot.
-    
+
     Parameters
     __________
     c : array
@@ -399,7 +399,7 @@ def bet_iso_combo_plot(c, err, sa, nm, df, file_name): #requires masked c, err, 
         array of error values, resulting from BET analysis
         this array should have masks applied to it
         if the array is masked only the valid relative pressure ranges will be considered
-        
+
     nm : array
         array of monolayer adsorbed amount, resulting from BET analysis
         this array should have masks applied to it
@@ -410,7 +410,7 @@ def bet_iso_combo_plot(c, err, sa, nm, df, file_name): #requires masked c, err, 
 
     file_name : str
         file name used to import .csv data, this function uses it to name the output .png file
-        
+
     Returns
     _______
     none
@@ -419,11 +419,11 @@ def bet_iso_combo_plot(c, err, sa, nm, df, file_name): #requires masked c, err, 
     *CHANGE OUTPUT LOC BEFORE PACKAGING?!*
 
     """
-    
+
     if np.any(err) == False:
         print('No valid relative pressure ranges. BET isotherm combo plot not created.')
         return
-    
+
     err_max, err_max_idx, err_min, err_min_idx = util.max_min(err)
     c_max_err = c[err_max_idx[0], err_max_idx[1]]
     c_min_err = c[err_min_idx[0], err_min_idx[1]]
@@ -488,13 +488,13 @@ def bet_iso_combo_plot(c, err, sa, nm, df, file_name): #requires masked c, err, 
     ax2.plot(df.relp, expnnm_max, c='grey', fillstyle='none',
              label='Experimental isotherm', marker='o', linewidth=0)
     ax2.plot([-.05, 1.05], [1, 1], c='grey', linestyle='-', linewidth=1, marker = '')
-    
+
     min_start = int(err_min_idx[1])
     min_stop = int(err_min_idx[0])
     max_start = int(err_max_idx[1])
     max_stop = int(err_max_idx[0])
-    
-    
+
+
     slope, intercept, r_value, p_value, std_err = \
         sp.stats.linregress(df.relp[min_start: min_stop],
                             df.bet[min_start: min_stop])

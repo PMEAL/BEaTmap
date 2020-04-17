@@ -9,7 +9,7 @@ Created on Wed May  8 11:46:59 2019
 
 from prettytable import PrettyTable
 import numpy as np
-import util
+from beatmap import utils as util
 
 
 def ascii_tables(c, sa, err, df):
@@ -28,24 +28,24 @@ def ascii_tables(c, sa, err, df):
 
     df : dataframe
         dataframe of imported isotherm
-        
+
     Returns
     _______
     none
-        
+
     """
-    
+
     sa = np.nan_to_num(sa)
-    
+
     if np.any(sa) == False:
         print('No valid relative pressure ranges. ASCII tables not created.')
         return
-    
+
     c = np.nan_to_num(c)
-    
+
     samax, sa_max_idx, samin, sa_min_idx = util.max_min(sa)
     cmax, c_max_idx, cmin, c_min_idx = util.max_min(c)
-    
+
     samean = util.mean_ignore0(sa)
     samedian = util.median_ignore0(sa)
     cmean = util.mean_ignore0(c)

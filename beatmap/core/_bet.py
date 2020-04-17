@@ -8,47 +8,47 @@ Created on Wed May  8 11:05:19 2019
 
 import numpy as np
 import scipy as sp
-import util
+import beatmap.utils as util
 
 avagadro = 6.022*10**23 #used in functions
 
 def bet(df, a_o):
     """Performs BET analysis on an isotherm data set for all relative pressure ranges.
     This is the meat and potatoes of the whole package.
-    
+
     Parameters
     ----------
     df : dataframe
         dataframe of imported experimental isothermal adsorption data
-        
+
     a_o : float
         adsorbate cross section area, can be found from get adsorbate function
         or input by user, units must be [square angstrom]
-    
+
     Returns
     -------
     sa_array : array
         2D array of BET specific surface areas, the coordinates of the array
         corresponding to relative pressures, units [square meter / gram]
-    
+
     c_array : array
         2D array of BET constants, the coordinates of the array
         corresponding to relative pressures
-    
+
     nm_array : array
         2D array of BET specific amount of adsorbate in the monolayer, the coordinates of the array
         corresponding to relative pressures, units [moles / gram]
-    
+
     err_array : array
         2D array of error between experimental data and BET theoretical isotherms,
         the coordinates of the array corresponding to relative pressures
-    
+
     lin_reg : array
         3D array, x by x by 3 where x is the number of experimental data points
         the x and x corrdinates corresponding to relative pressure
         this array is available for reference and BET theory checks
-    
-    
+
+
     """
     sa_array = np.zeros((len(df), len(df)))
     c_array = np.zeros((len(df), len(df)))
@@ -91,10 +91,10 @@ def bet(df, a_o):
 
 
 def single_point_bet(df, a_o):
-    
+
     sa_array = np.zeros((len(df), len(df)))
     nm_array = np.zeros((len(df), len(df)))
-    
+
     for i in range(len(df)):
         for j in range(len(df)):
             if i > j:
@@ -102,10 +102,10 @@ def single_point_bet(df, a_o):
                 relp_range = df.relp[j:i]
                 n = np.ma.median(n_range)
                 relp = np.ma.median(relp_range)
-            
+
                 nm_array[i, j] = n * (1-relp)
                 sa_array[i, j] = n * avagadro * a_o * 10**-20
-            
+
     return sa_array, nm_array
 
 # function currently not being used
@@ -115,21 +115,21 @@ def theta(df, nm):
     depending on the choice of n, theta can represent different things
     in this case, if n = the median n for the relative pressure range
     then theta gives an idea of how "centered" nm is in the relative pressure range
-    
+
     Parameters
     __________
     df : dataframe
         dataframe of imported experimental isothermal adsorption data
-        
+
     nm : array
         2D array of BET specific amount of adsorbate in the monolayer, the coordinates of the array
         corresponding to relative pressures, units [moles / gram]
-    
+
     Returns
     _______
     theta : array
         array of computed theta values, the coordinates of the array corresponding to relative pressures
-    
+
     """
     n = np.zeros((len(df), len(df)))
     theta = np.zeros((len(df), len(df)))
@@ -148,18 +148,18 @@ def theta(df, nm):
 def check_1(df):
     """Checks that n(p-po) aka check1 is increasing over the relative pressure range used in BET analysis.
     This is a necessary condition for linearity of the BET dataset.
-    
+
     Parameters
     __________
     df : dataframe
         dataframe of imported experimental isothermal adsorption data
-    
+
     Returns
     _______
     mask : array
         array of 1s and 0s where 0 corresponds to relative pressure ranges where
         n(p-po) isn't consistently increasing with relative pressure
-    
+
     """
     mask1 = np.ones((len(df), len(df)))
     minus1 = np.concatenate(([0], df.check1[: -1]))
@@ -167,35 +167,35 @@ def check_1(df):
     test = np.tile(test, (len(df), 1))
     mask1 = mask1 * test
     mask1 = mask1.T
-    
+
     if np.any(mask1) == False:
         print('All relative pressure ranges fail check 1.')
-    
+
     return mask1
 
 
 # checks that y int from bet plot is positive
 def check_2(lin_reg):
     """Checks that y intercept of the BET plot's fit line is positive.
-    
+
     Parameters
     __________
     lin_reg : array
         3D array of linear regression data where [i, j, 1] contains
         y-intercept values
-    
+
     Returns
     _______
     mask : array
         array of 1s and 0s where 0 corresponds to relative pressure ranges where
         the y-intercept is negative or zero
     """
-    
+
     mask2 = (lin_reg[:, :, 1] > 0)
-    
+
     if np.any(mask2) == False:
         print('All relative pressure ranges fail check 2.')
-    
+
     return mask2
 
 
@@ -203,16 +203,16 @@ def check_2(lin_reg):
 def check_3(df, nm):
     """Checks that nm, amount adsorbed in the monolayer, is in the range of
     data points used in BET analysis
-    
+
     Parameters
     __________
     df : dataframe
         dataframe of imported experimental isothermal adsorption data
-    
+
     nm : array
         2D array of BET specific amount of adsorbate in the monolayer, the coordinates of the array
         corresponding to relative pressures, units [moles / gram]
-    
+
     Returns
     _______
     mask : array
@@ -224,11 +224,11 @@ def check_3(df, nm):
     for i in range(np.shape(mask3)[0]):
         for j in range(np.shape(mask3)[1]):
             if df.iloc[j, 1] <= nm[i, j] <= df.iloc[i, 1]:
-                mask3[i,j] = 1 
-                
+                mask3[i,j] = 1
+
     if np.any(mask3) == False:
         print('All relative pressure ranges fail check 3.')
-                
+
     return mask3
 
 
@@ -236,26 +236,26 @@ def check_3(df, nm):
 # sloppy in the same way as mask1
 def check_4(df, lin_reg, nm):
     """Checks that relative pressure is consistent.
-    The relative pressure corresponding to nm is found from linear 
+    The relative pressure corresponding to nm is found from linear
     interpolation of the experiemental data. A second relative pressure is
     found by setting n to nm in the BET equation and solving for relative
     pressure. The two relative pressures are compared and must agree within 10%
     to pass this check.
-    
+
     Parameters
     __________
     df : dataframe
         dataframe of imported experimental isothermal adsorption data
-        
+
     lin_reg : array
         3D array of linear regression data where [i, j, 1] contains
         y-intercept values
-    
+
     nm : array
         2D array of BET specific amount of adsorbate in the monolayer,
         the coordinates of the array corresponding to relative pressures,
         units [moles / gram]
-    
+
     Returns
     _______
     mask : array
@@ -282,27 +282,27 @@ def check_4(df, lin_reg, nm):
                         diff = abs((relp_m - relpm) / relpm)
                     if diff < .1:
                         mask4[i, j] = 1
-                        
-    
+
+
     if np.any(mask4) == False:
         print('All relative pressure ranges fail check 4.')
-                        
+
     return mask4
 
 
 # check that range of values used in BET contain certain number of datapoints
 def check_5(df, points=5):
     """Checks that relative pressure ranges contain a minium number of data points.
-    
+
     Parameters
     __________
     df : dataframe
         dataframe of imported experimental isothermal adsorption data
-        
+
     points : int
         minimum number of data points required for BET analysis to be considered valid
         default value is 5
-    
+
     Returns
     _______
     mask : array
@@ -315,70 +315,70 @@ def check_5(df, points=5):
         for j in range(len(df)):
             if i - j < points -1:
                 mask5[i,j] = 0
-                
-    
+
+
     if np.any(mask5) == False:
-        print('All relative pressure ranges fail check 5.')           
-                
+        print('All relative pressure ranges fail check 5.')
+
     return mask5
 
 
 def combine_masks(df, linreg, nm, check1 = True, check2 = True, check3 = True,
                   check4 = True, check5 = True, points=5):
     """Calls all check functions and combines their masks into one "combomask".
-    
+
     Parameters
     __________
     df : dataframe
         dataframe of imported experimental isothermal adsorption data
-        
+
     lin_reg : array
         3D array of linear regression data where [i, j, 1] contains
         y-intercept values
-    
+
     nm : array
         2D array of BET specific amount of adsorbate in the monolayer, the coordinates of the array
         corresponding to relative pressures, units [moles / gram]
-    
+
     Returns
     _______
     mask : array
         array of 1s and 0s where 0 corresponds to relative pressure ranges that fail one or more checks
     """
-    
-    
+
+
     if check1 == True:
         mask1 = check_1(df)
     else:
         mask1 = np.ones((len(df), len(df)))
-        
+
     if check2 == True:
         mask2 = check_2(linreg)
     else:
         mask2 = np.ones((len(df), len(df)))
-        
+
     if check3 == True:
         mask3 = check_3(df, nm)
     else:
         mask3 = np.ones((len(df), len(df)))
-    
+
     if check4 ==True:
         mask4 = check_4(df, linreg, nm)
     else:
         mask4 = np.ones((len(df), len(df)))
-        
+
     if check5 == True:
         mask5 = check_5(df, points)
     else:
         mask5 = np.ones((len(df), len(df)))
-   
-    
+
+
     mask = np.multiply(mask1, mask2)
     mask = np.multiply(mask3, mask)
     mask = np.multiply(mask4, mask)
     mask = np.multiply(mask5, mask)
-    
+
     if np.any(mask) == False:
         print('All relative pressure ranges fail the checks you have selected.')
-                       
+
     return mask
