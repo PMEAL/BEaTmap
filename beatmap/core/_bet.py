@@ -324,7 +324,7 @@ def check_5(df, points=5):
 
 
 def combine_masks(df, linreg, nm, check1 = True, check2 = True, check3 = True,
-                  check4 = True, check5 = True, points=5):
+                  check4 = True, check5 = True, points = 5):
     """Calls all check functions and combines their masks into one "combomask".
 
     Parameters

@@ -58,7 +58,88 @@ def import_data():
 
     labels = list(data)
     data.rename(columns={labels[0]: 'relp', labels[1]: 'n'}, inplace=True)
-    data['n'] = data.n
+    data['n'] = data.n #necessary? why that here?
+    data['bet'] = (1 / data.n) * (data.relp / (1-data.relp))
+    data['check1'] = data.n * (1 - data.relp)
+
+    #checking data quality
+    test = np.zeros(len(data))
+    minus1 = np.concatenate(([0], data.n[: -1]))
+    test = data.n - minus1
+    test_sum = sum(x < 0 for x in test)
+    if test_sum > 0:
+        print("""\nIsotherm data is suspect.
+Adsorbed moles do not consistantly increase as relative pressure increases""")
+    else:
+        print("""\nIsotherm data quality appears good.
+Adsorbed molar amounts are increasing as relative pressure increases.""")
+
+
+    #checking isotherm type
+    x = data.relp.values
+    y = data.n.values
+
+    dist = np.sqrt((x[:-1] - x[1:])**2 + (y[:-1] - y[1:])**2)
+    dist_along = np.concatenate(([0], dist.cumsum()))
+
+    # build a spline representation of the contour
+    spline, u = sp.interpolate.splprep([x, y], u=dist_along, w = np.multiply(1, np.ones(len(x))), s = .0000000001)
+    interp_d = np.linspace(dist_along[0], dist_along[-1], 50) #len(x)
+    interp_x, interp_y = sp.interpolate.splev(interp_d, spline)
+
+    # take derivative of the spline (to find inflection points)
+    spline_1deriv = np.diff(interp_y)/np.diff(interp_x)
+    spline_2deriv = np.diff(spline_1deriv)/np.diff(interp_x[1:])
+
+    zero_crossings = np.where(np.diff(np.sign(spline_2deriv)))[0]
+
+    if len(zero_crossings) == 0 and np.sign(spline_2deriv[0]) == -1:
+        print('Isotherm is type I.')
+    elif len(zero_crossings) == 0 and np.sign(spline_2deriv[0]) == 1:
+        print('Isotherm is type III.')
+    elif len(zero_crossings) == 1 and np.sign(spline_2deriv[0]) == -1:
+        print('Isotherm is type II.')
+    elif len(zero_crossings) == 1 and np.sign(spline_2deriv[0]) == 1:
+        print('Isotherm is type V.')
+    elif len(zero_crossings) == 2 and np.sign(spline_2deriv[0]) ==-1:
+        print('Isotherm is type IV.')
+    else:
+        print('Isotherm is type VI.')
+
+    return file, data, adsorbate, a_o
+
+def import_list_data(relp, n):
+
+    """REWRITE!!!! ******DS**SXS* DSNJDIKZImports 
+    __________
+    file : str
+        the file name (if in same directory) or file name and path
+    Returns
+    _______
+    data : dataframe
+        contains adsorption data and values computed from
+        adsortion data, used later in the BET analysis
+    """
+
+
+    file = input("Enter name for dataset:")
+    adsorbate = input("Enter name of adsorbate used:")
+    a_o_input = input("Enter cross sectional area of adsorbate in square Angstrom:")
+
+    try:
+        a_o = float(a_o_input)
+    except:
+        print('The ao provided is not numeric.')
+        a_o_input = input("Try again, enter the cross sectional area of adsorbate in square Angstrom:")
+        a_o = float(a_o_input)
+
+    print('\nAdsorbate used was %s with an adsorbed cross sectional area of %.2f sq. Angstrom.'
+      % (adsorbate, a_o))
+
+
+    #importing data and creating 'bet' and 'check1' data points
+    dict_from_lists = {'relp': relp, 'n [mol/g]':n}
+    data = pd.DataFrame(dict_from_lists)
     data['bet'] = (1 / data.n) * (data.relp / (1-data.relp))
     data['check1'] = data.n * (1 - data.relp)
 

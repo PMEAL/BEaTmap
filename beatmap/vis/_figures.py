@@ -319,8 +319,9 @@ def bet_combo_plot(c, err, df, file_name): #requires masked c and error array
     max_stop = int(err_max_idx[0])
 
     slope, intercept, r_value, p_value, std_err =\
-        sp.stats.linregress(df.relp[min_start: min_stop],
-                            df.bet[min_start:min_stop])
+        sp.stats.linregress(df.relp[min_start: min_stop + 1],
+                            df.bet[min_start:min_stop +1])        
+
     min_liney = np.zeros(2)
     min_liney[0] = slope * (df.relp[min_start] - .01) + intercept
     min_liney[1] = slope * (df.relp[min_stop] + .01) + intercept
@@ -347,8 +348,8 @@ def bet_combo_plot(c, err, df, file_name): #requires masked c and error array
                  xy=(df.relp[min_stop], df.bet[min_start]), size=11)
 
     slope, intercept, r_value, p_value, std_err = \
-        sp.stats.linregress(df.relp[max_start: max_stop],
-                            df.bet[max_start: max_stop])
+        sp.stats.linregress(df.relp[max_start: max_stop + 1],
+                            df.bet[max_start: max_stop + 1])
     max_liney = np.zeros(2)
     max_liney[0] = slope * (df.relp[max_start] - .01) + intercept
     max_liney[1] = slope * (df.relp[max_stop] + .01) + intercept
@@ -362,7 +363,7 @@ def bet_combo_plot(c, err, df, file_name): #requires masked c and error array
     ax2.set_ylabel('1/[n(1-Po/P)]')
     ax2.set_ylim(max_liney[0]*.9, max_liney[1]*1.1)
     ax2.grid(b=True, which='major', color='gray', linestyle='-')
-    ax2.plot(df.relp[max_start:max_stop], df.bet[max_start:max_stop],
+    ax2.plot(df.relp[max_start:max_stop + 1], df.bet[max_start:max_stop + 1],
              label='Experimental Data', c='grey', marker='o', linewidth=0)
     ax2.plot(max_linex, max_liney, color='black', label='Linear Regression')
     ax2.annotate('Linear Regression: \nm = %.3f \nb = %.3f \nR = %.3f'
@@ -496,8 +497,8 @@ def bet_iso_combo_plot(c, err, sa, nm, df, file_name): #requires masked c, err, 
 
 
     slope, intercept, r_value, p_value, std_err = \
-        sp.stats.linregress(df.relp[min_start: min_stop],
-                            df.bet[min_start: min_stop])
+        sp.stats.linregress(df.relp[min_start: min_stop + 1],
+                            df.bet[min_start: min_stop + 1])
     min_liney = np.zeros(2)
     min_liney[0] = slope * (df.relp[min_start] - .01) + intercept
     min_liney[1] = slope * (df.relp[min_stop] + .01) + intercept
@@ -521,8 +522,8 @@ def bet_iso_combo_plot(c, err, sa, nm, df, file_name): #requires masked c, err, 
                  xy=(df.relp[min_stop], df.bet[min_start]), size=11)
 
     slope, intercept, r_value, p_value, std_err =\
-        sp.stats.linregress(df.relp[max_start:max_stop],
-                            df.bet[max_start:max_stop])
+        sp.stats.linregress(df.relp[max_start:max_stop + 1],
+                            df.bet[max_start:max_stop + 1])
     max_liney = np.zeros(2)
     max_liney[0] = slope * (df.relp[max_start] - .01) + intercept
     max_liney[1] = slope * (df.relp[max_stop] + .01) + intercept

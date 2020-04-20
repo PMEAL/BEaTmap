@@ -11,7 +11,7 @@ import bet
 import figures
 import settables
 
-file, df, adsorbate, a_o = dataio.import_data()
+file, df, adsorbate, a_o = bt.dataio.import_data()
 print(df)
 
 sa, c, nm, err, linreg = bet.bet(df, a_o)

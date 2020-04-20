@@ -22,7 +22,6 @@ def index_of_value(array, value):
     idx = np.where(X ==0)
     return idx
 
-
 def max_min(array):
     """Finds maximum and minimum of an array.
     
@@ -45,7 +44,7 @@ def max_min(array):
 
     """
 
-    maximum = np.nanmax(array)
+    maximum = np.nanmax(array[np.nonzero(array)])
     minimum = np.nanmin(array[np.nonzero(array)])
     max_idx = index_of_value(array, maximum)
     min_idx = index_of_value(array, minimum)
