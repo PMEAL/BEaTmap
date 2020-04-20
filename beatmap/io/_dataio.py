@@ -138,7 +138,7 @@ def import_list_data(relp, n):
 
 
     #importing data and creating 'bet' and 'check1' data points
-    dict_from_lists = {'relp': relp, 'n [mol/g]':n}
+    dict_from_lists = {'relp': relp, 'n':n}
     data = pd.DataFrame(dict_from_lists)
     data['bet'] = (1 / data.n) * (data.relp / (1-data.relp))
     data['check1'] = data.n * (1 - data.relp)
