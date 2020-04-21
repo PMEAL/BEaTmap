@@ -8,7 +8,6 @@ Created on Tue May  7 13:00:16 2019
 import numpy as np
 import pandas as pd
 import scipy as sp
-import matplotlib.pyplot as plt
 import beatmap.core as bet
 
 
@@ -32,23 +31,23 @@ def import_data():
         adsortion data, used later in the BET analysis
     """
 
-
     file = input("Enter file name/path:")
     adsorbate = input("Enter name of adsorbate used:")
-    a_o_input = input("Enter cross sectional area of adsorbate in square Angstrom:")
+    a_o_input = input("Enter cross sectional area of adsorbate in \
+                      square Angstrom:")
 
     try:
         a_o = float(a_o_input)
     except:
         print('The ao provided is not numeric.')
-        a_o_input = input("Try again, enter the cross sectional area of adsorbate in square Angstrom:")
+        a_o_input = input("Try again, enter the cross sectional area of \
+                          adsorbate in square Angstrom: ")
         a_o = float(a_o_input)
 
-    print('\nAdsorbate used was %s with an adsorbed cross sectional area of %.2f sq. Angstrom.'
-      % (adsorbate, a_o))
+    print('\nAdsorbate used was %s with an adsorbed cross sectional area of \
+          %.2f sq. Angstrom.' % (adsorbate, a_o))
 
-
-    #importing data and creating 'bet' and 'check1' data points
+    # importing data and creating 'bet' and 'check1' data points
     try:
         data = pd.read_csv(file)
     except FileNotFoundError:
@@ -58,11 +57,11 @@ def import_data():
 
     labels = list(data)
     data.rename(columns={labels[0]: 'relp', labels[1]: 'n'}, inplace=True)
-    data['n'] = data.n #necessary? why that here?
+    data['n'] = data.n  # necessary? why that here?
     data['bet'] = (1 / data.n) * (data.relp / (1-data.relp))
     data['check1'] = data.n * (1 - data.relp)
 
-    #checking data quality
+    # checking data quality
     test = np.zeros(len(data))
     minus1 = np.concatenate(([0], data.n[: -1]))
     test = data.n - minus1
@@ -74,8 +73,7 @@ Adsorbed moles do not consistantly increase as relative pressure increases""")
         print("""\nIsotherm data quality appears good.
 Adsorbed molar amounts are increasing as relative pressure increases.""")
 
-
-    #checking isotherm type
+    # checking isotherm type
     x = data.relp.values
     y = data.n.values
 
@@ -83,8 +81,10 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
     dist_along = np.concatenate(([0], dist.cumsum()))
 
     # build a spline representation of the contour
-    spline, u = sp.interpolate.splprep([x, y], u=dist_along, w = np.multiply(1, np.ones(len(x))), s = .0000000001)
-    interp_d = np.linspace(dist_along[0], dist_along[-1], 50) #len(x)
+    spline, u = sp.interpolate.splprep([x, y], u=dist_along,
+                                       w=np.multiply(1, np.ones(len(x))),
+                                       s=.0000000001)
+    interp_d = np.linspace(dist_along[0], dist_along[-1], 50) # len(x)
     interp_x, interp_y = sp.interpolate.splev(interp_d, spline)
 
     # take derivative of the spline (to find inflection points)
@@ -101,12 +101,13 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
         print('Isotherm is type II.')
     elif len(zero_crossings) == 1 and np.sign(spline_2deriv[0]) == 1:
         print('Isotherm is type V.')
-    elif len(zero_crossings) == 2 and np.sign(spline_2deriv[0]) ==-1:
+    elif len(zero_crossings) == 2 and np.sign(spline_2deriv[0]) == -1:
         print('Isotherm is type IV.')
     else:
         print('Isotherm is type VI.')
 
     return file, data, adsorbate, a_o
+
 
 def import_list_data(relp, n):
 
@@ -121,29 +122,29 @@ def import_list_data(relp, n):
         adsortion data, used later in the BET analysis
     """
 
-
     file = input("Enter name for dataset:")
     adsorbate = input("Enter name of adsorbate used:")
-    a_o_input = input("Enter cross sectional area of adsorbate in square Angstrom:")
+    a_o_input = input("Enter cross sectional area of adsorbate in \
+                      square Angstrom:")
 
     try:
         a_o = float(a_o_input)
     except:
         print('The ao provided is not numeric.')
-        a_o_input = input("Try again, enter the cross sectional area of adsorbate in square Angstrom:")
+        a_o_input = input("Try again, enter the cross sectional area of \
+                          adsorbate in square Angstrom:")
         a_o = float(a_o_input)
 
-    print('\nAdsorbate used was %s with an adsorbed cross sectional area of %.2f sq. Angstrom.'
-      % (adsorbate, a_o))
+    print('\nAdsorbate used was %s with an adsorbed cross sectional area of \
+          %.2f sq. Angstrom.' % (adsorbate, a_o))
 
-
-    #importing data and creating 'bet' and 'check1' data points
-    dict_from_lists = {'relp': relp, 'n':n}
+    # importing data and creating 'bet' and 'check1' data points
+    dict_from_lists = {'relp': relp, 'n': n}
     data = pd.DataFrame(dict_from_lists)
     data['bet'] = (1 / data.n) * (data.relp / (1-data.relp))
     data['check1'] = data.n * (1 - data.relp)
 
-    #checking data quality
+    # checking data quality
     test = np.zeros(len(data))
     minus1 = np.concatenate(([0], data.n[: -1]))
     test = data.n - minus1
@@ -155,8 +156,7 @@ Adsorbed moles do not consistantly increase as relative pressure increases""")
         print("""\nIsotherm data quality appears good.
 Adsorbed molar amounts are increasing as relative pressure increases.""")
 
-
-    #checking isotherm type
+    # checking isotherm type
     x = data.relp.values
     y = data.n.values
 
@@ -164,8 +164,10 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
     dist_along = np.concatenate(([0], dist.cumsum()))
 
     # build a spline representation of the contour
-    spline, u = sp.interpolate.splprep([x, y], u=dist_along, w = np.multiply(1, np.ones(len(x))), s = .0000000001)
-    interp_d = np.linspace(dist_along[0], dist_along[-1], 50) #len(x)
+    spline, u = sp.interpolate.splprep([x, y], u=dist_along,
+                                       w=np.multiply(1, np.ones(len(x))),
+                                       s=.0000000001)
+    interp_d = np.linspace(dist_along[0], dist_along[-1], 50)  # len(x)
     interp_x, interp_y = sp.interpolate.splev(interp_d, spline)
 
     # take derivative of the spline (to find inflection points)
@@ -182,20 +184,22 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
         print('Isotherm is type II.')
     elif len(zero_crossings) == 1 and np.sign(spline_2deriv[0]) == 1:
         print('Isotherm is type V.')
-    elif len(zero_crossings) == 2 and np.sign(spline_2deriv[0]) ==-1:
+    elif len(zero_crossings) == 2 and np.sign(spline_2deriv[0]) == -1:
         print('Isotherm is type IV.')
     else:
         print('Isotherm is type VI.')
 
     return file, data, adsorbate, a_o
 
+
 def export_raw_data(df, file_name):
     file_name = file_name[:-4]
     export_file_name = file_name + '_raw_data_export.csv'
-    export_csv = df.to_csv("/exports/" + export_file_name, index=None, header=True)
+    df.to_csv("/exports/" + export_file_name, index=None, header=True)
     return
 
-def export_processed_data(df, sa, c, nm, lin_reg, file_name, points = 5):
+
+def export_processed_data(df, sa, c, nm, lin_reg, file_name, points=5):
     i = 0
     end_relp = np.zeros((len(df), len(df)))
     while i < len(df):
@@ -210,25 +214,33 @@ def export_processed_data(df, sa, c, nm, lin_reg, file_name, points = 5):
     mask4 = bet.check_4(df, lin_reg, nm)
     mask5 = bet.check_5(df, points)
 
-    processed_data = np.column_stack((begin_relp.flatten(), end_relp.flatten()))
+    processed_data = np.column_stack((begin_relp.flatten(),
+                                      end_relp.flatten()))
     processed_data = np.column_stack((processed_data, sa.flatten()))
     processed_data = np.column_stack((processed_data, c.flatten()))
     processed_data = np.column_stack((processed_data, nm.flatten()))
-    processed_data = np.column_stack((processed_data, lin_reg[:,:,0].flatten()))
-    processed_data = np.column_stack((processed_data, lin_reg[:,:,1].flatten()))
-    processed_data = np.column_stack((processed_data, lin_reg[:,:,2].flatten()))
+    processed_data = np.column_stack((processed_data,
+                                      lin_reg[:, :, 0].flatten()))
+    processed_data = np.column_stack((processed_data,
+                                      lin_reg[:, :, 1].flatten()))
+    processed_data = np.column_stack((processed_data,
+                                      lin_reg[:, :, 2].flatten()))
     processed_data = np.column_stack((processed_data, mask1.flatten()))
     processed_data = np.column_stack((processed_data, mask2.flatten()))
     processed_data = np.column_stack((processed_data, mask3.flatten()))
     processed_data = np.column_stack((processed_data, mask4.flatten()))
     processed_data = np.column_stack((processed_data, mask5.flatten()))
 
-    processed_data = pd.DataFrame(data=processed_data, columns=['begin relative pressure', 'end relative pressure', 'spec sa [m2/g]',
-              'bet constant', 'nm [mol/g]', 'slope', 'y-int', 'r value', 'check1',
-              'check2','check3','check4', 'check5'])
+    processed_data = pd.DataFrame(data=processed_data,
+                                  columns=['begin relative pressure',
+                                           'end relative pressure',
+                                           'spec sa [m2/g]', 'bet constant',
+                                           'nm [mol/g]', 'slope', 'y-int',
+                                           'r value', 'check1', 'check2',
+                                           'check3', 'check4', 'check5'])
 
     file_name = file_name[:-4]
     export_file_name = file_name + '_processed_data_export.csv'
-    export_csv = processed_data.to_csv(export_file_name, index=None, header=True)
+    processed_data.to_csv(export_file_name, index=None, header=True)
 
     return processed_data

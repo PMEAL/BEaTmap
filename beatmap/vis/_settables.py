@@ -37,7 +37,7 @@ def ascii_tables(c, sa, err, df):
 
     sa = np.nan_to_num(sa)
 
-    if np.any(sa) == False:
+    if np.any(sa) is False:
         print('No valid relative pressure ranges. ASCII tables not created.')
         return
 
@@ -123,5 +123,5 @@ def ascii_tables(c, sa, err, df):
 
     return
 
-def sing_table():
-    return
+# def sing_table():
+#    return
