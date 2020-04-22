@@ -389,4 +389,7 @@ def combine_masks(df, linreg, nm, check1=True, check2=True, check3=True,
     if np.any(mask) is False:
         print('All relative pressure ranges fail the selected checks.')
 
-    return mask
+    mask.astype(bool)  # converting mask to boolean
+    invertedmask = np.logical_not(mask)  # inverting mask so that 0 = valid, 
+    # 1 = invlad, to work well with numpy masks
+    return invertedmask

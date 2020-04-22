@@ -46,9 +46,9 @@ def ascii_tables(c, sa, err, df):
     samax, sa_max_idx, samin, sa_min_idx = util.max_min(sa)
     cmax, c_max_idx, cmin, c_min_idx = util.max_min(c)
 
-    samean = util.mean_ignore0(sa)
+    samean = np.mean(sa)
     samedian = util.median_ignore0(sa)
-    cmean = util.mean_ignore0(c)
+    cmean = np.mean(c)
     cmedian = util.median_ignore0(c)
 
     sa_std = np.nan_to_num(sa)[sa != 0].std()
