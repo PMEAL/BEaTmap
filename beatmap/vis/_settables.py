@@ -123,5 +123,5 @@ def ascii_tables(c, sa, err, df):
 
     return
 
-# def sing_table():
-#    return
+def sing_table():
+    return

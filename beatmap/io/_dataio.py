@@ -34,18 +34,18 @@ def import_data():
     file = input("Enter file name/path:")
     adsorbate = input("Enter name of adsorbate used:")
     a_o_input = input("Enter cross sectional area of adsorbate in \
-                      square Angstrom:")
+square Angstrom:")
 
     try:
         a_o = float(a_o_input)
     except:
         print('The ao provided is not numeric.')
         a_o_input = input("Try again, enter the cross sectional area of \
-                          adsorbate in square Angstrom: ")
+adsorbate in square Angstrom: ")
         a_o = float(a_o_input)
 
     print('\nAdsorbate used was %s with an adsorbed cross sectional area of \
-          %.2f sq. Angstrom.' % (adsorbate, a_o))
+%.2f sq. Angstrom.' % (adsorbate, a_o))
 
     # importing data and creating 'bet' and 'check1' data points
     try:
@@ -132,11 +132,11 @@ def import_list_data(relp, n):
     except:
         print('The ao provided is not numeric.')
         a_o_input = input("Try again, enter the cross sectional area of \
-                          adsorbate in square Angstrom:")
+adsorbate in square Angstrom:")
         a_o = float(a_o_input)
 
     print('\nAdsorbate used was %s with an adsorbed cross sectional area of \
-          %.2f sq. Angstrom.' % (adsorbate, a_o))
+%.2f sq. Angstrom.' % (adsorbate, a_o))
 
     # importing data and creating 'bet' and 'check1' data points
     dict_from_lists = {'relp': relp, 'n': n}

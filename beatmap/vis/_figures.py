@@ -82,7 +82,7 @@ def experimental_data_1stderiv_plot(df, file_name):
     ax.grid(b=True, which='major', color='gray', linestyle='-')
     fig.savefig('expdata1deriv_%s.png' % (file_name[:-4]), bbox_inches='tight')
     print('Experimental data first derivative plot saved as: \
-        expdata1deriv_%s.png' % (file_name[:-4]))
+expdata1deriv_%s.png' % (file_name[:-4]))
     return()
 
 
@@ -117,7 +117,7 @@ def ssa_heatmap(df, sa, file_name, gradient='Greens'):
 
     if np.any(sa) is False:
         print('No valid relative pressure ranges. Specific surface area \
-              heatmap not created.')
+heatmap not created.')
         return
 
     # finding max and min sa to normalize heatmap colours
@@ -492,8 +492,8 @@ def bet_iso_combo_plot(c, err, sa, nm, df, file_name):
     f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2,
                                                figsize=(20, 20))
 
-    ax1.set_title('Isotherm as a composition of two equations, a and b -\
-                  Minimum Error C')
+    ax1.set_title('Isotherm as a composition of two equations, a and b - \
+Minimum Error C')
     ax1.set_ylim(-1, synth_min[-2]+1)
     ax1.set_xlim(-.05, 1.05)
     ax1.set_ylabel('n/nm')
@@ -514,8 +514,8 @@ def bet_iso_combo_plot(c, err, sa, nm, df, file_name):
              linewidth=1, marker='')
     ax1.legend(loc='upper left', framealpha=1)
 
-    ax2.set_title('Isotherm as a composition of two equations, a and b -\
-                  Maximum Error C')
+    ax2.set_title('Isotherm as a composition of two equations, a and b - \
+Maximum Error C')
     ax2.set_ylabel('n/nm')
     ax2.set_xlabel('P/Po')
     ax2.set_ylim(-1, synth_max[-2] + 1)
