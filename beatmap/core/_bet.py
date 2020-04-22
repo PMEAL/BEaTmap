@@ -61,8 +61,8 @@ def bet(df, a_o):
     lin_reg = np.zeros((len(df), len(df), 3))
     bet_c = np.zeros(len(df.relp))
 
-    for i in range(len(df)-1):
-        for j in range(len(df)-1):
+    for i in range(len(df)):
+        for j in range(len(df)):
             if i > j:
                 a = df.iloc[j:i+1]
                 X = a.relp
