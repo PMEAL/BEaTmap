@@ -84,7 +84,7 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
     spline, u = sp.interpolate.splprep([x, y], u=dist_along,
                                        w=np.multiply(1, np.ones(len(x))),
                                        s=.0000000001)
-    interp_d = np.linspace(dist_along[0], dist_along[-1], 50) # len(x)
+    interp_d = np.linspace(dist_along[0], dist_along[-1], 50)
     interp_x, interp_y = sp.interpolate.splev(interp_d, spline)
 
     # take derivative of the spline (to find inflection points)
@@ -111,10 +111,17 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
 
 def import_list_data(relp, n):
 
-    """REWRITE!!!! ******DS**SXS* DSNJDIKZImports 
+    """Imports isothermal adsoprtion data.
+
+    User provides two lists, one of relative pressures and the other of amount
+    adsorbed with units of [mol/g].
+
+    Parameters
     __________
-    file : str
-        the file name (if in same directory) or file name and path
+    relp : list
+        list of relative pressure values
+    n : list
+        list of amount adsorbed at each relative pressure stage, mols per gram
     Returns
     _______
     data : dataframe

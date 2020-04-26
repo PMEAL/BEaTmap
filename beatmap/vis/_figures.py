@@ -50,42 +50,6 @@ def experimental_data_plot(df, file_name):
     return()
 
 
-def experimental_data_1stderiv_plot(df, file_name):
-    """Creates a scatter plot of experimental data's first derivative.
-
-    dn/drelp, computed from experimental data
-    x-axis is relative pressure, y-axis is dndrelp
-    this plot is to aid in isotherm type identification
-
-    Parameters
-    __________
-    df : dataframe
-        dataframe of imported experimental data
-
-    file_name : str
-        file name used to import .csv data, this function uses it to name the
-        output .png file
-
-    Returns
-    _______
-    none
-
-    Saves image file in same directory as figures.py code
-    *CHANGE OUTPUT LOC BEFORE PACKAGING?!*
-
-    """
-    fig, (ax) = plt.subplots(1, 1, figsize=(13, 13))
-    ax.plot(df.relp, df.dndp, c='grey', marker='o', linewidth=0)
-    ax.set_title('Experimental Isotherm 1st Derivative')
-    ax.set_ylabel('dn/dp')
-    ax.set_xlabel('P/Po')
-    ax.grid(b=True, which='major', color='gray', linestyle='-')
-    fig.savefig('expdata1deriv_%s.png' % (file_name[:-4]), bbox_inches='tight')
-    print('Experimental data first derivative plot saved as: \
-expdata1deriv_%s.png' % (file_name[:-4]))
-    return()
-
-
 def ssa_heatmap(df, sa, file_name, gradient='Greens'):
     """Creates a heatmap of specific surface areas.
 
@@ -137,60 +101,6 @@ heatmap not created.')
     fig.savefig('ssa_heatmap_%s.png' % (file_name[:-4]), bbox_inches='tight')
     print('Specific surface area heatmap saved as: ssa_heatmap_%s.png'
           % (file_name[:-4]))
-    return
-
-
-def theta_heatmap(df, theta, file_name, gradient='PiYG', center=1):
-    """Creates a heatmap of theta values.
-
-    Shading corresponds to theta, normalized for the minimum and maximum theta
-    values, 0 = white
-    Can be used to explore correlation between theta in BET analysis and
-    BET specific surface area
-
-    Parameters
-    __________
-    df : dataframe
-        dataframe of imported experimental data, used to label heatmap axis
-
-    theta : array
-        array of theta values, resulting from theta function
-        if the array has had masks applied to it the resulting heatmap will
-        be masked
-
-    file_name : str
-        file name used to import .csv data, this function uses it to name
-        the output .png file
-
-    Returns
-    _______
-    none
-
-    Saves image file in same directory as figures.py code
-    *CHANGE OUTPUT LOC BEFORE PACKAGING?!*
-
-    """
-
-    if np.any(theta) is False:
-        print('No valid relative pressure ranges. Theta heat map not created.')
-        return
-
-    thetamax, theta_max_idx, thetamin, theta_min_idx = util.max_min(theta)
-    hm_labels = round(df.relp * 100, 1)
-    fig, (ax) = plt.subplots(1, 1, figsize=(13, 13))
-    sns.heatmap(theta, vmin=thetamin, vmax=thetamax, square=True,
-                cmap=gradient, center=center, mask=(theta == 0),
-                xticklabels=hm_labels, yticklabels=hm_labels,
-                linewidths=1, linecolor='w',
-                cbar_kws={'shrink': .78, 'aspect': len(df.relp)})
-    ax.invert_yaxis()
-    ax.set_title('BET Theta (n/nm) where n is Median of Pressure Range')
-    plt.xticks(rotation=45, horizontalalignment='right')
-    plt.xlabel('Start Relative Pressure')
-    plt.yticks(rotation=45, horizontalalignment='right')
-    plt.ylabel('End Relative Pressure')
-    fig.savefig('theta_heatmap_%s.png' % (file_name[:-4]), bbox_inches='tight')
-    print('Theta heatmap saved as: theta_heatmap_%s.png' % (file_name[:-4]))
     return
 
 
@@ -304,7 +214,7 @@ def diff_heatmap(df, diff, file_name, gradient='PuOr', center=0):
     return
 
 
-def bet_combo_plot(c, err, df, file_name):  # requires masked c and error array
+def bet_combo_plot(c, err, df, file_name):
     """Creates two BET plots, for the minimum and maxium error data sets.
 
     Only datapoints in the minimum and maximum error data sets are plotted
@@ -411,8 +321,6 @@ def bet_combo_plot(c, err, df, file_name):  # requires masked c and error array
     return
 
 
-# "BET isocombo plot" is a way to visually compare the "best" and "worst"
-# values of C (in terms of error)
 def bet_iso_combo_plot(c, err, sa, nm, df, file_name):
     """Creates an image to visually compare the "best" and "worst" values of C.
 
