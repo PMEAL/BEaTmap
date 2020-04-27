@@ -49,49 +49,8 @@ def max_min(array):
     minimum = np.nanmin(array[np.nonzero(array)])
     max_idx = index_of_value(array, maximum)
     min_idx = index_of_value(array, minimum)
-    return(maximum, max_idx, minimum, min_idx)
-
-
-def mean_ignore0(array):
-    """Computes the mean of an array's values, considering only non-zero values
-
-    Parameters
-    __________
-    array : array
-        masked array of BET constant values
-
-    Returns
-    _______
-    mean : float
-
-    """
-    col = array.sum(0)
-    n_col = (array != 0).sum(0)
-    mean = np.sum(col) / np.sum(n_col)
-    return mean
-
-
-def median_ignore0(array):
-    """Computes the median of an array's values, considering only
-    non-zero values.
-
-    If there are an even number of non-zero values the median is the
-    mean of the two central values.
-
-    Parameters
-    __________
-    array : array
-        masked array of BET constant values
-
-    Returns
-    _______
-    median : float
-
-    """
-
-    m = np.ma.masked_equal(array, 0)
-    median = np.ma.median(m)
-    return median
+    
+    return maximum, max_idx, minimum, min_idx
 
 
 def lin_interp(df, val):

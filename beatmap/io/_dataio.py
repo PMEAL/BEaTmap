@@ -200,9 +200,8 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
 
 
 def export_raw_data(df, file_name):
-    file_name = file_name[:-4]
-    export_file_name = file_name + '_raw_data_export.csv'
-    df.to_csv("/exports/" + export_file_name, index=None, header=True)
+    export_file_name = 'raw_data_export_' + file_name
+    df.to_csv(export_file_name, index=None, header=True)
     return
 
 
@@ -246,8 +245,7 @@ def export_processed_data(df, sa, c, nm, lin_reg, file_name, points=5):
                                            'r value', 'check1', 'check2',
                                            'check3', 'check4', 'check5'])
 
-    file_name = file_name[:-4]
-    export_file_name = file_name + '_processed_data_export.csv'
+    export_file_name = 'processed_data_export_' + file_name
     processed_data.to_csv(export_file_name, index=None, header=True)
 
     return processed_data

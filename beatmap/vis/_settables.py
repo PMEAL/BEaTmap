@@ -35,7 +35,6 @@ def ascii_tables(c, sa, err, df):
 
     """
 
-    sa = np.nan_to_num(sa)
 
     if np.any(sa) is False:
         print('No valid relative pressure ranges. ASCII tables not created.')
@@ -46,10 +45,10 @@ def ascii_tables(c, sa, err, df):
     samax, sa_max_idx, samin, sa_min_idx = util.max_min(sa)
     cmax, c_max_idx, cmin, c_min_idx = util.max_min(c)
 
-    samean = np.mean(sa)
-    samedian = util.median_ignore0(sa)
-    cmean = np.mean(c)
-    cmedian = util.median_ignore0(c)
+    samean = np.ma.mean(sa)
+    samedian = np.ma.median(sa)
+    cmean = np.ma.mean(c)
+    cmedian = np.ma.median(c)
 
     sa_std = np.nan_to_num(sa)[sa != 0].std()
     c_std = np.nan_to_num(c)[c != 0].std()
@@ -123,5 +122,3 @@ def ascii_tables(c, sa, err, df):
 
     return
 
-def sing_table():
-    return

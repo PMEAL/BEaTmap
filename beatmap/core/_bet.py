@@ -127,17 +127,17 @@ def check_1(df):
         where n(p-po) isn't consistently increasing with relative pressure
 
     """
-    mask1 = np.ones((len(df), len(df)))
+    check1 = np.ones((len(df), len(df)))
     minus1 = np.concatenate(([0], df.check1[: -1]))
     test = (df.check1 - minus1 >= 0)
     test = np.tile(test, (len(df), 1))
-    mask1 = mask1 * test
-    mask1 = mask1.T
+    check1 = check1 * test
+    check1 = check1.T
 
-    if np.any(mask1) is False:
+    if np.any(check1) is False:
         print('All relative pressure ranges fail check 1.')
 
-    return mask1
+    return check1
 
 
 def check_2(lin_reg):
@@ -156,12 +156,12 @@ def check_2(lin_reg):
         where the y-intercept is negative or zero
     """
 
-    mask2 = (lin_reg[:, :, 1] > 0)
+    check2 = (lin_reg[:, :, 1] > 0)
 
-    if np.any(mask2) is False:
+    if np.any(check2) is False:
         print('All relative pressure ranges fail check 2.')
 
-    return mask2
+    return check2
 
 
 def check_3(df, nm):
@@ -185,17 +185,17 @@ def check_3(df, nm):
         is not included in the range of experimental n values
     """
 
-    mask3 = np.zeros((len(df), len(df)))
+    check3 = np.zeros((len(df), len(df)))
 
-    for i in range(np.shape(mask3)[0]):
-        for j in range(np.shape(mask3)[1]):
+    for i in range(np.shape(check3)[0]):
+        for j in range(np.shape(check3)[1]):
             if df.iloc[j, 1] <= nm[i, j] <= df.iloc[i, 1]:
-                mask3[i, j] = 1
+                check3[i, j] = 1
 
-    if np.any(mask3) is False:
+    if np.any(check3) is False:
         print('All relative pressure ranges fail check 3.')
 
-    return mask3
+    return check3
 
 
 def check_4(df, lin_reg, nm):
@@ -226,10 +226,10 @@ def check_4(df, lin_reg, nm):
         array of 1s and 0s where 0 corresponds to relative pressure values that
         do not agree within 10%
     """
-    mask4 = np.zeros((len(df), len(df)))
+    check4 = np.zeros((len(df), len(df)))
 
-    for i in range(np.shape(mask4)[0]):
-        for j in range(np.shape(mask4)[1]):
+    for i in range(np.shape(check4)[0]):
+        for j in range(np.shape(check4)[1]):
             if nm[i, j] != 0 and i > 0 and j > 0:
                 relpm = util.lin_interp(df, nm[i, j])
                 coeff = [-1 * lin_reg[i, j, 0] * nm[i, j], lin_reg[i, j, 0]
@@ -244,12 +244,12 @@ def check_4(df, lin_reg, nm):
                     else:
                         diff = abs((relp_m - relpm) / relpm)
                     if diff < .1:
-                        mask4[i, j] = 1
+                        check4[i, j] = 1
 
-    if np.any(mask4) is False:
+    if np.any(check4) is False:
         print('All relative pressure ranges fail check 4.')
 
-    return mask4
+    return check4
 
 
 def check_5(df, points=5):
@@ -271,17 +271,17 @@ def check_5(df, points=5):
         array of 1s and 0s where 0 corresponds to ranges of experimental data
         that contain less than the minimum number of points
     """
-    mask5 = np.ones((len(df), len(df)))
+    check5 = np.ones((len(df), len(df)))
 
     for i in range(len(df)):
         for j in range(len(df)):
             if i - j < points - 1:
-                mask5[i, j] = 0
+                check5[i, j] = 0
 
-    if np.any(mask5) is False:
+    if np.any(check5) is False:
         print('All relative pressure ranges fail check 5.')
 
-    return mask5
+    return check5
 
 
 def combine_masks(df, linreg, nm, check1=True, check2=True, check3=True,
@@ -309,35 +309,42 @@ def combine_masks(df, linreg, nm, check1=True, check2=True, check3=True,
         fail one or more checks
     """
 
+    mask = np.ones((len(df), len(df)))
+    for i in range(len(df)):
+        for j in range(len(df)):
+            if j >= i:
+                mask[i, j] = 0
+
     if check1 is True:
-        mask1 = check_1(df)
+        check1 = check_1(df)
     else:
-        mask1 = np.ones((len(df), len(df)))
+        check1 = np.ones((len(df), len(df)))
 
     if check2 is True:
-        mask2 = check_2(linreg)
+        check2 = check_2(linreg)
     else:
-        mask2 = np.ones((len(df), len(df)))
+        check2 = np.ones((len(df), len(df)))
 
     if check3 is True:
-        mask3 = check_3(df, nm)
+        check3 = check_3(df, nm)
     else:
-        mask3 = np.ones((len(df), len(df)))
+        check3 = np.ones((len(df), len(df)))
 
     if check4 is True:
-        mask4 = check_4(df, linreg, nm)
+        check4 = check_4(df, linreg, nm)
     else:
-        mask4 = np.ones((len(df), len(df)))
+        check4 = np.ones((len(df), len(df)))
 
     if check5 is True:
-        mask5 = check_5(df, points)
+        check5 = check_5(df, points)
     else:
-        mask5 = np.ones((len(df), len(df)))
+        check5 = np.ones((len(df), len(df)))
 
-    mask = np.multiply(mask1, mask2)
-    mask = np.multiply(mask3, mask)
-    mask = np.multiply(mask4, mask)
-    mask = np.multiply(mask5, mask)
+    mask = np.multiply(check1, mask)
+    mask = np.multiply(check2, mask)
+    mask = np.multiply(check3, mask)
+    mask = np.multiply(check4, mask)
+    mask = np.multiply(check5, mask)
 
     if np.any(mask) is False:
         print('All relative pressure ranges fail the selected checks.')

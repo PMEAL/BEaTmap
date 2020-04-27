@@ -12,7 +12,7 @@ import seaborn as sns
 from beatmap import utils as util
 
 
-def experimental_data_plot(df, file_name):
+def experimental_data_plot(df, file_name = 'dont_save'):
     """Creates a scatter plot of experimental data.
 
     Typical isotherm presentation where
@@ -43,9 +43,11 @@ def experimental_data_plot(df, file_name):
     ax.set_ylabel('n [mol/g]')
     ax.set_xlabel('P/Po')
     ax.grid(b=True, which='major', color='gray', linestyle='-')
-    fig.savefig('experimentaldata_%s.png' % (file_name[:-4]),
+    
+    if file_name != 'dont_save':
+        fig.savefig('experimentaldata_%s.png' % (file_name[:-4]),
                 bbox_inches='tight')
-    print('Experimental data plot saved as: experimentaldata_%s.png'
+        print('Experimental data plot saved as: experimentaldata_%s.png'
           % (file_name[:-4]))
     return()
 
@@ -155,62 +157,6 @@ def err_heatmap(df, err, file_name, gradient='Greys'):
     plt.ylabel('End Relative Pressure')
     fig.savefig('error_heatmap_%s.png' % (file_name[:-4]), bbox_inches='tight')
     print('Error heatmap saved as: error_heatmap_%s.png' % (file_name[:-4]))
-    return
-
-
-def diff_heatmap(df, diff, file_name, gradient='PuOr', center=0):
-    """Creates a heatmap of error values.
-
-    Shading corresponds to theta, normalized for the minimum and maximum
-    theta values, 0 = white
-    Can be used to explore correlation between error in BET analysis and
-    BET specific surface area
-
-    Parameters
-    __________
-    df : dataframe
-        dataframe of imported experimental data, used to label heatmap axis
-
-    diff : array
-        array of difference values, resulting from multipoint - single point
-        if the array has had masks applied to it the resulting heatmap will be
-        masked
-
-    file_name : str
-        file name used to import .csv data, this function uses it to name the
-        output .png file
-
-    Returns
-    _______
-    none
-
-    Saves image file in same directory as figures.py code
-    *CHANGE OUTPUT LOC BEFORE PACKAGING?!*
-    """
-
-    if np.any(diff) is False:
-        print('No valid relative pressure ranges. Difference heat map not \
-              created.')
-        return
-
-    diffmax, diff_max_idx, diffmin, diff_min_idx = util.max_min(diff)
-
-    hm_labels = round(df.relp * 100, 1)
-    fig, (ax) = plt.subplots(1, 1, figsize=(13, 13))
-    sns.heatmap(diff, vmin=diffmin, vmax=diffmax, square=True, cmap=gradient,
-                mask=(diff == 0), xticklabels=hm_labels, yticklabels=hm_labels,
-                center=center, linewidths=1, linecolor='w',
-                cbar_kws={'shrink': .78, 'aspect': len(df.relp)})
-    ax.invert_yaxis()
-    ax.set_title('BET Difference Between Multipoint and Single Point: \
-                 Diff = Multi - Single')
-    plt.xticks(rotation=45, horizontalalignment='right')
-    plt.xlabel('Start Relative Pressure')
-    plt.yticks(rotation=45, horizontalalignment='right')
-    plt.ylabel('End Relative Pressure')
-    fig.savefig('diff_heatmap_%s.png' % (file_name[:-4]), bbox_inches='tight')
-    print('Difference heatmap saved as: diff_heatmap_%s.png'
-          % (file_name[:-4]))
     return
 
 
