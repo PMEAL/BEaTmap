@@ -52,7 +52,7 @@ def experimental_data_plot(df, file_name = 'dont_save'):
     return()
 
 
-def ssa_heatmap(df, sa, file_name, gradient='Greens'):
+def ssa_heatmap(df, ssa, file_name, gradient='Greens'):
     """Creates a heatmap of specific surface areas.
 
     Shading corresponds to specific surface area, normalized for the minimum
@@ -81,17 +81,17 @@ def ssa_heatmap(df, sa, file_name, gradient='Greens'):
 
     """
 
-    if np.any(sa) is False:
+    if np.any(ssa) is False:
         print('No valid relative pressure ranges. Specific surface area \
 heatmap not created.')
         return
 
     # finding max and min sa to normalize heatmap colours
-    samax, sa_max_idx, samin, sa_min_idx = util.max_min(sa)
+    ssamax, ssa_max_idx, ssamin, ssa_min_idx = util.max_min(ssa)
     hm_labels = round(df.relp * 100, 1)
     fig, ax = plt.subplots(1, 1, figsize=(13, 13))
-    sns.heatmap(sa, vmin=samin, vmax=samax, square=True, cmap=gradient,
-                mask=(sa == 0), xticklabels=hm_labels, yticklabels=hm_labels,
+    sns.heatmap(ssa, vmin=ssamin, vmax=ssamax, square=True, cmap=gradient,
+                mask=(ssa == 0), xticklabels=hm_labels, yticklabels=hm_labels,
                 linewidths=1, linecolor='w',
                 cbar_kws={'shrink': .78, 'aspect': len(df.relp)})
     ax.invert_yaxis()
@@ -160,7 +160,7 @@ def err_heatmap(df, err, file_name, gradient='Greys'):
     return
 
 
-def bet_combo_plot(c, err, df, file_name):
+def bet_combo_plot(df, c, err, file_name):
     """Creates two BET plots, for the minimum and maxium error data sets.
 
     Only datapoints in the minimum and maximum error data sets are plotted
@@ -267,7 +267,7 @@ def bet_combo_plot(c, err, df, file_name):
     return
 
 
-def bet_iso_combo_plot(c, err, sa, nm, df, file_name):
+def bet_iso_combo_plot(df, ssa, nm, c, err, file_name):
     """Creates an image to visually compare the "best" and "worst" values of C.
 
     Image is 4 by 4, with two "decomposed isotherm" plots on the top row

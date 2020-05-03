@@ -202,10 +202,11 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
 def export_raw_data(df, file_name):
     export_file_name = 'raw_data_export_' + file_name
     df.to_csv(export_file_name, index=None, header=True)
+    print('Raw data saved as: %s' % (export_file_name))
     return
 
 
-def export_processed_data(df, sa, c, nm, lin_reg, file_name, points=5):
+def export_processed_data(df, ssa, nm, c, lin_reg, file_name, points=5):
     i = 0
     end_relp = np.zeros((len(df), len(df)))
     while i < len(df):
@@ -217,12 +218,12 @@ def export_processed_data(df, sa, c, nm, lin_reg, file_name, points=5):
     mask1 = bet.check_1(df)
     mask2 = bet.check_2(lin_reg)
     mask3 = bet.check_3(df, nm)
-    mask4 = bet.check_4(df, lin_reg, nm)
+    mask4 = bet.check_4(df, nm, lin_reg)
     mask5 = bet.check_5(df, points)
 
     processed_data = np.column_stack((begin_relp.flatten(),
                                       end_relp.flatten()))
-    processed_data = np.column_stack((processed_data, sa.flatten()))
+    processed_data = np.column_stack((processed_data, ssa.flatten()))
     processed_data = np.column_stack((processed_data, c.flatten()))
     processed_data = np.column_stack((processed_data, nm.flatten()))
     processed_data = np.column_stack((processed_data,
@@ -247,5 +248,5 @@ def export_processed_data(df, sa, c, nm, lin_reg, file_name, points=5):
 
     export_file_name = 'processed_data_export_' + file_name
     processed_data.to_csv(export_file_name, index=None, header=True)
-
-    return processed_data
+    print('Processed data saved as: %s' % (export_file_name))
+    return

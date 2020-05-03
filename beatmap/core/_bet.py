@@ -52,7 +52,7 @@ def bet(df, a_o):
         checks
     """
 
-    sa_array = np.zeros((len(df), len(df)))
+    ssa_array = np.zeros((len(df), len(df)))
     c_array = np.zeros((len(df), len(df)))
     nm_array = np.zeros((len(df), len(df)))
     err_array = np.zeros((len(df), len(df)))
@@ -78,7 +78,7 @@ def bet(df, a_o):
                     nm = 1 / (intercept * c)
                     bet_c = (1 / (nm * c)) + (c - 1) * df.relp / (nm * c)
                 spec_sa = nm * avagadro * a_o * 10**-20
-                sa_array[i, j] = spec_sa
+                ssa_array[i, j] = spec_sa
                 c_array[i, j] = c
                 nm_array[i, j] = nm
                 errors = np.nan_to_num(abs(bet_c - df.bet))
@@ -88,12 +88,12 @@ def bet(df, a_o):
                 # best and worst fit over the interval used in BET analysis,
                 # not the entire isotherm
     np.nan_to_num(lin_reg)
-    return sa_array, c_array, nm_array, err_array, lin_reg
+    return ssa_array, nm_array, c_array, err_array, lin_reg
 
 
 def single_point_bet(df, a_o):
 
-    sa_array = np.zeros((len(df), len(df)))
+    ssa_array = np.zeros((len(df), len(df)))
     nm_array = np.zeros((len(df), len(df)))
 
     for i in range(len(df)):
@@ -105,9 +105,9 @@ def single_point_bet(df, a_o):
                 relp = np.ma.median(relp_range)
 
                 nm_array[i, j] = n * (1-relp)
-                sa_array[i, j] = n * avagadro * a_o * 10**-20
+                ssa_array[i, j] = n * avagadro * a_o * 10**-20
 
-    return sa_array, nm_array
+    return ssa_array, nm_array
 
 
 def check_1(df):
@@ -198,7 +198,7 @@ def check_3(df, nm):
     return check3
 
 
-def check_4(df, lin_reg, nm):
+def check_4(df, nm, lin_reg):
     """Checks that relative pressure is consistent.
     The relative pressure corresponding to nm is found from linear
     interpolation of the experiemental data. A second relative pressure is
@@ -284,9 +284,9 @@ def check_5(df, points=5):
     return check5
 
 
-def combine_masks(df, linreg, nm, check1=True, check2=True, check3=True,
+def rouq_mask(df, nm, linreg, check1=True, check2=True, check3=True,
                   check4=True, check5=True, points=5):
-    """Calls all check functions and combines their masks into one "combomask".
+    """Calls all check functions and combines their masks into one "rouqerol mask".
 
     Parameters
     __________
@@ -331,7 +331,7 @@ def combine_masks(df, linreg, nm, check1=True, check2=True, check3=True,
         check3 = np.ones((len(df), len(df)))
 
     if check4 is True:
-        check4 = check_4(df, linreg, nm)
+        check4 = check_4(df, nm, linreg)
     else:
         check4 = np.ones((len(df), len(df)))
 
