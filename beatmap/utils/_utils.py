@@ -49,7 +49,7 @@ def max_min(array):
     minimum = np.nanmin(array[np.nonzero(array)])
     max_idx = index_of_value(array, maximum)
     min_idx = index_of_value(array, minimum)
-    
+
     return maximum, max_idx, minimum, min_idx
 
 

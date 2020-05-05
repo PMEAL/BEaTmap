@@ -21,14 +21,21 @@ def import_data():
     requires n values with units of mol/g
 
     Parameters
-    __________
-    file : str
-        the file name (if in same directory) or file name and path
+    _________
     Returns
     _______
+    file: string
+        file name, used later to name saved files
+
     data : dataframe
         contains adsorption data and values computed from
         adsortion data, used later in the BET analysis
+
+    adsorbate: string
+        adsorbate name, for reference
+
+    a_o: float
+        cross sectional surface area of adsorbate in square angstrom
     """
 
     file = input("Enter file name/path:")
@@ -110,7 +117,6 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
 
 
 def import_list_data(relp, n):
-
     """Imports isothermal adsoprtion data.
 
     User provides two lists, one of relative pressures and the other of amount
@@ -120,19 +126,30 @@ def import_list_data(relp, n):
     __________
     relp : list
         list of relative pressure values
+
     n : list
         list of amount adsorbed at each relative pressure stage, mols per gram
+
     Returns
     _______
+    file: string
+        file name, used later to name saved files
+
     data : dataframe
         contains adsorption data and values computed from
         adsortion data, used later in the BET analysis
+
+    adsorbate: string
+        adsorbate name, for reference
+
+    a_o: float
+        cross sectional surface area of adsorbate in square angstrom
     """
 
     file = input("Enter name for dataset:")
     adsorbate = input("Enter name of adsorbate used:")
     a_o_input = input("Enter cross sectional area of adsorbate in \
-                      square Angstrom:")
+square Angstrom:")
 
     try:
         a_o = float(a_o_input)
@@ -200,6 +217,21 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
 
 
 def export_raw_data(df, file_name):
+    """Exports isothermal adsoprtion data as a .csv file.
+
+    Parameters
+    __________
+
+    df : dataframe
+        contains adsorption data and values computed from
+        adsortion data, used later in the BET analysis
+
+    file_name: string
+        file name, used to name .csv file
+
+    Returns
+    _______
+    """
     export_file_name = 'raw_data_export_' + file_name
     df.to_csv(export_file_name, index=None, header=True)
     print('Raw data saved as: %s' % (export_file_name))
@@ -207,6 +239,21 @@ def export_raw_data(df, file_name):
 
 
 def export_processed_data(df, ssa, nm, c, lin_reg, file_name, points=5):
+    """Exports processed isothermal adsoprtion data as a .csv file.
+
+    Parameters
+    __________
+
+    df : dataframe
+        contains adsorption data and values computed from
+        adsortion data, used later in the BET analysis
+
+    file_name: string
+        file name, used to name .csv file
+
+    Returns
+    _______
+    """
     i = 0
     end_relp = np.zeros((len(df), len(df)))
     while i < len(df):

@@ -12,7 +12,7 @@ import seaborn as sns
 from beatmap import utils as util
 
 
-def experimental_data_plot(df, file_name = 'dont_save'):
+def experimental_data_plot(df, file_name='dont_save'):
     """Creates a scatter plot of experimental data.
 
     Typical isotherm presentation where
@@ -43,12 +43,12 @@ def experimental_data_plot(df, file_name = 'dont_save'):
     ax.set_ylabel('n [mol/g]')
     ax.set_xlabel('P/Po')
     ax.grid(b=True, which='major', color='gray', linestyle='-')
-    
-    if file_name != 'dont_save':
+
+    if file_name != 'do not save':
         fig.savefig('experimentaldata_%s.png' % (file_name[:-4]),
-                bbox_inches='tight')
+                    bbox_inches='tight')
         print('Experimental data plot saved as: experimentaldata_%s.png'
-          % (file_name[:-4]))
+              % (file_name[:-4]))
     return()
 
 
@@ -81,7 +81,7 @@ def ssa_heatmap(df, ssa, file_name, gradient='Greens'):
 
     """
 
-    if np.any(ssa) is False:
+    if ssa.mask.all() == True:
         print('No valid relative pressure ranges. Specific surface area \
 heatmap not created.')
         return
@@ -100,9 +100,12 @@ heatmap not created.')
     plt.xlabel('Start Relative Pressure')
     plt.yticks(rotation=45, horizontalalignment='right')
     plt.ylabel('End Relative Pressure')
-    fig.savefig('ssa_heatmap_%s.png' % (file_name[:-4]), bbox_inches='tight')
-    print('Specific surface area heatmap saved as: ssa_heatmap_%s.png'
-          % (file_name[:-4]))
+
+    if file_name != 'do not save':
+        fig.savefig('ssa_heatmap_%s.png' % (file_name[:-4]),
+                    bbox_inches='tight')
+        print('Specific surface area heatmap saved as: ssa_heatmap_%s.png'
+              % (file_name[:-4]))
     return
 
 
@@ -137,7 +140,7 @@ def err_heatmap(df, err, file_name, gradient='Greys'):
 
     """
 
-    if np.any(err) is False:
+    if err.mask.all() == True:
         print('No valid relative pressure ranges. Error heat map not created.')
         return
 
@@ -155,8 +158,12 @@ def err_heatmap(df, err, file_name, gradient='Greys'):
     plt.xlabel('Start Relative Pressure')
     plt.yticks(rotation=45, horizontalalignment='right')
     plt.ylabel('End Relative Pressure')
-    fig.savefig('error_heatmap_%s.png' % (file_name[:-4]), bbox_inches='tight')
-    print('Error heatmap saved as: error_heatmap_%s.png' % (file_name[:-4]))
+
+    if file_name != 'do not save':
+        fig.savefig('error_heatmap_%s.png' % (file_name[:-4]),
+                    bbox_inches='tight')
+        print('Error heatmap saved as: error_heatmap_%s.png' %
+              (file_name[:-4]))
     return
 
 
@@ -198,7 +205,7 @@ def bet_combo_plot(df, c, err, file_name):
 
     """
 
-    if np.any(err) is False:
+    if err.mask.all() == True:
         print('No valid relative pressure ranges. BET combo plot not created.')
         return
 
@@ -262,8 +269,11 @@ def bet_combo_plot(df, c, err, file_name):
                  bbox=dict(boxstyle="round", fc='white', ec="gray", alpha=1),
                  textcoords='axes fraction', xytext=(.775, .018),
                  xy=(df.relp[max_stop], df.bet[max_start + 1]), size=11)
-    figure.savefig('betplot_%s.png' % (file_name[:-4]), bbox_inches='tight')
-    print('BET plot saved as: betplot_%s.png' % (file_name[:-4]))
+
+    if file_name != 'do not save':
+        figure.savefig('betplot_%s.png' % (file_name[:-4]),
+                       bbox_inches='tight')
+        print('BET plot saved as: betplot_%s.png' % (file_name[:-4]))
     return
 
 
@@ -315,9 +325,9 @@ def bet_iso_combo_plot(df, ssa, nm, c, err, file_name):
 
     """
 
-    if np.any(err) is False:
+    if err.mask.all() == True:
         print('No valid relative pressure ranges. BET isotherm \
-              combo plot not created.')
+combo plot not created.')
         return
 
     err_max, err_max_idx, err_min, err_min_idx = util.max_min(err)
@@ -443,7 +453,10 @@ Maximum Error C')
                  bbox=dict(boxstyle="round", fc='white', ec="gray", alpha=1),
                  textcoords='axes fraction', xytext=(.775, .018),
                  xy=(df.relp[min_stop], df.bet[min_start]), size=11)
-    f.savefig('isothermcomp_%s.png' % (file_name[:-4]), bbox_inches='tight')
-    print('Isotherm decomposition plot saved as: isothermcomp_%s.png'
-          % (file_name[:-4]))
+
+    if file_name != 'do not save':
+        f.savefig('isothermcomp_%s.png' % (file_name[:-4]),
+                  bbox_inches='tight')
+        print('Isotherm decomposition plot saved as: isothermcomp_%s.png'
+              % (file_name[:-4]))
     return

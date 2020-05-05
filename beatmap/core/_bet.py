@@ -82,7 +82,10 @@ def bet(df, a_o):
                 c_array[i, j] = c
                 nm_array[i, j] = nm
                 errors = np.nan_to_num(abs(bet_c - df.bet))
-                err_array[i, j] = sum(errors[j:i + 1]) / (i + 1 - j)
+                if i - j == 1:
+                    err_array[i, j] = 0
+                else:
+                    err_array[i, j] = sum(errors[j:i + 1]) / (i + 1 - j)
                 # error is normalized for the interval of relative pressures
                 # used to compute C, so, min and max error corresponds to the
                 # best and worst fit over the interval used in BET analysis,
@@ -92,6 +95,29 @@ def bet(df, a_o):
 
 
 def single_point_bet(df, a_o):
+    """Performs single point BET analysis on an isotherm data set for all
+    relative pressure ranges. Can be used to check for agreement between BET
+    and single point BET.
+
+    Parameters
+    ----------
+    df : dataframe
+        dataframe of imported experimental isothermal adsorption data
+
+    a_o : float
+        adsorbate cross section area, units must be [square angstrom]
+
+    Returns
+    -------
+    sa_array : array
+        2D array of BET specific surface areas, the coordinates of the array
+        corresponding to relative pressures, units [square meter / gram]
+
+    nm_array : array
+        2D array of BET specific amount of adsorbate in the monolayer, the
+        coordinates of the array corresponding to relative pressures, units
+        [moles / gram]
+    """
 
     ssa_array = np.zeros((len(df), len(df)))
     nm_array = np.zeros((len(df), len(df)))
@@ -122,7 +148,7 @@ def check_1(df):
 
     Returns
     _______
-    mask : array
+    check1 : array
         array of 1s and 0s where 0 corresponds to relative pressure ranges
         where n(p-po) isn't consistently increasing with relative pressure
 
@@ -151,7 +177,7 @@ def check_2(lin_reg):
 
     Returns
     _______
-    mask : array
+    check2 : array
         array of 1s and 0s where 0 corresponds to relative pressure ranges
         where the y-intercept is negative or zero
     """
@@ -180,7 +206,7 @@ def check_3(df, nm):
 
     Returns
     _______
-    mask : array
+    check3 : array
         array of 1s and 0s where 0 corresponds to relative pressure ranges nm
         is not included in the range of experimental n values
     """
@@ -201,10 +227,14 @@ def check_3(df, nm):
 def check_4(df, nm, lin_reg):
     """Checks that relative pressure is consistent.
     The relative pressure corresponding to nm is found from linear
-    interpolation of the experiemental data. A second relative pressure is
+    interpolation of the experiemental data.
+
+    A second relative pressure is
     found by setting n to nm in the BET equation and solving for relative
-    pressure. The two relative pressures are compared and must agree within 10%
-    to pass this check.
+    pressure.
+
+    The two relative pressures are compared and must agree within 10% to pass
+    this check.
 
     Parameters
     __________
@@ -222,7 +252,7 @@ def check_4(df, nm, lin_reg):
 
     Returns
     _______
-    mask : array
+    check4 : array
         array of 1s and 0s where 0 corresponds to relative pressure values that
         do not agree within 10%
     """
@@ -267,7 +297,7 @@ def check_5(df, points=5):
 
     Returns
     _______
-    mask : array
+    check5 : array
         array of 1s and 0s where 0 corresponds to ranges of experimental data
         that contain less than the minimum number of points
     """
@@ -285,8 +315,9 @@ def check_5(df, points=5):
 
 
 def rouq_mask(df, nm, linreg, check1=True, check2=True, check3=True,
-                  check4=True, check5=True, points=5):
-    """Calls all check functions and combines their masks into one "rouqerol mask".
+              check4=True, check5=True, points=5):
+    """Calls all check functions and combines their masks
+    into one "rouqerol mask".
 
     Parameters
     __________
@@ -304,7 +335,7 @@ def rouq_mask(df, nm, linreg, check1=True, check2=True, check3=True,
 
     Returns
     _______
-    mask : numpy mask array
+    invertedmask : numpy mask array
         array of 1s and 0s where 1 corresponds to relative pressure ranges that
         fail one or more checks
     """
@@ -346,10 +377,10 @@ def rouq_mask(df, nm, linreg, check1=True, check2=True, check3=True,
     mask = np.multiply(check4, mask)
     mask = np.multiply(check5, mask)
 
-    if np.any(mask) is False:
+    if np.any(mask) == False:
         print('All relative pressure ranges fail the selected checks.')
 
     mask.astype(bool)  # converting mask to boolean
     invertedmask = np.logical_not(mask)  # inverting mask so that 0 = valid,
-    # 1 = invlad, to work well with numpy masks
+    # 1 = invalid, to work well with numpy masks
     return invertedmask

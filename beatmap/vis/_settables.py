@@ -36,7 +36,7 @@ def ascii_tables(df, ssa, c, err):
     """
 
 
-    if np.any(ssa) is False:
+    if ssa.mask.all() == True:
         print('No valid relative pressure ranges. ASCII tables not created.')
         return
 
@@ -61,8 +61,8 @@ def ascii_tables(df, ssa, c, err):
     # these are just variables to print in tables
     ssa_min = round(ssamin, 3)
     ssa_min_c = round(float(c[ssa_min_idx[0], ssa_min_idx[1]]), 3)
-    ssa_min_start_ppo = float(df.relp[ssa_min_idx[1]])
-    ssa_min_end_ppo = float(df.relp[ssa_min_idx[0]])
+    ssa_min_start_ppo = round(float(df.relp[ssa_min_idx[1]]), 3)
+    ssa_min_end_ppo = round(float(df.relp[ssa_min_idx[0]]), 3)
     ssa_max = round(ssamax, 3)
     ssa_max_c = round(float(c[ssa_max_idx[0], ssa_max_idx[1]]), 3)
     ssa_max_start_ppo = round(float(df.relp[ssa_max_idx[1]]), 3)
@@ -123,4 +123,3 @@ def ascii_tables(df, ssa, c, err):
     print('Standard deviation of BET constant (C) = %.5f' % (c_std))
 
     return
-
