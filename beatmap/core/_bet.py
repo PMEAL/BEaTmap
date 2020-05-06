@@ -13,6 +13,14 @@ import beatmap.utils as util
 avagadro = 6.022*10**23
 
 
+"""
+from collections import namedtuple
+profile = namedtuple('profile', ('volume', 'porosity'))
+profile.volume = volume
+profile.porosity = porosity
+return profile
+"""
+
 def bet(df, a_o):
     """Performs BET analysis on an isotherm data set for all relative pressure
         ranges.
