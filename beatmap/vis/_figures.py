@@ -10,6 +10,7 @@ import scipy as sp
 import matplotlib.pyplot as plt
 import seaborn as sns
 from beatmap import utils as util
+from collections import namedtuple
 
 
 def experimental_data_plot(df, file_name='dont_save'):
@@ -52,7 +53,7 @@ def experimental_data_plot(df, file_name='dont_save'):
     return()
 
 
-def ssa_heatmap(df, ssa, file_name, gradient='Greens'):
+def ssa_heatmap(df, bet_results, mask, file_name, gradient='Greens'):
     """Creates a heatmap of specific surface areas.
 
     Shading corresponds to specific surface area, normalized for the minimum
@@ -63,14 +64,21 @@ def ssa_heatmap(df, ssa, file_name, gradient='Greens'):
     df : dataframe
         dataframe of imported experimental data, used to label heatmap axis
 
-    sa : array
-        array of specific surface area values, resulting from BET analysis
-        if the array has had masks applied to it the resulting heatmap will
-        be masked
+    bet_results : namedtuple
+        bet_results is the named tuple returned from the bet function, containing all data
+        required to check the validity of BET theory over all relative pressure intervals
+        in this function the ssa element is used
 
+    mask : array
+        array of boolean values, returned from the rouq_mask function, used to mask
+        invalid relative pressure ranges
+    
     file_name : str
         file name used to import .csv data, this function uses it to name the
         output .png file
+
+    gradient : string
+        color gradient for heatmap
 
     Returns
     _______
@@ -81,10 +89,13 @@ def ssa_heatmap(df, ssa, file_name, gradient='Greens'):
 
     """
 
-    if ssa.mask.all() == True:
+    if mask.all() == True:
         print('No valid relative pressure ranges. Specific surface area \
 heatmap not created.')
         return
+
+    #creating a masked array of ssa values
+    ssa = np.ma.array(bet_results.ssa, mask=mask)
 
     # finding max and min sa to normalize heatmap colours
     ssamax, ssa_max_idx, ssamin, ssa_min_idx = util.max_min(ssa)
@@ -109,7 +120,7 @@ heatmap not created.')
     return
 
 
-def err_heatmap(df, err, file_name, gradient='Greys'):
+def err_heatmap(df, bet_results, mask, file_name, gradient='Greys'):
     """Creates a heatmap of error values.
 
     Shading corresponds to theta, normalized for the minimum and maximum theta
@@ -122,14 +133,21 @@ def err_heatmap(df, err, file_name, gradient='Greys'):
     df : dataframe
         dataframe of imported experimental data, used to label heatmap axis
 
-    error : array
-        array of theta values, resulting from error calculation
-        if the array has had masks applied to it the resulting heatmap will be
-        masked
+    bet_results : namedtuple
+        bet_results is the named tuple returned from the bet function, containing all data
+        required to check the validity of BET theory over all relative pressure intervals
+        in this function the error element is used
 
+    mask : array
+        array of boolean values, returned from the rouq_mask function, used to mask
+        invalid relative pressure ranges
+    
     file_name : str
         file name used to import .csv data, this function uses it to name the
         output .png file
+
+    gradient : string
+        color gradient for heatmap
 
     Returns
     _______
@@ -140,9 +158,14 @@ def err_heatmap(df, err, file_name, gradient='Greys'):
 
     """
 
-    if err.mask.all() == True:
+    if mask.all() == True:
         print('No valid relative pressure ranges. Error heat map not created.')
         return
+
+    err = np.ma.array(bet_results.err, mask=mask)
+
+    #creating a masked array of ssa values
+    err = np.ma.array(bet_results.err, mask=mask)
 
     errormax, error_max_idx, errormin, error_min_idx = util.max_min(err)
 
@@ -167,7 +190,7 @@ def err_heatmap(df, err, file_name, gradient='Greys'):
     return
 
 
-def bet_combo_plot(df, c, err, file_name):
+def bet_combo_plot(df, bet_results, mask, file_name):
     """Creates two BET plots, for the minimum and maxium error data sets.
 
     Only datapoints in the minimum and maximum error data sets are plotted
@@ -177,20 +200,18 @@ def bet_combo_plot(df, c, err, file_name):
 
     Parameters
     __________
-    c : array
-        array of C values, resulting from BET analysis
-        this array should have masks applied to it
-        if the array has had masks applied to it only the valid relative
-        pressure ranges will be considered
-
-    error : array
-        array of error values, resulting from BET analysis
-        this array should have masks applied to it
-        if the array has had masks applied to it only the valid relative
-        pressure ranges will be considered
 
     df : dataframe
         dataframe of imported experimental data, used to label heatmap axis
+
+    bet_results : namedtuple
+        bet_results is the named tuple returned from the bet function, containing all data
+        required to check the validity of BET theory over all relative pressure intervals
+        in this function the error element is used
+
+    mask : array
+        array of boolean values, returned from the rouq_mask function, used to mask
+        invalid relative pressure ranges
 
     file_name : str
         file name used to import .csv data, this function uses it to name the
@@ -205,9 +226,12 @@ def bet_combo_plot(df, c, err, file_name):
 
     """
 
-    if err.mask.all() == True:
+    if mask.all() == True:
         print('No valid relative pressure ranges. BET combo plot not created.')
         return
+
+    err = np.ma.array(bet_results.err, mask=mask)
+    c = np.ma.array(bet_results.c, mask=mask)
 
     err_max, err_max_idx, err_min, err_min_idx = util.max_min(err)
 
@@ -277,7 +301,7 @@ def bet_combo_plot(df, c, err, file_name):
     return
 
 
-def bet_iso_combo_plot(df, ssa, nm, c, err, file_name):
+def bet_iso_combo_plot(df, bet_results, mask, file_name):
     """Creates an image to visually compare the "best" and "worst" values of C.
 
     Image is 4 by 4, with two "decomposed isotherm" plots on the top row
@@ -291,26 +315,18 @@ def bet_iso_combo_plot(df, ssa, nm, c, err, file_name):
 
     Parameters
     __________
-    c : array
-        array of C values, resulting from BET analysis
-        this array should have masks applied to it
-        if the array is masked only the valid relative pressure ranges will be
-        considered
-
-    error : array
-        array of error values, resulting from BET analysis
-        this array should have masks applied to it
-        if the array is masked only the valid relative pressure ranges will be
-        considered
-
-    nm : array
-        array of monolayer adsorbed amount, resulting from BET analysis
-        this array should have masks applied to it
-        if the array is masked only the valid relative pressure ranges will be
-        considered
 
     df : dataframe
         dataframe of imported experimental data, used to label heatmap axis
+
+    bet_results : namedtuple
+        bet_results is the named tuple returned from the bet function, containing all data
+        required to check the validity of BET theory over all relative pressure intervals
+        in this function the error element is used
+
+    mask : array
+        array of boolean values, returned from the rouq_mask function, used to mask
+        invalid relative pressure ranges
 
     file_name : str
         file name used to import .csv data, this function uses it to name the
@@ -325,10 +341,15 @@ def bet_iso_combo_plot(df, ssa, nm, c, err, file_name):
 
     """
 
-    if err.mask.all() == True:
+    if mask.all() == True:
         print('No valid relative pressure ranges. BET isotherm \
 combo plot not created.')
         return
+
+    ssa = np.ma.array(bet_results.ssa, mask=mask)
+    nm = np.ma.array(bet_results.nm, mask=mask)
+    c = np.ma.array(bet_results.c, mask=mask)
+    err = np.ma.array(bet_results.err, mask=mask)
 
     err_max, err_max_idx, err_min, err_min_idx = util.max_min(err)
     c_max_err = c[err_max_idx[0], err_max_idx[1]]

@@ -238,7 +238,7 @@ def export_raw_data(df, file_name):
     return
 
 
-def export_processed_data(df, ssa, nm, c, lin_reg, file_name, points=5):
+def export_processed_data(df, bet_results, file_name, points=5):
     """Exports processed isothermal adsoprtion data as a .csv file.
 
     Parameters
@@ -248,8 +248,15 @@ def export_processed_data(df, ssa, nm, c, lin_reg, file_name, points=5):
         contains adsorption data and values computed from
         adsortion data, used later in the BET analysis
 
+    bet_results : namedtuple
+        bet_results is the named tuple returned from the bet function, containing all data
+        required to check the validity of BET theory over all relative pressure intervals
+
     file_name: string
         file name, used to name .csv file
+
+    points : int
+        the minimum number of experimental data points for a relative pressure interval to be considered valid
 
     Returns
     _______
@@ -263,22 +270,23 @@ def export_processed_data(df, ssa, nm, c, lin_reg, file_name, points=5):
     begin_relp = np.transpose(end_relp)
 
     mask1 = bet.check_1(df)
-    mask2 = bet.check_2(lin_reg)
-    mask3 = bet.check_3(df, nm)
-    mask4 = bet.check_4(df, nm, lin_reg)
+    mask2 = bet.check_2(bet_results.intercept)
+    mask3 = bet.check_3(df, bet_results.nm)
+    mask4 = bet.check_4(df, bet_results.nm, bet_results.slope, bet_results.intercept)
     mask5 = bet.check_5(df, points)
-
+   
     processed_data = np.column_stack((begin_relp.flatten(),
                                       end_relp.flatten()))
-    processed_data = np.column_stack((processed_data, ssa.flatten()))
-    processed_data = np.column_stack((processed_data, c.flatten()))
-    processed_data = np.column_stack((processed_data, nm.flatten()))
+    processed_data = np.column_stack((processed_data, bet_results.ssa.flatten()))
+    processed_data = np.column_stack((processed_data, bet_results.nm.flatten()))
+    processed_data = np.column_stack((processed_data, bet_results.c.flatten()))
+    processed_data = np.column_stack((processed_data, bet_results.err.flatten()))
     processed_data = np.column_stack((processed_data,
-                                      lin_reg[:, :, 0].flatten()))
+                                      bet_results.slope.flatten()))
     processed_data = np.column_stack((processed_data,
-                                      lin_reg[:, :, 1].flatten()))
+                                      bet_results.intercept.flatten()))
     processed_data = np.column_stack((processed_data,
-                                      lin_reg[:, :, 2].flatten()))
+                                      bet_results.r.flatten()))
     processed_data = np.column_stack((processed_data, mask1.flatten()))
     processed_data = np.column_stack((processed_data, mask2.flatten()))
     processed_data = np.column_stack((processed_data, mask3.flatten()))
@@ -289,7 +297,7 @@ def export_processed_data(df, ssa, nm, c, lin_reg, file_name, points=5):
                                   columns=['begin relative pressure',
                                            'end relative pressure',
                                            'spec sa [m2/g]', 'bet constant',
-                                           'nm [mol/g]', 'slope', 'y-int',
+                                           'nm [mol/g]', 'error', 'slope', 'y-int',
                                            'r value', 'check1', 'check2',
                                            'check3', 'check4', 'check5'])
 

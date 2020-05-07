@@ -12,22 +12,22 @@ import numpy as np
 from beatmap import utils as util
 
 
-def ascii_tables(df, ssa, c, err):
+def ascii_tables(df, bet_results, mask):
     """Creates and populates ASCII formatted tables of BET results.
 
     Parameters
     __________
-    c : array
-        masked array of BET constant values
-
-    ssa : array
-        masked array of specific surface area values
-
-    err : array
-        masked array of error values
-
     df : dataframe
         dataframe of imported isotherm
+
+    bet_results : namedtuple
+        bet_results is the named tuple returned from the bet function, containing all data
+        required to check the validity of BET theory over all relative pressure intervals
+        in this function the error element is used
+
+    mask : array
+        array of boolean values, returned from the rouq_mask function, used to mask
+        invalid relative pressure ranges
 
     Returns
     _______
@@ -35,12 +35,15 @@ def ascii_tables(df, ssa, c, err):
 
     """
 
-
-    if ssa.mask.all() == True:
+    if mask.all() == True:
         print('No valid relative pressure ranges. ASCII tables not created.')
         return
 
-    c = np.nan_to_num(c)
+    ssa = np.ma.array(bet_results.ssa, mask=mask)
+    c = np.ma.array(bet_results.c, mask=mask)
+    err = np.ma.array(bet_results.err, mask=mask)
+    
+    c = np.nan_to_num(c) #is this necessary? --- check
 
     ssamax, ssa_max_idx, ssamin, ssa_min_idx = util.max_min(ssa)
     cmax, c_max_idx, cmin, c_min_idx = util.max_min(c)
