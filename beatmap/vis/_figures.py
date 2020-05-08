@@ -357,12 +357,9 @@ combo plot not created.')
 
     nnm_min = nm[err_min_idx[0], err_min_idx[1]]
     nnm_max = nm[err_max_idx[0], err_max_idx[1]]
-    ppo = np.arange(-.1, .9001, .001)
-    nnm1 = 1 / (1 - ppo)
-    nnm2_min = 1 / (1 + (c_min_err - 1) * ppo)
-    nnm2_max = 1 / (1 + (c_max_err - 1) * ppo)
-    synth_min = nnm1 - nnm2_min
-    synth_max = nnm1 - nnm2_max
+    ppo = np.arange(0, .9001, .001)
+    synth_min = 1 / (1 - ppo) - 1 / (1 + (c_min_err - 1) * ppo)
+    synth_max = 1 / (1 - ppo) - 1 / (1 + (c_max_err - 1) * ppo)
     expnnm_min = df.n / nnm_min
     err_min_i = int(err_min_idx[0] + 1)
     err_min_j = int(err_min_idx[1])
@@ -379,23 +376,19 @@ combo plot not created.')
 
     ax1.set_title('Isotherm as a composition of two equations, a and b - \
 Minimum Error C')
-    ax1.set_ylim(-1, synth_min[-2]+1)
-    ax1.set_xlim(-.05, 1.05)
+    ax1.set_ylim(0, synth_min[-2]+1)
+    ax1.set_xlim(0, 1)
     ax1.set_ylabel('n/nm')
     ax1.set_xlabel('P/Po')
     ax1.grid(b=True, which='major', color='gray', linestyle='-')
-    ax1.plot(ppo, nnm1, linestyle='--', linewidth=1, c='b',
-             label='a = 1/(1-P/Po)')
-    ax1.plot(ppo, nnm2_min, linestyle='--', linewidth=1, c='r',
-             label='b = 1/(1+(c-1)(P/Po))')
-    ax1.plot(ppo, synth_min, linestyle='-', linewidth=1, c='y',
+    ax1.plot(ppo, synth_min, linestyle='-', linewidth=1, c='black',
              label='Theoretical isotherm', marker='')
-    ax1.plot(ppo_expnnm_min_used, expnnm_min_used, c='grey',
+    ax1.plot(ppo_expnnm_min_used, expnnm_min_used, c='gray',
              label='Experimental isotherm - used data',
              marker='o', linewidth=0)
     ax1.plot(df.relp, expnnm_min, c='grey', fillstyle='none',
              label='Experimental isotherm', marker='o', linewidth=0)
-    ax1.plot([-.05, 1.05], [1, 1], c='grey', linestyle='-',
+    ax1.plot([0, 1], [1, 1], c='grey', linestyle='--',
              linewidth=1, marker='')
     ax1.legend(loc='upper left', framealpha=1)
 
@@ -403,21 +396,17 @@ Minimum Error C')
 Maximum Error C')
     ax2.set_ylabel('n/nm')
     ax2.set_xlabel('P/Po')
-    ax2.set_ylim(-1, synth_max[-2] + 1)
-    ax2.set_xlim(-.05, 1.05)
+    ax2.set_ylim(0, synth_max[-2] + 1)
+    ax2.set_xlim(0, 1)
     ax2.grid(b=True, which='major', color='gray', linestyle='-')
-    ax2.plot(ppo, nnm1, linestyle='--', linewidth=1, c='b',
-             label='a = 1/(1-P/Po)')
-    ax2.plot(ppo, nnm2_max, linestyle='--', linewidth=1, c='r',
-             label='b = 1/(1+(c-1)(P/Po))')
-    ax2.plot(ppo, synth_max, linestyle='-', linewidth=1, c='y',
+    ax2.plot(ppo, synth_max, linestyle='-', linewidth=1, c='black',
              label='Theoretical isotherm', marker='')
-    ax2.plot(ppo_expnnm_max_used, expnnm_max_used, c='grey',
+    ax2.plot(ppo_expnnm_max_used, expnnm_max_used, c='gray',
              label='Experimental isotherm - used data',
              marker='o', linewidth=0)
     ax2.plot(df.relp, expnnm_max, c='grey', fillstyle='none',
              label='Experimental isotherm', marker='o', linewidth=0)
-    ax2.plot([-.05, 1.05], [1, 1], c='grey', linestyle='-',
+    ax2.plot([0, 1], [1, 1], c='grey', linestyle='--',
              linewidth=1, marker='')
 
     min_start = int(err_min_idx[1])
@@ -435,13 +424,13 @@ Maximum Error C')
     min_linex[0] = df.relp[min_start] - .01
     min_linex[1] = df.relp[min_stop] + .01
     ax3.set_title('BET Plot - Data Points for Minimum Error C')
-    ax3.set_xlim(-.05, 1.05)
+    ax3.set_xlim(0, 1)
     ax3.set_ylim(min_liney[0]*.9, min_liney[1]*1.1)
     ax3.set_ylabel('1/[n(1-Po/P)]')
     ax3.set_xlabel('P/Po')
     ax3.grid(b=True, which='major', color='gray', linestyle='-')
     ax3.plot(df.relp[min_start:min_stop + 1], df.bet[min_start:min_stop + 1],
-             label='Experimental Data', c='grey', marker='o', linewidth=0)
+             label='Experimental Data', c='gray', marker='o', linewidth=0)
     ax3.plot(min_linex, min_liney, color='black', label='Linear Regression')
     ax3.legend(loc='upper left', framealpha=1)
     ax3.annotate('Linear Regression: \nm = %.3f \nb = %.3f \nR = %.3f'
@@ -463,11 +452,11 @@ Maximum Error C')
     ax4.set_title('BET Plot - Data Points for Maximum Error C')
     ax4.set_ylabel('1/[n(1-Po/P)]')
     ax4.set_xlabel('P/Po')
-    ax4.set_xlim(-.05, 1.05)
+    ax4.set_xlim(0, 1)
     ax4.set_ylim(max_liney[0]*.9, max_liney[1]*1.1)
     ax4.grid(b=True, which='major', color='gray', linestyle='-')
     ax4.plot(df.relp[max_start:max_stop + 1], df.bet[max_start:max_stop + 1],
-             label='Experimental Data', c='grey', marker='o', linewidth=0)
+             label='Experimental Data', c='gray', marker='o', linewidth=0)
     ax4.plot(max_linex, max_liney, color='black', label='Linear Regression')
     ax4.annotate('Linear Regression: \nm = %.3f \nb = %.3f \nR = %.3f'
                  % (slope, intercept, r_value),
