@@ -13,7 +13,7 @@ from beatmap import utils as util
 from collections import namedtuple
 
 
-def experimental_data_plot(df, file_name='dont_save'):
+def experimental_data_plot(bet_results, save_file=False):
     """Creates a scatter plot of experimental data.
 
     Typical isotherm presentation where
@@ -37,7 +37,8 @@ def experimental_data_plot(df, file_name='dont_save'):
 
     """
 
-    fig, (ax) = plt.subplots(1, 1, figsize=(13, 13))
+    df = bet_results.raw_data
+    fig, (ax) = plt.subplots(1, 1, figsize=(10, 10))
     ax.plot(df.relp, df.n, c='grey', marker='o', linewidth=0)
     ax.set_xlim(-.05, 1.05)
     ax.set_title('Experimental Isotherm')
@@ -45,15 +46,15 @@ def experimental_data_plot(df, file_name='dont_save'):
     ax.set_xlabel('P/Po')
     ax.grid(b=True, which='major', color='gray', linestyle='-')
 
-    if file_name != 'do not save':
-        fig.savefig('experimentaldata_%s.png' % (file_name[:-4]),
+    if save_file is True:
+        fig.savefig('experimentaldata_%s.png' % (bet_results.info),
                     bbox_inches='tight')
         print('Experimental data plot saved as: experimentaldata_%s.png'
-              % (file_name[:-4]))
+              % (bet_results.info))
     return()
 
 
-def ssa_heatmap(df, bet_results, mask, file_name, gradient='Greens'):
+def ssa_heatmap(bet_results, rouq_mask, save_file = True, gradient='Greens'):
     """Creates a heatmap of specific surface areas.
 
     Shading corresponds to specific surface area, normalized for the minimum
@@ -89,11 +90,15 @@ def ssa_heatmap(df, bet_results, mask, file_name, gradient='Greens'):
 
     """
 
+    mask = rouq_mask.mask
+
     if mask.all() == True:
         print('No valid relative pressure ranges. Specific surface area \
 heatmap not created.')
         return
 
+    df = bet_results.raw_data
+    
     #creating a masked array of ssa values
     ssa = np.ma.array(bet_results.ssa, mask=mask)
 
@@ -112,15 +117,15 @@ heatmap not created.')
     plt.yticks(rotation=45, horizontalalignment='right')
     plt.ylabel('End Relative Pressure')
 
-    if file_name != 'do not save':
-        fig.savefig('ssa_heatmap_%s.png' % (file_name[:-4]),
+    if save_file is True:
+        fig.savefig('ssa_heatmap_%s.png' % (bet_results.info),
                     bbox_inches='tight')
         print('Specific surface area heatmap saved as: ssa_heatmap_%s.png'
-              % (file_name[:-4]))
+              % (bet_results.info))
     return
 
 
-def err_heatmap(df, bet_results, mask, file_name, gradient='Greys'):
+def err_heatmap(bet_results, rouq_mask, save_file=True, gradient='Greys'):
     """Creates a heatmap of error values.
 
     Shading corresponds to theta, normalized for the minimum and maximum theta
@@ -157,10 +162,13 @@ def err_heatmap(df, bet_results, mask, file_name, gradient='Greys'):
     *CHANGE OUTPUT LOC BEFORE PACKAGING?!*
 
     """
+    mask = rouq_mask.mask
 
     if mask.all() == True:
         print('No valid relative pressure ranges. Error heat map not created.')
         return
+
+    df = bet_results.raw_data    
 
     err = np.ma.array(bet_results.err, mask=mask)
 
@@ -176,21 +184,21 @@ def err_heatmap(df, bet_results, mask, file_name, gradient='Greys'):
                 linewidths=1, linecolor='w',
                 cbar_kws={'shrink': .78, 'aspect': len(df.relp)})
     ax.invert_yaxis()
-    ax.set_title('BET Error Between Experimental and Theoretical Isotherms')
+    ax.set_title('Average Error per Point Between Experimental and Theoretical Isotherms')
     plt.xticks(rotation=45, horizontalalignment='right')
     plt.xlabel('Start Relative Pressure')
     plt.yticks(rotation=45, horizontalalignment='right')
     plt.ylabel('End Relative Pressure')
 
-    if file_name != 'do not save':
-        fig.savefig('error_heatmap_%s.png' % (file_name[:-4]),
+    if save_file is True:
+        fig.savefig('error_heatmap_%s.png' % (bet_results.info),
                     bbox_inches='tight')
         print('Error heatmap saved as: error_heatmap_%s.png' %
-              (file_name[:-4]))
+              (bet_results.info))
     return
 
 
-def bet_combo_plot(df, bet_results, mask, file_name):
+def bet_combo_plot(bet_results, rouq_mask, save_file=True):
     """Creates two BET plots, for the minimum and maxium error data sets.
 
     Only datapoints in the minimum and maximum error data sets are plotted
@@ -225,11 +233,14 @@ def bet_combo_plot(df, bet_results, mask, file_name):
     *CHANGE OUTPUT LOC BEFORE PACKAGING?!*
 
     """
-
+    
+    mask = rouq_mask.mask
+    
     if mask.all() == True:
         print('No valid relative pressure ranges. BET combo plot not created.')
         return
-
+    
+    df = bet_results.raw_data
     err = np.ma.array(bet_results.err, mask=mask)
     c = np.ma.array(bet_results.c, mask=mask)
 
@@ -294,14 +305,14 @@ def bet_combo_plot(df, bet_results, mask, file_name):
                  textcoords='axes fraction', xytext=(.775, .018),
                  xy=(df.relp[max_stop], df.bet[max_start + 1]), size=11)
 
-    if file_name != 'do not save':
-        figure.savefig('betplot_%s.png' % (file_name[:-4]),
+    if save_file is True:
+        figure.savefig('betplot_%s.png' % (bet_results.info),
                        bbox_inches='tight')
-        print('BET plot saved as: betplot_%s.png' % (file_name[:-4]))
+        print('BET plot saved as: betplot_%s.png' % (bet_results.info))
     return
 
 
-def bet_iso_combo_plot(df, bet_results, mask, file_name):
+def bet_iso_combo_plot(bet_results, rouq_mask, save_file=True):
     """Creates an image to visually compare the "best" and "worst" values of C.
 
     Image is 4 by 4, with two "decomposed isotherm" plots on the top row
@@ -340,12 +351,15 @@ def bet_iso_combo_plot(df, bet_results, mask, file_name):
     *CHANGE OUTPUT LOC BEFORE PACKAGING?!*
 
     """
-
+    
+    mask = rouq_mask.mask
+    
     if mask.all() == True:
         print('No valid relative pressure ranges. BET isotherm \
 combo plot not created.')
         return
-
+    
+    df = bet_results.raw_data
     ssa = np.ma.array(bet_results.ssa, mask=mask)
     nm = np.ma.array(bet_results.nm, mask=mask)
     c = np.ma.array(bet_results.c, mask=mask)
@@ -464,9 +478,9 @@ Maximum Error C')
                  textcoords='axes fraction', xytext=(.775, .018),
                  xy=(df.relp[min_stop], df.bet[min_start]), size=11)
 
-    if file_name != 'do not save':
-        f.savefig('isothermcomp_%s.png' % (file_name[:-4]),
+    if save_file == True:
+        f.savefig('isothermcomp_%s.png' % (bet_results.info),
                   bbox_inches='tight')
         print('Isotherm decomposition plot saved as: isothermcomp_%s.png'
-              % (file_name[:-4]))
+              % (bet_results.info))
     return

@@ -22,7 +22,7 @@ profile.porosity = porosity
 return profile
 """
 
-def bet(df, a_o):
+def bet(bet_results):
     """Performs BET analysis on an isotherm data set for all relative pressure
         ranges.
     This is the meat and potatoes of the whole package.
@@ -48,6 +48,9 @@ def bet(df, a_o):
         intercept is the y-intercept that results from applying linear regression to the experimental data
         r is the r value that results from applying linear regression to the experimental data
     """
+    
+    df = bet_results.raw_data
+    a_o = bet_results.a_o
     
     ssa_array = np.zeros((len(df), len(df)))
     c_array = np.zeros((len(df), len(df)))
@@ -84,13 +87,12 @@ def bet(df, a_o):
                 if i - j == 1:
                     err_array[i, j] = 0
                 else:
-                    err_array[i, j] = sum(errors[j:i + 1]) / (i + 1 - j)
+                    err_array[i, j] = 100 * sum(errors[j:i + 1]) / (i + 1 - j)
                 # error is normalized for the interval of relative pressures
                 # used to compute C, so, min and max error corresponds to the
                 # best and worst fit over the interval used in BET analysis,
                 # not the entire isotherm
 
-                bet_results = namedtuple('bet_results', ('ssa', 'nm', 'c', 'err', 'slope', 'intercept', 'r'))
                 bet_results.ssa = ssa_array
                 bet_results.nm = nm_array
                 bet_results.c = c_array
@@ -324,7 +326,7 @@ def check_5(df, points=5):
     return check5
 
 
-def rouq_mask(df, bet_results, check1=True, check2=True, check3=True,
+def rouq_mask(bet_results, check1=True, check2=True, check3=True,
               check4=True, check5=True, points=5):
     """Calls all check functions and combines their masks
     into one "rouqerol mask".
@@ -363,6 +365,8 @@ def rouq_mask(df, bet_results, check1=True, check2=True, check3=True,
         fail one or more checks
     """
     
+    df = bet_results.raw_data
+    
     mask = np.ones((len(df), len(df)))
     for i in range(len(df)):
         for j in range(len(df)):
@@ -400,10 +404,16 @@ def rouq_mask(df, bet_results, check1=True, check2=True, check3=True,
     mask = np.multiply(check4, mask)
     mask = np.multiply(check5, mask)
 
-    if np.any(mask) == False:
-        print('All relative pressure ranges fail the selected checks.')
-
     mask.astype(bool)  # converting mask to boolean
     invertedmask = np.logical_not(mask)  # inverting mask so that 0 = valid,
     # 1 = invalid, to work well with numpy masks
-    return invertedmask
+    
+    rouq_mask = namedtuple('rouq_mask', ('mask', 'check1', 'check2', 'check3', 'check4', 'check5'))
+    rouq_mask.mask = invertedmask
+    rouq_mask.check1 = check1
+    rouq_mask.check2 = check2
+    rouq_mask.check3 = check3
+    rouq_mask.check4 = check4
+    rouq_mask.check5 = check5
+    
+    return rouq_mask

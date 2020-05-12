@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import scipy as sp
 import beatmap.core as bet
+from collections import namedtuple
 
 
 def import_data():
@@ -39,7 +40,7 @@ def import_data():
     """
 
     file = input("Enter file name/path:")
-    adsorbate = input("Enter name of adsorbate used:")
+    info = input("Enter adsorbate-adsorbent information (this will be incorporated into file names):")
     a_o_input = input("Enter cross sectional area of adsorbate in \
 square Angstrom:")
 
@@ -51,8 +52,8 @@ square Angstrom:")
 adsorbate in square Angstrom: ")
         a_o = float(a_o_input)
 
-    print('\nAdsorbate used was %s with an adsorbed cross sectional area of \
-%.2f sq. Angstrom.' % (adsorbate, a_o))
+    print('\nAdsorbate used has an adsorbed cross sectional area of \
+%.2f sq. Angstrom.' % (a_o))
 
     # importing data and creating 'bet' and 'check1' data points
     try:
@@ -112,8 +113,13 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
         print('Isotherm is type IV.')
     else:
         print('Isotherm is type VI.')
-
-    return file, data, adsorbate, a_o
+        
+    bet_results = namedtuple('bet_results', ('file', 'info', 'a_o', 'raw_data', 'ssa', 'nm', 'c', 'err', 'slope', 'intercept', 'r'))
+    bet_results.file = file
+    bet_results.info = info
+    bet_results.a_o = a_o
+    bet_results.raw_data = data
+    return bet_results
 
 
 def import_list_data(relp, n):
@@ -147,7 +153,7 @@ def import_list_data(relp, n):
     """
 
     file = input("Enter name for dataset:")
-    adsorbate = input("Enter name of adsorbate used:")
+    info = input("Enter name of adsorbate used:")
     a_o_input = input("Enter cross sectional area of adsorbate in \
 square Angstrom:")
 
@@ -159,8 +165,8 @@ square Angstrom:")
 adsorbate in square Angstrom:")
         a_o = float(a_o_input)
 
-    print('\nAdsorbate used was %s with an adsorbed cross sectional area of \
-%.2f sq. Angstrom.' % (adsorbate, a_o))
+    print('\nAdsorbate used has an adsorbed cross sectional area of \
+%.2f sq. Angstrom.' % (a_o))
 
     # importing data and creating 'bet' and 'check1' data points
     dict_from_lists = {'relp': relp, 'n': n}
@@ -212,11 +218,17 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
         print('Isotherm is type IV.')
     else:
         print('Isotherm is type VI.')
+        
+    bet_results = namedtuple('bet_results', ('file', 'info', 'a_o', 'raw_data', 'ssa', 'nm', 'c', 'err', 'slope', 'intercept', 'r'))
+    bet_results.file = file
+    bet_results.info = info
+    bet_results.a_o = a_o
+    bet_results.raw_data = data
 
-    return file, data, adsorbate, a_o
+    return bet_results
 
 
-def export_raw_data(df, file_name):
+def export_raw_data(bet_results):
     """Exports isothermal adsoprtion data as a .csv file.
 
     Parameters
@@ -232,13 +244,14 @@ def export_raw_data(df, file_name):
     Returns
     _______
     """
-    export_file_name = 'raw_data_export_' + file_name
+    export_file_name = 'raw_data_export_' + bet_results.info
+    df = bet_results.raw_data
     df.to_csv(export_file_name, index=None, header=True)
     print('Raw data saved as: %s' % (export_file_name))
     return
 
 
-def export_processed_data(df, bet_results, file_name, points=5):
+def export_processed_data(bet_results, points=5):
     """Exports processed isothermal adsoprtion data as a .csv file.
 
     Parameters
@@ -261,6 +274,8 @@ def export_processed_data(df, bet_results, file_name, points=5):
     Returns
     _______
     """
+    
+    df = bet_results.raw_data
     i = 0
     end_relp = np.zeros((len(df), len(df)))
     while i < len(df):
@@ -301,7 +316,7 @@ def export_processed_data(df, bet_results, file_name, points=5):
                                            'r value', 'check1', 'check2',
                                            'check3', 'check4', 'check5'])
 
-    export_file_name = 'processed_data_export_' + file_name
+    export_file_name = 'processed_data_export_' + bet_results.info
     processed_data.to_csv(export_file_name, index=None, header=True)
     print('Processed data saved as: %s' % (export_file_name))
     return
