@@ -346,7 +346,4 @@ def dataframe_tables(bet_results, rouq_mask):
     
     c_table = pd.DataFrame(data=c_dict)
     
-    ssa_sdev = 'Standard deviation of specific surface area = %.3f' % (ssa_std)
-    c_sdev = 'Standard deviation of BET constant (C) = %.3f' % (c_std)
-    
-    return ssa_table, c_table, ssa_sdev, c_sdev
+    return ssa_table, c_table, ssa_std, c_std
