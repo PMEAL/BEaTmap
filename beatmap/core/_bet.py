@@ -14,14 +14,6 @@ from collections import namedtuple
 avagadro = 6.022*10**23
 
 
-"""
-from collections import namedtuple
-profile = namedtuple('profile', ('volume', 'porosity'))
-profile.volume = volume
-profile.porosity = porosity
-return profile
-"""
-
 def bet(bet_results):
     """Performs BET analysis on an isotherm data set for all relative pressure
         ranges.
@@ -29,16 +21,14 @@ def bet(bet_results):
 
     Parameters
     ----------
-    df : dataframe
-        dataframe of imported experimental isothermal adsorption data
-
-    a_o : float
-        adsorbate cross section area, units must be [square angstrom]
+    bet_results : namedtuple
+        namedtuple containing all information required for BET analysis,
+        
 
     Returns
     -------
     bet_results : namedtuple
-        namedtuple with the following elements: ssa, nm, c, err, slope, intercept, r
+        namedtuple, the following elements contain BET results: ssa, nm, c, err, slope, intercept, r
         the elements are 2D arrays where each cell represents the results for a partiular relative pressure interval
         ssa is the specific suraface area in m^2/g 
         nm is the monolayer amount in mol/g 
@@ -333,8 +323,6 @@ def rouq_mask(bet_results, check1=True, check2=True, check3=True,
 
     Parameters
     __________
-    df : dataframe
-        dataframe of imported experimental isothermal adsorption data
 
     bet_results : namedtuple
         bet_results is the named tuple returned from the bet function, containing all data
@@ -360,9 +348,9 @@ def rouq_mask(bet_results, check1=True, check2=True, check3=True,
     
     Returns
     _______
-    invertedmask : numpy mask array
-        array of 1s and 0s where 1 corresponds to relative pressure ranges that
-        fail one or more checks
+    rouq_mask : namedtuple
+        namedtuple with fields containing arrays for the result of each check
+        in addition to the rouq_mask.mask field which contains the mask of invalid relative pressure ranges
     """
     
     df = bet_results.raw_data

@@ -21,19 +21,17 @@ def experimental_data_plot(bet_results, save_file=False):
 
     Parameters
     __________
-    df : dataframe
-        dataframe of imported experimental data
+    bet_results : namedtuple
+        namedtuple where the bet_results.raw_data element is used to
+        create a plot of isotherm data
 
-    file_name : str
-        file name used to import .csv data, this function uses it to name the
-        output .png file
+    save_file : boolean
+        when save_file = True a .png of the figure is created in the
+        working directory
 
     Returns
     _______
     none
-
-    Saves image file in same directory as figures.py code
-    *CHANGE OUTPUT LOC BEFORE PACKAGING?!*
 
     """
 
@@ -62,31 +60,26 @@ def ssa_heatmap(bet_results, rouq_mask, save_file = True, gradient='Greens'):
 
     Parameters
     __________
-    df : dataframe
-        dataframe of imported experimental data, used to label heatmap axis
-
     bet_results : namedtuple
-        bet_results is the named tuple returned from the bet function, containing all data
-        required to check the validity of BET theory over all relative pressure intervals
-        in this function the ssa element is used
+        namedtuple where the bet_results.ssa element is used to
+        create a heatmap of specific surface area answers
 
-    mask : array
-        array of boolean values, returned from the rouq_mask function, used to mask
-        invalid relative pressure ranges
+    rouq_mask : namedtuple
+        namedtuple, the rouq_mask.mask element is used to mask the
+        specific surface area heatmap so that only valid results are
+        displayed
     
-    file_name : str
-        file name used to import .csv data, this function uses it to name the
-        output .png file
+    save_file : boolean
+        when save_file = True a .png of the figure is created in the
+        working directory
 
     gradient : string
-        color gradient for heatmap
+        color gradient for heatmap, must be a vaild color gradient name
+        in the seaborn package
 
     Returns
     _______
     none
-
-    Saves image file in same directory as figures.py code
-    *CHANGE OUTPUT LOC BEFORE PACKAGING?!*
 
     """
 
@@ -135,31 +128,26 @@ def err_heatmap(bet_results, rouq_mask, save_file=True, gradient='Greys'):
 
     Parameters
     __________
-    df : dataframe
-        dataframe of imported experimental data, used to label heatmap axis
-
     bet_results : namedtuple
-        bet_results is the named tuple returned from the bet function, containing all data
-        required to check the validity of BET theory over all relative pressure intervals
-        in this function the error element is used
+        namedtuple where the bet_results.error element is used to
+        create a heatmap of error values
 
-    mask : array
-        array of boolean values, returned from the rouq_mask function, used to mask
-        invalid relative pressure ranges
+    rouq_mask : namedtuple
+        namedtuple, the rouq_mask.mask element is used to mask the
+        specific surface area heatmap so that only valid results are
+        displayed
     
-    file_name : str
-        file name used to import .csv data, this function uses it to name the
-        output .png file
+    save_file : boolean
+        when save_file = True a .png of the figure is created in the
+        working directory
 
     gradient : string
-        color gradient for heatmap
+        color gradient for heatmap, must be a vaild color gradient name
+        in the seaborn package
 
     Returns
     _______
     none
-
-    Saves image file in same directory as figures.py code
-    *CHANGE OUTPUT LOC BEFORE PACKAGING?!*
 
     """
     mask = rouq_mask.mask
@@ -209,28 +197,22 @@ def bet_combo_plot(bet_results, rouq_mask, save_file=True):
     Parameters
     __________
 
-    df : dataframe
-        dataframe of imported experimental data, used to label heatmap axis
-
     bet_results : namedtuple
-        bet_results is the named tuple returned from the bet function, containing all data
-        required to check the validity of BET theory over all relative pressure intervals
-        in this function the error element is used
+        namedtuple where the bet_results.raw_data element is used to
+        create a plot of isotherm data
 
-    mask : array
-        array of boolean values, returned from the rouq_mask function, used to mask
-        invalid relative pressure ranges
-
-    file_name : str
-        file name used to import .csv data, this function uses it to name the
-        output .png file
+    rouq_mask : namedtuple
+        namedtuple, the rouq_mask.mask element is used to mask the
+        BET results so that only valid results are
+        displayed
+    
+    save_file : boolean
+        when save_file = True a .png of the figure is created in the
+        working directory
 
     Returns
     _______
     none
-
-    Saves image file in same directory as figures.py code
-    *CHANGE OUTPUT LOC BEFORE PACKAGING?!*
 
     """
     
@@ -327,21 +309,18 @@ def bet_iso_combo_plot(bet_results, rouq_mask, save_file=True):
     Parameters
     __________
 
-    df : dataframe
-        dataframe of imported experimental data, used to label heatmap axis
-
     bet_results : namedtuple
-        bet_results is the named tuple returned from the bet function, containing all data
-        required to check the validity of BET theory over all relative pressure intervals
-        in this function the error element is used
+        namedtuple where the bet_results.raw_data element is used to
+        create a plot of isotherm data
 
-    mask : array
-        array of boolean values, returned from the rouq_mask function, used to mask
-        invalid relative pressure ranges
-
-    file_name : str
-        file name used to import .csv data, this function uses it to name the
-        output .png file
+    rouq_mask : namedtuple
+        namedtuple, the rouq_mask.mask element is used to mask the
+        BET results so that only valid results are
+        displayed
+    
+    save_file : boolean
+        when save_file = True a .png of the figure is created in the
+        working directory
 
     Returns
     _______

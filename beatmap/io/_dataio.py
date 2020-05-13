@@ -25,18 +25,12 @@ def import_data():
     _________
     Returns
     _______
-    file: string
-        file name, used later to name saved files
-
-    data : dataframe
-        contains adsorption data and values computed from
-        adsortion data, used later in the BET analysis
-
-    adsorbate: string
-        adsorbate name, for reference
-
-    a_o: float
-        cross sectional surface area of adsorbate in square angstrom
+    bet_results : namedtuple
+    named tuple containing all information required for BET analysis
+    bet_results.file contains the file name or path as a string
+    bet_results.info contains adsorbate-adsorbent info as a string
+    bet_results.a_o contains the adsorbate cross sectional area as a float
+    bet_results.raw_data contains the imported isotherm data as a dataframe
     """
 
     file = input("Enter file name/path:")
@@ -234,17 +228,16 @@ def export_raw_data(bet_results):
     Parameters
     __________
 
-    df : dataframe
-        contains adsorption data and values computed from
-        adsortion data, used later in the BET analysis
-
-    file_name: string
-        file name, used to name .csv file
+    bet_results : namedtuple
+    named tuple containing all information required for BET analysis
+    bet_results.raw_data contains the raw isotherm data written to a .csv
+    bet_results.info contains adsorbate-adsorbent info that is used to create
+    a file name
 
     Returns
     _______
     """
-    export_file_name = 'raw_data_export_' + bet_results.info
+    export_file_name = bet_results.info + 'raw_data_export.csv' 
     df = bet_results.raw_data
     df.to_csv(export_file_name, index=None, header=True)
     print('Raw data saved as: %s' % (export_file_name))
@@ -257,16 +250,10 @@ def export_processed_data(bet_results, points=5):
     Parameters
     __________
 
-    df : dataframe
-        contains adsorption data and values computed from
-        adsortion data, used later in the BET analysis
-
     bet_results : namedtuple
-        bet_results is the named tuple returned from the bet function, containing all data
-        required to check the validity of BET theory over all relative pressure intervals
-
-    file_name: string
-        file name, used to name .csv file
+    named tuple containing all information required for BET analysis
+    bet_results.raw_data contains the raw isotherm data written to a .csv
+    bet_results.info contains adsorbate-adsorbent info that is used to create a .csv file name 
 
     points : int
         the minimum number of experimental data points for a relative pressure interval to be considered valid
