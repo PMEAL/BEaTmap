@@ -11,7 +11,7 @@ bet_results = bt.io.import_data()
 # file_name, data, adsorbate, a_o = bt.io.import_list_data(relp, n)
 
 # experimental_data_plot() may be used to visualize the isotherm
-bt.vis.experimental_data_plot(bet_results, True)
+#bt.vis.experimental_data_plot(bet_results, True)
 
 # the bet() function applies BET theory to the isotherm and returns arrays of
 # surface area, monolayer amounts, bet constant, error,
@@ -22,16 +22,16 @@ bet_results = bt.core.bet(bet_results)
 # the arrays (specific surface area, bet constant, etc)
 # by default all checks are applied
 rouq_mask = bt.core.rouq_mask(bet_results, check1=True, check2=True,
-                         check3=True, check4=True, check5=True, points=3)
+                         check3=False, check4=False, check5=True, points=3)
 
 
 # heatmaps, plots, and tables created from the masked arrays allow the
 # valid results of BET theory to be visualized by applying mask
 # ssa_heatmap() creates a heatmap of specific surface area values
-bt.vis.ssa_heatmap(bet_results, rouq_mask)
+#bt.vis.ssa_heatmap(bet_results, rouq_mask)
 
 # err_heatmap() creates a heatmap of error values
-bt.vis.err_heatmap(bet_results, rouq_mask)
+#bt.vis.err_heatmap(bet_results, rouq_mask)
 
 # bet_combo_plot() compares the two unmasked relative pressure ranges
 # that have the lowest and highest error (best and worst agreement
@@ -42,17 +42,13 @@ bt.vis.bet_combo_plot(bet_results, rouq_mask)
 # highest and lowest error. The BET equation is visualized in the 'decomposed'
 # form, the y - axis is normalized, n/nm. The point where the experimental data
 # crosses n/nm = 1 shows where monolayer coverage occurs
-bt.vis.bet_iso_combo_plot(bet_results, rouq_mask)
+#bt.vis.bet_iso_combo_plot(bet_results, rouq_mask)
 
 # ascii_tables() creates two tables summarizing
 # the valid results of applying BET theory
-bt.vis.ascii_tables(bet_results, rouq_mask)
+#bt.vis.ascii_tables(bet_results, rouq_mask)
 
 # export_raw_data() creates a .csv file of the isotherm data
-bt.io.export_raw_data(bet_results)
+#bt.io.export_processed_data(bet_results, points=5)
 
-# export_processed_data() creates a .csv file of data, bet results,
-# linear regression data, and rouq checks
-bt.io.export_processed_data(bet_results, points=5)
-
-ssa_table, c_table = bt.vis.dataframe_tables(bet_results, rouq_mask)
+#ssa_table, c_table = bt.vis.dataframe_tables(bet_results, rouq_mask)

@@ -244,48 +244,38 @@ def bet_combo_plot(bet_results, rouq_mask, save_file=True):
     min_linex[0] = df.relp[min_start] - .01
     min_linex[1] = df.relp[min_stop] + .01
 
-    figure, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10))
-
-    ax1.set_title('BET Plot - Data Points for Minimum Error C')
-    ax1.set_xlim(min_linex[0]-.01, min_linex[1]+.01)
-    ax1.set_ylabel('1/[n(1-Po/P)]')
-    ax1.set_ylim(min_liney[0]*.9, min_liney[1]*1.1)
-    ax1.set_xlabel('P/Po')
-    ax1.grid(b=True, which='major', color='gray', linestyle='-')
-    ax1.plot(df.relp[min_start:min_stop + 1], df.bet[min_start:min_stop + 1],
-             label='Experimental Data', c='grey', marker='o', linewidth=0)
-    ax1.plot(min_linex, min_liney, color='black', label='Linear Regression')
-    ax1.legend(loc='upper left', framealpha=1)
-    ax1.annotate('Linear Regression: \nm = %.3f \nb = %.3f \nR = %.3f'
-                 % (slope, intercept, r_value),
-                 bbox=dict(boxstyle="round", fc='white', ec="gray", alpha=1),
-                 textcoords='axes fraction', xytext=(.775, .018),
-                 xy=(df.relp[min_stop], df.bet[min_start]), size=11)
-
-    slope, intercept, r_value, p_value, std_err = \
+    slope_max, intercept_max, r_value_max, p_value_max, std_err_max = \
         sp.stats.linregress(df.relp[max_start: max_stop + 1],
                             df.bet[max_start: max_stop + 1])
     max_liney = np.zeros(2)
-    max_liney[0] = slope * (df.relp[max_start] - .01) + intercept
-    max_liney[1] = slope * (df.relp[max_stop] + .01) + intercept
+    max_liney[0] = slope_max * (df.relp[max_start] - .01) + intercept_max
+    max_liney[1] = slope_max * (df.relp[max_stop] + .01) + intercept_max
     max_linex = np.zeros(2)
     max_linex[0] = df.relp[max_start] - .01
     max_linex[1] = df.relp[max_stop] + .01
 
-    ax2.set_title('BET Plot - Data Points for Maximum Error C')
-    ax2.set_xlim(max_linex[0]-.01, max_linex[1]+.01)
-    ax2.set_xlabel('P/Po')
-    ax2.set_ylabel('1/[n(1-Po/P)]')
-    ax2.set_ylim(max_liney[0]*.9, max_liney[1]*1.1)
-    ax2.grid(b=True, which='major', color='gray', linestyle='-')
-    ax2.plot(df.relp[max_start:max_stop + 1], df.bet[max_start:max_stop + 1],
-             label='Experimental Data', c='grey', marker='o', linewidth=0)
-    ax2.plot(max_linex, max_liney, color='black', label='Linear Regression')
-    ax2.annotate('Linear Regression: \nm = %.3f \nb = %.3f \nR = %.3f'
-                 % (slope, intercept, r_value),
+    figure, ax1 = plt.subplots(1, figsize=(10, 10))
+
+    ax1.set_title('BET Plot')
+    ax1.set_xlim(0, max(min_linex[1], max_linex[1]))
+    ax1.set_ylabel('1/[n(P/Po-1)]')
+    ax1.set_ylim(0, max(min_liney[1]*1.1, max_liney[1]*1.1))
+    ax1.set_xlabel('P/Po')
+    ax1.grid(b=True, which='major', color='gray', linestyle='-')
+    ax1.plot(df.relp[min_start:min_stop + 1], df.bet[min_start:min_stop + 1],
+             label='Min Error Experimental Data', c='grey', marker='o', linewidth=0,
+             fillstyle = 'none')
+    ax1.plot(min_linex, min_liney, color='black', label='Min Error Linear Regression')
+    ax1.plot(df.relp[max_start:max_stop + 1], df.bet[max_start:max_stop + 1],
+             label='Max Error Experimental Data', c='grey', marker='x', linewidth=0)
+    ax1.plot(max_linex, max_liney, color='black', linestyle = '--', label='Max Error Linear Regression')
+    ax1.legend(loc='upper left', framealpha=1)
+    ax1.annotate('Min Error Linear Regression: \nm = %.3f \nb = %.3f \nR = %.3f \
+                 \n\nMax Error Linear Regression: \nm = %.3f \nb = %.3f \nR = %.3f'
+                 % (slope, intercept, r_value, slope_max, intercept_max, r_value_max),
                  bbox=dict(boxstyle="round", fc='white', ec="gray", alpha=1),
-                 textcoords='axes fraction', xytext=(.775, .018),
-                 xy=(df.relp[max_stop], df.bet[max_start + 1]), size=11)
+                 textcoords='axes fraction', xytext=(.695, .017),
+                 xy=(df.relp[min_stop], df.bet[min_start]), size=11)
 
     if save_file is True:
         figure.savefig('betplot_%s.png' % (bet_results.info),
@@ -364,11 +354,9 @@ combo plot not created.')
     expnnm_max_used = expnnm_max[err_max_j:err_max_i]
     ppo_expnnm_max_used = df.relp[err_max_j:err_max_i]
 
-    f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2,
-                                               figsize=(20, 20))
+    f, ax1 = plt.subplots(1,1, figsize=(10, 10))
 
-    ax1.set_title('Isotherm as a composition of two equations, a and b - \
-Minimum Error C')
+    ax1.set_title('BET Isotherm and Experimental data')
     ax1.set_ylim(0, synth_min[-2]+1)
     ax1.set_xlim(0, 1)
     ax1.set_ylabel('n/nm')
@@ -384,78 +372,6 @@ Minimum Error C')
     ax1.plot([0, 1], [1, 1], c='grey', linestyle='--',
              linewidth=1, marker='')
     ax1.legend(loc='upper left', framealpha=1)
-
-    ax2.set_title('Isotherm as a composition of two equations, a and b - \
-Maximum Error C')
-    ax2.set_ylabel('n/nm')
-    ax2.set_xlabel('P/Po')
-    ax2.set_ylim(0, synth_max[-2] + 1)
-    ax2.set_xlim(0, 1)
-    ax2.grid(b=True, which='major', color='gray', linestyle='-')
-    ax2.plot(ppo, synth_max, linestyle='-', linewidth=1, c='black',
-             label='Theoretical isotherm', marker='')
-    ax2.plot(ppo_expnnm_max_used, expnnm_max_used, c='gray',
-             label='Experimental isotherm - used data',
-             marker='o', linewidth=0)
-    ax2.plot(df.relp, expnnm_max, c='grey', fillstyle='none',
-             label='Experimental isotherm', marker='o', linewidth=0)
-    ax2.plot([0, 1], [1, 1], c='grey', linestyle='--',
-             linewidth=1, marker='')
-
-    min_start = int(err_min_idx[1])
-    min_stop = int(err_min_idx[0])
-    max_start = int(err_max_idx[1])
-    max_stop = int(err_max_idx[0])
-
-    slope, intercept, r_value, p_value, std_err = \
-        sp.stats.linregress(df.relp[min_start: min_stop + 1],
-                            df.bet[min_start: min_stop + 1])
-    min_liney = np.zeros(2)
-    min_liney[0] = slope * (df.relp[min_start] - .01) + intercept
-    min_liney[1] = slope * (df.relp[min_stop] + .01) + intercept
-    min_linex = np.zeros(2)
-    min_linex[0] = df.relp[min_start] - .01
-    min_linex[1] = df.relp[min_stop] + .01
-    ax3.set_title('BET Plot - Data Points for Minimum Error C')
-    ax3.set_xlim(0, 1)
-    ax3.set_ylim(min_liney[0]*.9, min_liney[1]*1.1)
-    ax3.set_ylabel('1/[n(1-Po/P)]')
-    ax3.set_xlabel('P/Po')
-    ax3.grid(b=True, which='major', color='gray', linestyle='-')
-    ax3.plot(df.relp[min_start:min_stop + 1], df.bet[min_start:min_stop + 1],
-             label='Experimental Data', c='gray', marker='o', linewidth=0)
-    ax3.plot(min_linex, min_liney, color='black', label='Linear Regression')
-    ax3.legend(loc='upper left', framealpha=1)
-    ax3.annotate('Linear Regression: \nm = %.3f \nb = %.3f \nR = %.3f'
-                 % (slope, intercept, r_value),
-                 bbox=dict(boxstyle="round", fc='white', ec="gray", alpha=1),
-                 textcoords='axes fraction', xytext=(.775, .018),
-                 xy=(df.relp[min_stop], df.bet[min_start]), size=11)
-
-    slope, intercept, r_value, p_value, std_err =\
-        sp.stats.linregress(df.relp[max_start:max_stop + 1],
-                            df.bet[max_start:max_stop + 1])
-    max_liney = np.zeros(2)
-    max_liney[0] = slope * (df.relp[max_start] - .01) + intercept
-    max_liney[1] = slope * (df.relp[max_stop] + .01) + intercept
-    max_linex = np.zeros(2)
-    max_linex[0] = df.relp[max_start] - .01
-    max_linex[1] = df.relp[max_stop] + .01
-
-    ax4.set_title('BET Plot - Data Points for Maximum Error C')
-    ax4.set_ylabel('1/[n(1-Po/P)]')
-    ax4.set_xlabel('P/Po')
-    ax4.set_xlim(0, 1)
-    ax4.set_ylim(max_liney[0]*.9, max_liney[1]*1.1)
-    ax4.grid(b=True, which='major', color='gray', linestyle='-')
-    ax4.plot(df.relp[max_start:max_stop + 1], df.bet[max_start:max_stop + 1],
-             label='Experimental Data', c='gray', marker='o', linewidth=0)
-    ax4.plot(max_linex, max_liney, color='black', label='Linear Regression')
-    ax4.annotate('Linear Regression: \nm = %.3f \nb = %.3f \nR = %.3f'
-                 % (slope, intercept, r_value),
-                 bbox=dict(boxstyle="round", fc='white', ec="gray", alpha=1),
-                 textcoords='axes fraction', xytext=(.775, .018),
-                 xy=(df.relp[min_stop], df.bet[min_start]), size=11)
 
     if save_file == True:
         f.savefig('isothermcomp_%s.png' % (bet_results.info),
