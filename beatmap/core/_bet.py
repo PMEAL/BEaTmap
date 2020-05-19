@@ -50,6 +50,7 @@ def bet(bet_results):
     intercept = np.zeros((len(df), len(df)))
     r = np.zeros((len(df), len(df)))
     bet_c = np.zeros(len(df.relp))
+    number_pts = np.zeros((len(df.relp), len(df.relp)))
 
     for i in range(len(df)):
         for j in range(len(df)):
@@ -73,6 +74,7 @@ def bet(bet_results):
                 ssa_array[i, j] = spec_sa
                 c_array[i, j] = c
                 nm_array[i, j] = nm
+                number_pts[i, j] = i - j + 1
                 errors = np.nan_to_num(abs(bet_c - df.bet) / bet_c)
                 if i - j == 1:
                     err_array[i, j] = 0
@@ -90,6 +92,7 @@ def bet(bet_results):
                 bet_results.slope = np.nan_to_num(slope)
                 bet_results.intercept = np.nan_to_num(intercept)
                 bet_results.r = r
+                bet_results.number_pts = number_pts
                  
     return bet_results
 
@@ -405,3 +408,27 @@ def rouq_mask(bet_results, check1=True, check2=True, check3=True,
     rouq_mask.check5 = check5
     
     return rouq_mask
+
+def ssa_answer(bet_results, rouq_mask, criterion='error'):
+    mask = rouq_mask.mask
+    ssa = np.ma.array(bet_results.ssa, mask=mask)
+    
+    if criterion == 'error':
+        err = np.ma.array(bet_results.err, mask=mask)
+        errormax, error_max_idx, errormin, error_min_idx = util.max_min(err)
+        ssa_ans = ssa[int(error_min_idx[0]), int(error_min_idx[1])]
+        print('The specific surface area value, based on %s is %.2f m2/g.' % (criterion, ssa_ans))
+        return 
+    
+    if criterion == 'points':
+        pts = np.ma.array(bet_results.number_pts, mask=mask)
+        max_pts = np.max(pts)
+        ssa_ans_array = np.ma.masked_where(pts < max_pts, ssa)
+        try: 
+            ssa_ans = float(ssa_ans_array.compressed())
+        except:
+            print('Error, so single specific surface area answer. Multiple relative pressure ranges with the maximum number of points.')
+            return 0
+        print('The specific surface area value, based on %s is %.2f m2/g.' % (criterion, ssa_ans))
+        return ssa_ans
+        

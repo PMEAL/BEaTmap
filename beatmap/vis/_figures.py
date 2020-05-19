@@ -37,12 +37,13 @@ def experimental_data_plot(bet_results, save_file=False):
 
     df = bet_results.raw_data
     fig, (ax) = plt.subplots(1, 1, figsize=(10, 10))
-    ax.plot(df.relp, df.n, c='grey', marker='o', linewidth=0)
-    ax.set_xlim(-.05, 1.05)
+    ax.set_xlim(0, 1.0)
+    ax.set_ylim(0, df['n'].iloc[-1] * 1.05)
     ax.set_title('Experimental Isotherm')
     ax.set_ylabel('n [mol/g]')
     ax.set_xlabel('P/Po')
     ax.grid(b=True, which='major', color='gray', linestyle='-')
+    ax.plot(df.relp, df.n, c='grey', marker='o', linewidth=0)
 
     if save_file is True:
         fig.savefig('experimentaldata_%s.png' % (bet_results.info),
@@ -158,8 +159,6 @@ def err_heatmap(bet_results, rouq_mask, save_file=True, gradient='Greys'):
 
     df = bet_results.raw_data    
 
-    err = np.ma.array(bet_results.err, mask=mask)
-
     #creating a masked array of ssa values
     err = np.ma.array(bet_results.err, mask=mask)
 
@@ -215,7 +214,6 @@ def bet_combo_plot(bet_results, rouq_mask, save_file=True):
     none
 
     """
-    
     mask = rouq_mask.mask
     
     if mask.all() == True:
@@ -257,7 +255,7 @@ def bet_combo_plot(bet_results, rouq_mask, save_file=True):
     figure, ax1 = plt.subplots(1, figsize=(10, 10))
 
     ax1.set_title('BET Plot')
-    ax1.set_xlim(0, max(min_linex[1], max_linex[1]))
+    ax1.set_xlim(0, max(min_linex[1], max_linex[1])*1.1)
     ax1.set_ylabel('1/[n(P/Po-1)]')
     ax1.set_ylim(0, max(min_liney[1]*1.1, max_liney[1]*1.1))
     ax1.set_xlabel('P/Po')
@@ -376,6 +374,6 @@ combo plot not created.')
     if save_file == True:
         f.savefig('isothermcomp_%s.png' % (bet_results.info),
                   bbox_inches='tight')
-        print('Isotherm decomposition plot saved as: isothermcomp_%s.png'
+        print('Experimental and theoretical isotherm plot saved as: isothermcomp_%s.png'
               % (bet_results.info))
     return
