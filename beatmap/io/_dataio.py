@@ -13,28 +13,30 @@ from collections import namedtuple
 
 
 def import_data():
-    """Imports isothermal adsoprtion data.
+    """Imports isothermal adsoprtion data from a csv file.
 
     The .csv file format expected is a two column table,
-    the first column being "n" (specific adsorbed amount)
-    and the second "relp" the relative pressure.
-
-    requires n values with units of mol/g
+    the first column being "n" (specific amount adsorbed, mol/g)
+    and the second being the relative pressure.
 
     Parameters
-    _________
+    ----------
+
     Returns
-    _______
+    -------
     bet_results : namedtuple
-    named tuple containing all information required for BET analysis
-    bet_results.file contains the file name or path as a string
-    bet_results.info contains adsorbate-adsorbent info as a string
-    bet_results.a_o contains the adsorbate cross sectional area as a float
-    bet_results.raw_data contains the imported isotherm data as a dataframe
+        Contains all information required for BET analysis.
+        Relevant fields are:
+
+        - ``bet_results.file`` (string) : file name or path.
+        - ``bet_results.info`` (string) : adsorbate-adsorbent info as a string.
+        - ``bet_results.a_o`` (float) : adsorbate cross sectional area.
+        - ``bet_results.raw_data`` (dataframe) : imported isotherm data.
     """
 
     file = input("Enter file name/path:")
-    info = input("Enter adsorbate-adsorbent information (this will be incorporated into file names):")
+    info = input("Enter adsorbate-adsorbent information (this will be \
+incorporated into file names):")
     a_o_input = input("Enter cross sectional area of adsorbate in \
 square Angstrom:")
 
@@ -107,8 +109,10 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
         print('Isotherm is type IV.')
     else:
         print('Isotherm is type VI.')
-        
-    bet_results = namedtuple('bet_results', ('file', 'info', 'a_o', 'raw_data', 'ssa', 'nm', 'c', 'err', 'slope', 'intercept', 'r'))
+
+    bet_results = namedtuple('bet_results', ('file', 'info', 'a_o', 'raw_data',
+                                             'ssa', 'nm', 'c', 'err', 'slope',
+                                             'intercept', 'r'))
     bet_results.file = file
     bet_results.info = info
     bet_results.a_o = a_o
@@ -123,27 +127,23 @@ def import_list_data(relp, n):
     adsorbed with units of [mol/g].
 
     Parameters
-    __________
+    ----------
     relp : list
-        list of relative pressure values
+        Experimental isotherm relative pressure values.
 
     n : list
-        list of amount adsorbed at each relative pressure stage, mols per gram
+        Experimental amount adsorbed values, mols per gram.
 
     Returns
-    _______
-    file: string
-        file name, used later to name saved files
+    -------
+    bet_results : namedtuple
+        Contains all information required for BET analysis.
+        Relevant fields are:
 
-    data : dataframe
-        contains adsorption data and values computed from
-        adsortion data, used later in the BET analysis
-
-    adsorbate: string
-        adsorbate name, for reference
-
-    a_o: float
-        cross sectional surface area of adsorbate in square angstrom
+        - ``bet_results.file`` (string) : file name or path.
+        - ``bet_results.info`` (string): adsorbate-adsorbent info as a string.
+        - ``bet_results.a_o`` (float) : adsorbate cross sectional area.
+        - ``bet_results.raw_data`` (dataframe) : imported isotherm data.
     """
 
     file = input("Enter name for dataset:")
@@ -212,8 +212,10 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
         print('Isotherm is type IV.')
     else:
         print('Isotherm is type VI.')
-        
-    bet_results = namedtuple('bet_results', ('file', 'info', 'a_o', 'raw_data', 'ssa', 'nm', 'c', 'err', 'slope', 'intercept', 'r'))
+
+    bet_results = namedtuple('bet_results', ('file', 'info', 'a_o', 'raw_data',
+                                             'ssa', 'nm', 'c', 'err', 'slope',
+                                             'intercept', 'r'))
     bet_results.file = file
     bet_results.info = info
     bet_results.a_o = a_o
@@ -223,21 +225,27 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
 
 
 def export_raw_data(bet_results):
-    """Exports isothermal adsoprtion data as a .csv file.
+    """Exports isothermal adsoprtion data.
+
+    Exported data is saved as a .csv file in the parent directory.
 
     Parameters
-    __________
+    ----------
 
     bet_results : namedtuple
-    named tuple containing all information required for BET analysis
-    bet_results.raw_data contains the raw isotherm data written to a .csv
-    bet_results.info contains adsorbate-adsorbent info that is used to create
-    a file name
+        Contains all information required for BET analysis.
+        Relevant fields are:
+
+        - ``bet_results.raw_data`` (dataframe) : of the raw isotherm data
+        written to a .csv
+        - ``bet_results.info`` (string) : adsorbate-adsorbent information used
 
     Returns
-    _______
+    -------
+
     """
-    export_file_name = bet_results.info + 'raw_data_export.csv' 
+
+    export_file_name = bet_results.info + 'raw_data_export.csv'
     df = bet_results.raw_data
     df.to_csv(export_file_name, index=None, header=True)
     print('Raw data saved as: %s' % (export_file_name))
@@ -245,23 +253,30 @@ def export_raw_data(bet_results):
 
 
 def export_processed_data(bet_results, points=5):
-    """Exports processed isothermal adsoprtion data as a .csv file.
+    """Exports processed isothermal adsoprtion data.
+
+    Exported data is saved as a .csv file in the parent directory.
 
     Parameters
-    __________
+    ----------
 
     bet_results : namedtuple
-    named tuple containing all information required for BET analysis
-    bet_results.raw_data contains the raw isotherm data written to a .csv
-    bet_results.info contains adsorbate-adsorbent info that is used to create a .csv file name 
+        Contains all information required for BET analysis.
+        Relevant fields are:
+
+        - ``bet_results.raw_data`` (dataframe) : of the raw isotherm data
+        written to a .csv
+        - ``bet_results.info`` (string) : adsorbate-adsorbent information used
 
     points : int
-        the minimum number of experimental data points for a relative pressure interval to be considered valid
+        The minimum number of experimental data points for a relative pressure
+        interval to be considered valid. Default is 5.
 
     Returns
-    _______
+    -------
+
     """
-    
+
     df = bet_results.raw_data
     i = 0
     end_relp = np.zeros((len(df), len(df)))
@@ -274,15 +289,20 @@ def export_processed_data(bet_results, points=5):
     mask1 = bet.check_1(df)
     mask2 = bet.check_2(bet_results.intercept)
     mask3 = bet.check_3(df, bet_results.nm)
-    mask4 = bet.check_4(df, bet_results.nm, bet_results.slope, bet_results.intercept)
+    mask4 = bet.check_4(df, bet_results.nm, bet_results.slope,
+                        bet_results.intercept)
     mask5 = bet.check_5(df, points)
-   
+
     processed_data = np.column_stack((begin_relp.flatten(),
                                       end_relp.flatten()))
-    processed_data = np.column_stack((processed_data, bet_results.ssa.flatten()))
-    processed_data = np.column_stack((processed_data, bet_results.nm.flatten()))
-    processed_data = np.column_stack((processed_data, bet_results.c.flatten()))
-    processed_data = np.column_stack((processed_data, bet_results.err.flatten()))
+    processed_data = np.column_stack((processed_data,
+                                      bet_results.ssa.flatten()))
+    processed_data = np.column_stack((processed_data,
+                                      bet_results.nm.flatten()))
+    processed_data = np.column_stack((processed_data,
+                                      bet_results.c.flatten()))
+    processed_data = np.column_stack((processed_data,
+                                      bet_results.err.flatten()))
     processed_data = np.column_stack((processed_data,
                                       bet_results.slope.flatten()))
     processed_data = np.column_stack((processed_data,
@@ -299,11 +319,12 @@ def export_processed_data(bet_results, points=5):
                                   columns=['begin relative pressure',
                                            'end relative pressure',
                                            'spec sa [m2/g]', 'bet constant',
-                                           'nm [mol/g]', 'error', 'slope', 'y-int',
-                                           'r value', 'check1', 'check2',
-                                           'check3', 'check4', 'check5'])
+                                           'nm [mol/g]', 'error', 'slope',
+                                           'y-int', 'r value', 'check1',
+                                           'check2', 'check3', 'check4',
+                                           'check5'])
 
-    export_file_name = 'processed_data_export_' + bet_results.info
+    export_file_name = bet_results.info + 'processed_data_export.csv'
     processed_data.to_csv(export_file_name, index=None, header=True)
     print('Processed data saved as: %s' % (export_file_name))
     return

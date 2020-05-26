@@ -2,20 +2,20 @@ import numpy as np
 
 
 def index_of_value(array, value):
-    """ Find the index of a value in an array most similar to value passed.
+    """ Finds the index of a value in an array most similar to value passed.
 
     Parameters
-    __________
+    ----------
     array : array
-        array containing values
+        Array of values.
 
     value : numeric
-        value you wish to find in array
+        Value you wish to find in array.
 
     Returns
-    _______
+    -------
     idx : array
-        for 2D idx[0] = i index, idx[1] = j index
+        For 2D idx[0] = i index, idx[1] = j index.
 
     """
     X = np.abs(array - value)
@@ -26,22 +26,23 @@ def index_of_value(array, value):
 def max_min(array):
     """Finds maximum and minimum of an array.
 
+    If multiple max and min values exist, all are returned.
+
     Parameters
-    __________
+    ----------
     array : array
-        masked array of BET constant values
+        Array of values.
 
     Returns
-    _______
+    -------
     maximum : float
-
+        Maximum value of array.
     max_idx : array
-        for 2D max_idx[0] = i index, max_idx[1] = j index
-
+        For 2D max_idx[0] = i index, max_idx[1] = j index.
     minimum : float
-
+        Minimum value of array.
     min_idx : array
-        for 2D min_idx[0] = i index, min_idx[1] = j index
+        For 2D min_idx[0] = i index, min_idx[1] = j index
 
     """
 
@@ -55,17 +56,18 @@ def max_min(array):
 
 def lin_interp(df, val):
     """Linerarly interpolates between two points.
-    Specifically designed to find the relative pressure corresponding to some n
+    
+    Specifically designed to find the relp corresponding to some value of n.
 
     Parameters
-    __________
+    ----------
     df : dataframe
-        containing relp and n columns
+        Contains raw data, realtaive pressure (relp) and amount adsorbed (n).
 
     Returns
-    _______
+    -------
     interp_val : float
-    The relative pressure corresponding to some n, between two (n, relp) points
+        The relp corresponding to some n, between two (n, relp) points.
 
     """
     hindex = len(df[df['n'] <= val])

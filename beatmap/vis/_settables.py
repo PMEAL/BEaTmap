@@ -13,33 +13,42 @@ from beatmap import utils as util
 
 
 def ascii_tables(bet_results, rouq_mask):
-    """Creates and populates ASCII formatted tables of BET results.
+    """Creates and prints ASCII formatted tables of BET results.
 
     Parameters
-    __________
+    ----------
     bet_results : namedtuple
-        namedtuple containing elements that result from BET  analysis
+        Contains elements that result from BET analysis.
+        Relevant fields are:
+
+        - ``bet_results.raw_data`` (dataframe) : experimental isotherm data.
+        - ``bet_results.ssa`` (array) : specific surface areas for all relp
+        ranges.
+        - ``bet_results.c`` (array) : BET constants for all relp ranges.
+        - ``bet_results.err`` (array) : error values for all relp ranges.
 
     rouq_mask : namedtuple
-        namedtuple, the rouq_mask.mask element is used to mask the
-        BET results so that only valid results are displayed
+        Contains the results of applying the Rouquerol criteria to BET results.
+        Relevant fields are:
+
+        - ``rouq_mask.mask`` (MaskedArray) : object where invalid BET results
+        are masked.
 
     Returns
-    _______
-    none
+    -------
 
     """
-    
+
     mask = rouq_mask.mask
     if mask.all() == True:
         print('No valid relative pressure ranges. ASCII tables not created.')
         return
-    
+
     df = bet_results.raw_data
     ssa = np.ma.array(bet_results.ssa, mask=mask)
     c = np.ma.array(bet_results.c, mask=mask)
     err = np.ma.array(bet_results.err, mask=mask)
-    
+
     ssamax, ssa_max_idx, ssamin, ssa_min_idx = util.max_min(ssa)
     cmax, c_max_idx, cmin, c_min_idx = util.max_min(c)
 
@@ -125,66 +134,80 @@ def ascii_tables(bet_results, rouq_mask):
 def dataframe_tables(bet_results, rouq_mask):
     """Creates and populates pandas dataframes summarizing BET results.
 
-    Parameters
-    __________
+   Parameters
+    ----------
     bet_results : namedtuple
-        namedtuple containing elements that result from BET  analysis
+        Contains elements that result from BET analysis.
+        Relevant fields are:
+
+        - ``bet_results.raw_data`` (dataframe) : experimental isotherm data.
+        - ``bet_results.ssa`` (array) : specific surface areas for all relp
+        ranges.
+        - ``bet_results.c`` (array) : BET constants for all relp ranges.
+        - ``bet_results.err`` (array) : error values for all relp ranges.
 
     rouq_mask : namedtuple
-        namedtuple, the rouq_mask.mask element is used to mask the
-        BET results so that only valid results are displayed
+        Contains the results of applying the Rouquerol criteria to BET results.
+        Relevant fields are:
+
+        - ``rouq_mask.mask`` (MaskedArray) : object where invalid BET results
+        are masked.
 
     Returns
-    _______
+    -------
     ssa_table : dataframe
-         dataframe summarizing BET result, highlighting the high, low, and
-         average values of specific surface area
-         
+         Summary of BET results, highlighting the high, low, and
+         average values of specific surface area.
+
     c_table : dataframe
-         dataframe summarizing BET result, highlighting the high, low, and
-         average values of the BET constant
-         
+         Summary of BET results, highlighting the high, low, and
+         average values of the BET constant.
+
     ssa_std : float
-         standard deviation of valid specific surface area values
-         
+         Atandard deviation of valid specific surface area values.
+
     c_std : float
-         standard deviation of valid BET constant values  
- 
+         Standard deviation of valid BET constant values.
+
     """
-    
+
     mask = rouq_mask.mask
-    
+
     if mask.all() == True:
         print('No valid relative pressure ranges. Tables not created.')
-        
-        ssa_dict = {' ': ['Min Spec SA', 'Max Spec SA', 'Mean Spec SA', 'Median Spec SA'],
-         'Spec SA m2/g': ['n/a', 'n/a', 'n/a', 'n/a'],
-         'C': ['n/a', 'n/a', 'n/a', 'n/a'],
-         'Start P/Po': ['n/a', 'n/a', 'n/a', 'n/a'],
-         'End P/Po': ['n/a', 'n/a', 'n/a', 'n/a']
-         }
-    
+
+        ssa_dict = {' ': ['Min Spec SA', 'Max Spec SA', 'Mean Spec SA',
+                          'Median Spec SA'],
+                    'Spec SA m2/g': ['n/a', 'n/a', 'n/a', 'n/a'],
+                    'C': ['n/a', 'n/a', 'n/a', 'n/a'],
+                    'Start P/Po': ['n/a', 'n/a', 'n/a', 'n/a'],
+                    'End P/Po': ['n/a', 'n/a', 'n/a', 'n/a']
+                    }
+
         ssa_table = pd.DataFrame(data=ssa_dict)
-    
-        c_dict = {' ': ['Min C', 'Max C', 'Mean C', 'Median C', 'Min Error C', 'Max Error C'],
-              'C': ['n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a'],
-              'Spec SA': ['n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a'],
-              'Start P/Po': ['n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a'],
-              'End P/Po': ['n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a'],
-              'Error': ['n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a']
-              }
-    
+
+        c_dict = {' ': ['Min C', 'Max C', 'Mean C', 'Median C', 'Min Error C',
+                        'Max Error C'],
+                  'C': ['n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a'],
+                  'Spec SA': ['n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a'],
+                  'Start P/Po': ['n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a'],
+                  'End P/Po': ['n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a'],
+                  'Error': ['n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a']
+                  }
+
         c_table = pd.DataFrame(data=c_dict)
-        ssa_sdev = 'No valid relative pressure ranges. Standard deviation not calculated.'
-        c_sdev = 'No valid relative pressure ranges. Standard deviation not calculated.'
+        ssa_sdev = 'No valid relative pressure ranges.\
+Standard deviation not calculated.'
+        c_sdev = 'No valid relative pressure ranges.\
+Standard deviation not calculated.'
         return ssa_table, c_table, ssa_sdev, c_sdev
-    
+
     df = bet_results.raw_data
     ssa = np.ma.array(bet_results.ssa, mask=mask)
     c = np.ma.array(bet_results.c, mask=mask)
     err = np.ma.array(bet_results.err, mask=mask)
-    
-    c = np.nan_to_num(c) #is this necessary? --- check
+
+    c = np.nan_to_num(c)
 
     ssamax, ssa_max_idx, ssamin, ssa_min_idx = util.max_min(ssa)
     cmax, c_max_idx, cmin, c_min_idx = util.max_min(c)
@@ -236,24 +259,30 @@ def dataframe_tables(bet_results, rouq_mask):
     c_max_err_start_ppo = round(float(df.relp[err_max_idx[1]]), 3)
     c_max_err_end_ppo = round(float(df.relp[err_max_idx[0]]), 3)
     err_max = round(err_max, 3)
-    
-    ssa_dict = {' ': ['Min Spec SA', 'Max Spec SA', 'Mean Spec SA', 'Median Spec SA'],
-         'Spec SA m2/g': [ssa_min, ssa_max, ssa_mean, ssa_median],
-         'C': [ssa_min_c, ssa_max_c, 'n/a', 'n/a'],
-         'Start P/Po': [ssa_min_start_ppo, ssa_max_start_ppo, 'n/a', 'n/a'],
-         'End P/Po': [ssa_min_end_ppo, ssa_max_end_ppo, 'n/a', 'n/a']
-         }
-    
+
+    ssa_dict = {' ': ['Min Spec SA', 'Max Spec SA', 'Mean Spec SA',
+                      'Median Spec SA'],
+                'Spec SA m2/g': [ssa_min, ssa_max, ssa_mean, ssa_median],
+                'C': [ssa_min_c, ssa_max_c, 'n/a', 'n/a'],
+                'Start P/Po': [ssa_min_start_ppo, ssa_max_start_ppo, 'n/a',
+                               'n/a'],
+                'End P/Po': [ssa_min_end_ppo, ssa_max_end_ppo, 'n/a', 'n/a']
+                }
+
     ssa_table = pd.DataFrame(data=ssa_dict)
-    
-    c_dict = {' ': ['Min C', 'Max C', 'Mean C', 'Median C', 'Min Error C', 'Max Error C'],
+
+    c_dict = {' ': ['Min C', 'Max C', 'Mean C', 'Median C', 'Min Error C',
+                    'Max Error C'],
               'C': [c_min, c_max, c_mean, c_median, cmin_err, cmax_err],
-              'Spec SA': [c_min_sa, c_max_sa, 'n/a', 'n/a', c_min_err_sa, c_max_err_sa],
-              'Start P/Po': [c_min_start_ppo, c_max_start_ppo, 'n/a', 'n/a', c_min_err_start_ppo, c_max_err_start_ppo],
-              'End P/Po': [c_min_end_ppo, c_max_end_ppo, 'n/a', 'n/a', c_min_err_end_ppo, c_max_err_end_ppo],
+              'Spec SA': [c_min_sa, c_max_sa, 'n/a', 'n/a', c_min_err_sa,
+                          c_max_err_sa],
+              'Start P/Po': [c_min_start_ppo, c_max_start_ppo, 'n/a', 'n/a',
+                             c_min_err_start_ppo, c_max_err_start_ppo],
+              'End P/Po': [c_min_end_ppo, c_max_end_ppo, 'n/a', 'n/a',
+                           c_min_err_end_ppo, c_max_err_end_ppo],
               'Error': [c_min_err, c_max_err, 'n/a', 'n/a', err_min, err_max]
               }
-    
+
     c_table = pd.DataFrame(data=c_dict)
-    
+
     return ssa_table, c_table, ssa_std, c_std
