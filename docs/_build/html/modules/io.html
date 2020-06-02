@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>io &#8212; BEaTmap  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="vis" href="vis.html" />
+    <link rel="prev" title="utils" href="utils.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <span class="target" id="module-beatmap.io"><span id="io"></span></span><div class="section" id="id1">
+<h1>io<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#beatmap.io.import_data" title="beatmap.io.import_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.io.import_data</span></code></a>()</p></td>
+<td><p>Imports isothermal adsoprtion data from a csv file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#beatmap.io.export_raw_data" title="beatmap.io.export_raw_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.io.export_raw_data</span></code></a>(bet_results)</p></td>
+<td><p>Exports isothermal adsoprtion data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#beatmap.io.export_processed_data" title="beatmap.io.export_processed_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.io.export_processed_data</span></code></a>(bet_results)</p></td>
+<td><p>Exports processed isothermal adsoprtion data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#beatmap.io.import_list_data" title="beatmap.io.import_list_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.io.import_list_data</span></code></a>(relp, n)</p></td>
+<td><p>Imports isothermal adsoprtion data.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="beatmap.io.import_data">
+<code class="sig-prename descclassname">beatmap.io.</code><code class="sig-name descname">import_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/io/_dataio.html#import_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.io.import_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports isothermal adsoprtion data from a csv file.</p>
+<p>The .csv file format expected is a two column table,
+the first column being “n” (specific amount adsorbed, mol/g)
+and the second being the relative pressure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p><strong>bet_results</strong> – Contains all information required for BET analysis.
+Relevant fields are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.file</span></code> (string) : file name or path.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.info</span></code> (string) : adsorbate-adsorbent info as a string.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.a_o</span></code> (float) : adsorbate cross sectional area.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.raw_data</span></code> (dataframe) : imported isotherm data.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>namedtuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.io.export_raw_data">
+<code class="sig-prename descclassname">beatmap.io.</code><code class="sig-name descname">export_raw_data</code><span class="sig-paren">(</span><em class="sig-param">bet_results</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/io/_dataio.html#export_raw_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.io.export_raw_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exports isothermal adsoprtion data.</p>
+<p>Exported data is saved as a .csv file in the parent directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bet_results</strong> (<em>namedtuple</em>) – <p>Contains all information required for BET analysis.
+Relevant fields are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.raw_data</span></code> (dataframe) : of the raw isotherm data</p></li>
+</ul>
+<p>written to a .csv
+- <code class="docutils literal notranslate"><span class="pre">bet_results.info</span></code> (string) : adsorbate-adsorbent information used</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.io.export_processed_data">
+<code class="sig-prename descclassname">beatmap.io.</code><code class="sig-name descname">export_processed_data</code><span class="sig-paren">(</span><em class="sig-param">bet_results</em>, <em class="sig-param">points=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/io/_dataio.html#export_processed_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.io.export_processed_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exports processed isothermal adsoprtion data.</p>
+<p>Exported data is saved as a .csv file in the parent directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bet_results</strong> (<em>namedtuple</em>) – <p>Contains all information required for BET analysis.
+Relevant fields are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.raw_data</span></code> (dataframe) : of the raw isotherm data</p></li>
+</ul>
+<p>written to a .csv
+- <code class="docutils literal notranslate"><span class="pre">bet_results.info</span></code> (string) : adsorbate-adsorbent information used</p>
+</p></li>
+<li><p><strong>points</strong> (<em>int</em>) – The minimum number of experimental data points for a relative pressure
+interval to be considered valid. Default is 5.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.io.import_list_data">
+<code class="sig-prename descclassname">beatmap.io.</code><code class="sig-name descname">import_list_data</code><span class="sig-paren">(</span><em class="sig-param">relp</em>, <em class="sig-param">n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/io/_dataio.html#import_list_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.io.import_list_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports isothermal adsoprtion data.</p>
+<p>User provides two lists, one of relative pressures and the other of amount
+adsorbed with units of [mol/g].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>relp</strong> (<em>list</em>) – Experimental isotherm relative pressure values.</p></li>
+<li><p><strong>n</strong> (<em>list</em>) – Experimental amount adsorbed values, mols per gram.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>bet_results</strong> – Contains all information required for BET analysis.
+Relevant fields are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.file</span></code> (string) : file name or path.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.info</span></code> (string): adsorbate-adsorbent info as a string.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.a_o</span></code> (float) : adsorbate cross sectional area.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.raw_data</span></code> (dataframe) : imported isotherm data.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>namedtuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">BEaTmap</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Module and Function Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#modules">Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="core.html">core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html">utils</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">io</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vis.html">vis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module and Function Reference</a><ul>
+      <li>Previous: <a href="utils.html" title="previous chapter">utils</a></li>
+      <li>Next: <a href="vis.html" title="next chapter">vis</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

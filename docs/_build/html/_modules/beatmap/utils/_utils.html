@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>beatmap.utils._utils &#8212; BEaTmap  documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for beatmap.utils._utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="index_of_value"><a class="viewcode-back" href="../../../modules/utils.html#beatmap.utils.index_of_value">[docs]</a><span class="k">def</span> <span class="nf">index_of_value</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Finds the index of a value in an array most similar to value passed.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    array : array</span>
+<span class="sd">        Array of values.</span>
+
+<span class="sd">    value : numeric</span>
+<span class="sd">        Value you wish to find in array.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    idx : array</span>
+<span class="sd">        For 2D idx[0] = i index, idx[1] = j index.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span> <span class="o">-</span> <span class="n">value</span><span class="p">)</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">X</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">idx</span></div>
+
+
+<div class="viewcode-block" id="max_min"><a class="viewcode-back" href="../../../modules/utils.html#beatmap.utils.max_min">[docs]</a><span class="k">def</span> <span class="nf">max_min</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds maximum and minimum of an array.</span>
+
+<span class="sd">    If multiple max and min values exist, all are returned.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    array : array</span>
+<span class="sd">        Array of values.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    maximum : float</span>
+<span class="sd">        Maximum value of array.</span>
+<span class="sd">    max_idx : array</span>
+<span class="sd">        For 2D max_idx[0] = i index, max_idx[1] = j index.</span>
+<span class="sd">    minimum : float</span>
+<span class="sd">        Minimum value of array.</span>
+<span class="sd">    min_idx : array</span>
+<span class="sd">        For 2D min_idx[0] = i index, min_idx[1] = j index</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">maximum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">array</span><span class="p">)])</span>
+    <span class="n">minimum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">array</span><span class="p">)])</span>
+    <span class="n">max_idx</span> <span class="o">=</span> <span class="n">index_of_value</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">maximum</span><span class="p">)</span>
+    <span class="n">min_idx</span> <span class="o">=</span> <span class="n">index_of_value</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">minimum</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">maximum</span><span class="p">,</span> <span class="n">max_idx</span><span class="p">,</span> <span class="n">minimum</span><span class="p">,</span> <span class="n">min_idx</span></div>
+
+
+<div class="viewcode-block" id="lin_interp"><a class="viewcode-back" href="../../../modules/utils.html#beatmap.utils.lin_interp">[docs]</a><span class="k">def</span> <span class="nf">lin_interp</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Linerarly interpolates between two points.</span>
+<span class="sd">    </span>
+<span class="sd">    Specifically designed to find the relp corresponding to some value of n.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    df : dataframe</span>
+<span class="sd">        Contains raw data, realtaive pressure (relp) and amount adsorbed (n).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    interp_val : float</span>
+<span class="sd">        The relp corresponding to some n, between two (n, relp) points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hindex</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">val</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">hindex</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+        <span class="n">hindex</span> <span class="o">=</span> <span class="n">hindex</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">lindex</span> <span class="o">=</span> <span class="n">hindex</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">hindex</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">lindex</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="p">((</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">hindex</span><span class="p">,</span> <span class="s1">&#39;relp&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">lindex</span><span class="p">,</span> <span class="s1">&#39;relp&#39;</span><span class="p">])</span> <span class="o">/</span>
+             <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">hindex</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">lindex</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">]))</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">hindex</span><span class="p">,</span> <span class="s1">&#39;relp&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">hindex</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span>
+
+    <span class="n">interp_val</span> <span class="o">=</span> <span class="n">m</span> <span class="o">*</span> <span class="n">val</span> <span class="o">+</span> <span class="n">b</span>
+    <span class="k">return</span> <span class="n">interp_val</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">BEaTmap</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/index.html">Module and Function Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

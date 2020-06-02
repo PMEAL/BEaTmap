@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>vis &#8212; BEaTmap  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="io" href="io.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <span class="target" id="module-beatmap.vis"><span id="vis"></span></span><div class="section" id="id1">
+<h1>vis<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#beatmap.vis.experimental_data_plot" title="beatmap.vis.experimental_data_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.vis.experimental_data_plot</span></code></a>(bet_results)</p></td>
+<td><p>Creates a scatter plot of experimental data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#beatmap.vis.ssa_heatmap" title="beatmap.vis.ssa_heatmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.vis.ssa_heatmap</span></code></a>(bet_results, rouq_mask)</p></td>
+<td><p>Creates a heatmap of specific surface areas.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#beatmap.vis.err_heatmap" title="beatmap.vis.err_heatmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.vis.err_heatmap</span></code></a>(bet_results, rouq_mask)</p></td>
+<td><p>Creates a heatmap of error values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#beatmap.vis.bet_combo_plot" title="beatmap.vis.bet_combo_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.vis.bet_combo_plot</span></code></a>(bet_results, …)</p></td>
+<td><p>Creates two BET plots, for the minimum and maxium error data sets.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#beatmap.vis.bet_iso_combo_plot" title="beatmap.vis.bet_iso_combo_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.vis.bet_iso_combo_plot</span></code></a>(bet_results, …)</p></td>
+<td><p>Creates an image displaying the relative pressure range with minimum error and the BET isotherm on the same plot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#beatmap.vis.ascii_tables" title="beatmap.vis.ascii_tables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.vis.ascii_tables</span></code></a>(bet_results, rouq_mask)</p></td>
+<td><p>Creates and prints ASCII formatted tables of BET results.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#beatmap.vis.dataframe_tables" title="beatmap.vis.dataframe_tables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.vis.dataframe_tables</span></code></a>(bet_results, …)</p></td>
+<td><p>Creates and populates pandas dataframes summarizing BET results.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="beatmap.vis.experimental_data_plot">
+<code class="sig-prename descclassname">beatmap.vis.</code><code class="sig-name descname">experimental_data_plot</code><span class="sig-paren">(</span><em class="sig-param">bet_results</em>, <em class="sig-param">save_file=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/vis/_figures.html#experimental_data_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.vis.experimental_data_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a scatter plot of experimental data.</p>
+<p>Typical isotherm presentation where
+x-axis is relative pressure, y-axis is specific amount adsorbed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bet_results</strong> (<em>namedtuple</em>) – The bet_results.raw_data field is used to
+create a plot of isotherm data.</p></li>
+<li><p><strong>save_file</strong> (<em>boolean</em>) – When save_file=True a .png of the figure is created in the
+working directory.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.vis.ssa_heatmap">
+<code class="sig-prename descclassname">beatmap.vis.</code><code class="sig-name descname">ssa_heatmap</code><span class="sig-paren">(</span><em class="sig-param">bet_results</em>, <em class="sig-param">rouq_mask</em>, <em class="sig-param">save_file=True</em>, <em class="sig-param">gradient='Greens'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/vis/_figures.html#ssa_heatmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.vis.ssa_heatmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a heatmap of specific surface areas.</p>
+<p>Shading corresponds to specific surface area, normalized for the minimum
+and maximum specific sa values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bet_results</strong> (<em>namedtuple</em>) – The bet_results.ssa field is used to create a heatmap of specific
+surface area answers.</p></li>
+<li><p><strong>rouq_mask</strong> (<em>namedtuple</em>) – The rouq_mask.mask field is used to mask the
+specific surface area heatmap so that only valid results are
+displayed.</p></li>
+<li><p><strong>save_file</strong> (<em>boolean</em>) – When save_file = True a png of the figure is created in the
+working directory.</p></li>
+<li><p><strong>gradient</strong> (<em>string</em>) – Color gradient for heatmap, must be a vaild color gradient name
+in the seaborn package</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.vis.err_heatmap">
+<code class="sig-prename descclassname">beatmap.vis.</code><code class="sig-name descname">err_heatmap</code><span class="sig-paren">(</span><em class="sig-param">bet_results</em>, <em class="sig-param">rouq_mask</em>, <em class="sig-param">save_file=True</em>, <em class="sig-param">gradient='Greys'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/vis/_figures.html#err_heatmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.vis.err_heatmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a heatmap of error values.</p>
+<p>Shading corresponds to average error between experimental data and the
+the theoretical BET isotherm, normalized so that, with default shading,
+0 is displayed as white and the maximum error value is black.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bet_results</strong> (<em>namedtuple</em>) – The bet_results.err field is used to create a heatmap of error values,</p></li>
+<li><p><strong>rouq_mask</strong> (<em>namedtuple</em>) – The rouq_mask.mask field is used to mask the error heatmap so that only
+valid results are displayed.</p></li>
+<li><p><strong>save_file</strong> (<em>boolean</em>) – When save_file = True a png of the figure is created in the
+working directory.</p></li>
+<li><p><strong>gradient</strong> (<em>string</em>) – Color gradient for heatmap, must be a vaild color gradient name
+in the seaborn package, default is grey.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.vis.bet_combo_plot">
+<code class="sig-prename descclassname">beatmap.vis.</code><code class="sig-name descname">bet_combo_plot</code><span class="sig-paren">(</span><em class="sig-param">bet_results</em>, <em class="sig-param">rouq_mask</em>, <em class="sig-param">save_file=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/vis/_figures.html#bet_combo_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.vis.bet_combo_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates two BET plots, for the minimum and maxium error data sets.</p>
+<p>Only datapoints in the minimum and maximum error data sets are plotted.
+Equation for best fit line and corresponding R value are annotated on plots
+Image is 2 by 1, two BET plots arranged horizontally in one image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bet_results</strong> (<em>namedtuple</em>) – Namedtuple where the bet_results.raw_data element is used to
+create a plot of isotherm BET values.</p></li>
+<li><p><strong>rouq_mask</strong> (<em>namedtuple</em>) – The rouq_mask.mask element is used to mask the BET results so that only
+valid results are displayed.</p></li>
+<li><p><strong>save_file</strong> (<em>boolean</em>) – When save_file = True a png of the figure is created in the
+working directory.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.vis.bet_iso_combo_plot">
+<code class="sig-prename descclassname">beatmap.vis.</code><code class="sig-name descname">bet_iso_combo_plot</code><span class="sig-paren">(</span><em class="sig-param">bet_results</em>, <em class="sig-param">rouq_mask</em>, <em class="sig-param">save_file=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/vis/_figures.html#bet_iso_combo_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.vis.bet_iso_combo_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an image displaying the relative pressure range with minimum
+error and the BET isotherm on the same plot. The point where n/nm = 1 is
+is the point where the BET monolayer loading is achieved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bet_results</strong> (<em>named tuple</em>) – The bet_results.raw_data element is used to
+create a plot of isotherm data.</p></li>
+<li><p><strong>rouq_mask</strong> (<em>named tuple</em>) – The rouq_mask.mask element is used to mask the BET results so that only
+valid results are displayed.</p></li>
+<li><p><strong>save_file</strong> (<em>boolean</em>) – When save_file = True a png of the figure is created in the
+working directory.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.vis.ascii_tables">
+<code class="sig-prename descclassname">beatmap.vis.</code><code class="sig-name descname">ascii_tables</code><span class="sig-paren">(</span><em class="sig-param">bet_results</em>, <em class="sig-param">rouq_mask</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/vis/_settables.html#ascii_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.vis.ascii_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates and prints ASCII formatted tables of BET results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bet_results</strong> (<em>namedtuple</em>) – <p>Contains elements that result from BET analysis.
+Relevant fields are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.raw_data</span></code> (dataframe) : experimental isotherm data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.ssa</span></code> (array) : specific surface areas for all relp</p></li>
+</ul>
+<p>ranges.
+- <code class="docutils literal notranslate"><span class="pre">bet_results.c</span></code> (array) : BET constants for all relp ranges.
+- <code class="docutils literal notranslate"><span class="pre">bet_results.err</span></code> (array) : error values for all relp ranges.</p>
+</p></li>
+<li><p><strong>rouq_mask</strong> (<em>namedtuple</em>) – <p>Contains the results of applying the Rouquerol criteria to BET results.
+Relevant fields are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">rouq_mask.mask</span></code> (MaskedArray) : object where invalid BET results</p></li>
+</ul>
+<p>are masked.</p>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.vis.dataframe_tables">
+<code class="sig-prename descclassname">beatmap.vis.</code><code class="sig-name descname">dataframe_tables</code><span class="sig-paren">(</span><em class="sig-param">bet_results</em>, <em class="sig-param">rouq_mask</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/vis/_settables.html#dataframe_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.vis.dataframe_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates and populates pandas dataframes summarizing BET results.</p>
+<dl>
+<dt>Parameters</dt><dd><dl>
+<dt>bet_results<span class="classifier">namedtuple</span></dt><dd><p>Contains elements that result from BET analysis.
+Relevant fields are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.raw_data</span></code> (dataframe) : experimental isotherm data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.ssa</span></code> (array) : specific surface areas for all relp</p></li>
+</ul>
+<p>ranges.
+- <code class="docutils literal notranslate"><span class="pre">bet_results.c</span></code> (array) : BET constants for all relp ranges.
+- <code class="docutils literal notranslate"><span class="pre">bet_results.err</span></code> (array) : error values for all relp ranges.</p>
+</dd>
+<dt>rouq_mask<span class="classifier">namedtuple</span></dt><dd><p>Contains the results of applying the Rouquerol criteria to BET results.
+Relevant fields are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rouq_mask.mask</span></code> (MaskedArray) : object where invalid BET results</p></li>
+</ul>
+<p>are masked.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>ssa_table<span class="classifier">dataframe</span></dt><dd><p>Summary of BET results, highlighting the high, low, and
+average values of specific surface area.</p>
+</dd>
+<dt>c_table<span class="classifier">dataframe</span></dt><dd><p>Summary of BET results, highlighting the high, low, and
+average values of the BET constant.</p>
+</dd>
+<dt>ssa_std<span class="classifier">float</span></dt><dd><p>Atandard deviation of valid specific surface area values.</p>
+</dd>
+<dt>c_std<span class="classifier">float</span></dt><dd><p>Standard deviation of valid BET constant values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">BEaTmap</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Module and Function Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#modules">Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="core.html">core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html">utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="io.html">io</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">vis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module and Function Reference</a><ul>
+      <li>Previous: <a href="io.html" title="previous chapter">io</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

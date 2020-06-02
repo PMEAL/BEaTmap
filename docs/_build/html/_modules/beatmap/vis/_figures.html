@@ -1,0 +1,454 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>beatmap.vis._figures &#8212; BEaTmap  documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for beatmap.vis._figures</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Wed May  8 11:26:18 2019</span>
+
+<span class="sd">@author: ellsworthbell</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">beatmap</span> <span class="kn">import</span> <span class="n">utils</span> <span class="k">as</span> <span class="n">util</span>
+
+
+<div class="viewcode-block" id="experimental_data_plot"><a class="viewcode-back" href="../../../modules/vis.html#beatmap.vis.experimental_data_plot">[docs]</a><span class="k">def</span> <span class="nf">experimental_data_plot</span><span class="p">(</span><span class="n">bet_results</span><span class="p">,</span> <span class="n">save_file</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a scatter plot of experimental data.</span>
+
+<span class="sd">    Typical isotherm presentation where</span>
+<span class="sd">    x-axis is relative pressure, y-axis is specific amount adsorbed.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bet_results : namedtuple</span>
+<span class="sd">        The bet_results.raw_data field is used to</span>
+<span class="sd">        create a plot of isotherm data.</span>
+
+<span class="sd">    save_file : boolean</span>
+<span class="sd">        When save_file=True a .png of the figure is created in the</span>
+<span class="sd">        working directory.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">bet_results</span><span class="o">.</span><span class="n">raw_data</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Experimental Isotherm&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;n [mol/g]&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;P/Po&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">b</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">save_file</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;experimentaldata_</span><span class="si">%s</span><span class="s1">.png&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">info</span><span class="p">),</span>
+                    <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Experimental data plot saved as: experimentaldata_</span><span class="si">%s</span><span class="s1">.png&#39;</span>
+              <span class="o">%</span> <span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">info</span><span class="p">))</span>
+    <span class="k">return</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ssa_heatmap"><a class="viewcode-back" href="../../../modules/vis.html#beatmap.vis.ssa_heatmap">[docs]</a><span class="k">def</span> <span class="nf">ssa_heatmap</span><span class="p">(</span><span class="n">bet_results</span><span class="p">,</span> <span class="n">rouq_mask</span><span class="p">,</span> <span class="n">save_file</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a heatmap of specific surface areas.</span>
+
+<span class="sd">    Shading corresponds to specific surface area, normalized for the minimum</span>
+<span class="sd">    and maximum specific sa values.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bet_results : namedtuple</span>
+<span class="sd">        The bet_results.ssa field is used to create a heatmap of specific</span>
+<span class="sd">        surface area answers.</span>
+
+<span class="sd">    rouq_mask : namedtuple</span>
+<span class="sd">        The rouq_mask.mask field is used to mask the</span>
+<span class="sd">        specific surface area heatmap so that only valid results are</span>
+<span class="sd">        displayed.</span>
+
+<span class="sd">    save_file : boolean</span>
+<span class="sd">        When save_file = True a png of the figure is created in the</span>
+<span class="sd">        working directory.</span>
+
+<span class="sd">    gradient : string</span>
+<span class="sd">        Color gradient for heatmap, must be a vaild color gradient name</span>
+<span class="sd">        in the seaborn package</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">rouq_mask</span><span class="o">.</span><span class="n">mask</span>
+
+    <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No valid relative pressure ranges. Specific surface area </span><span class="se">\</span>
+<span class="s1">heatmap not created.&#39;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">bet_results</span><span class="o">.</span><span class="n">raw_data</span>
+
+    <span class="c1"># creating a masked array of ssa values</span>
+    <span class="n">ssa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">ssa</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="c1"># finding max and min sa to normalize heatmap colours</span>
+    <span class="n">ssamax</span><span class="p">,</span> <span class="n">ssa_max_idx</span><span class="p">,</span> <span class="n">ssamin</span><span class="p">,</span> <span class="n">ssa_min_idx</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">max_min</span><span class="p">(</span><span class="n">ssa</span><span class="p">)</span>
+    <span class="n">hm_labels</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relp</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">ssa</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">ssamin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">ssamax</span><span class="p">,</span> <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">gradient</span><span class="p">,</span>
+                <span class="n">mask</span><span class="o">=</span><span class="p">(</span><span class="n">ssa</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span> <span class="n">xticklabels</span><span class="o">=</span><span class="n">hm_labels</span><span class="p">,</span> <span class="n">yticklabels</span><span class="o">=</span><span class="n">hm_labels</span><span class="p">,</span>
+                <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
+                <span class="n">cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;shrink&#39;</span><span class="p">:</span> <span class="o">.</span><span class="mi">78</span><span class="p">,</span> <span class="s1">&#39;aspect&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">)})</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;BET Specific Surface Area [m^2/g]&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Start Relative Pressure&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;End Relative Pressure&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">save_file</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;ssa_heatmap_</span><span class="si">%s</span><span class="s1">.png&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">info</span><span class="p">),</span>
+                    <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Specific surface area heatmap saved as: ssa_heatmap_</span><span class="si">%s</span><span class="s1">.png&#39;</span>
+              <span class="o">%</span> <span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">info</span><span class="p">))</span>
+    <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="err_heatmap"><a class="viewcode-back" href="../../../modules/vis.html#beatmap.vis.err_heatmap">[docs]</a><span class="k">def</span> <span class="nf">err_heatmap</span><span class="p">(</span><span class="n">bet_results</span><span class="p">,</span> <span class="n">rouq_mask</span><span class="p">,</span> <span class="n">save_file</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="s1">&#39;Greys&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a heatmap of error values.</span>
+
+<span class="sd">    Shading corresponds to average error between experimental data and the</span>
+<span class="sd">    the theoretical BET isotherm, normalized so that, with default shading,</span>
+<span class="sd">    0 is displayed as white and the maximum error value is black.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bet_results : namedtuple</span>
+<span class="sd">        The bet_results.err field is used to create a heatmap of error values,</span>
+
+<span class="sd">    rouq_mask : namedtuple</span>
+<span class="sd">        The rouq_mask.mask field is used to mask the error heatmap so that only</span>
+<span class="sd">        valid results are displayed.</span>
+
+<span class="sd">    save_file : boolean</span>
+<span class="sd">        When save_file = True a png of the figure is created in the</span>
+<span class="sd">        working directory.</span>
+
+<span class="sd">    gradient : string</span>
+<span class="sd">        Color gradient for heatmap, must be a vaild color gradient name</span>
+<span class="sd">        in the seaborn package, default is grey.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">rouq_mask</span><span class="o">.</span><span class="n">mask</span>
+
+    <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No valid relative pressure ranges. Error heat map not created.&#39;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">bet_results</span><span class="o">.</span><span class="n">raw_data</span>
+
+    <span class="c1"># creating a masked array of error values</span>
+    <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">err</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="n">errormax</span><span class="p">,</span> <span class="n">error_max_idx</span><span class="p">,</span> <span class="n">errormin</span><span class="p">,</span> <span class="n">error_min_idx</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">max_min</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+
+    <span class="n">hm_labels</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relp</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">errormax</span><span class="p">,</span> <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">gradient</span><span class="p">,</span>
+                <span class="n">mask</span><span class="o">=</span><span class="p">(</span><span class="n">err</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span> <span class="n">xticklabels</span><span class="o">=</span><span class="n">hm_labels</span><span class="p">,</span> <span class="n">yticklabels</span><span class="o">=</span><span class="n">hm_labels</span><span class="p">,</span>
+                <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
+                <span class="n">cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;shrink&#39;</span><span class="p">:</span> <span class="o">.</span><span class="mi">78</span><span class="p">,</span> <span class="s1">&#39;aspect&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">)})</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Average Error per Point Between Experimental and</span><span class="se">\</span>
+<span class="s1"> Theoretical Isotherms&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Start Relative Pressure&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;End Relative Pressure&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">save_file</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;error_heatmap_</span><span class="si">%s</span><span class="s1">.png&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">info</span><span class="p">),</span>
+                    <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error heatmap saved as: error_heatmap_</span><span class="si">%s</span><span class="s1">.png&#39;</span> <span class="o">%</span>
+              <span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">info</span><span class="p">))</span>
+    <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="bet_combo_plot"><a class="viewcode-back" href="../../../modules/vis.html#beatmap.vis.bet_combo_plot">[docs]</a><span class="k">def</span> <span class="nf">bet_combo_plot</span><span class="p">(</span><span class="n">bet_results</span><span class="p">,</span> <span class="n">rouq_mask</span><span class="p">,</span> <span class="n">save_file</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates two BET plots, for the minimum and maxium error data sets.</span>
+
+<span class="sd">    Only datapoints in the minimum and maximum error data sets are plotted.</span>
+<span class="sd">    Equation for best fit line and corresponding R value are annotated on plots</span>
+<span class="sd">    Image is 2 by 1, two BET plots arranged horizontally in one image.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    bet_results : namedtuple</span>
+<span class="sd">        Namedtuple where the bet_results.raw_data element is used to</span>
+<span class="sd">        create a plot of isotherm BET values.</span>
+
+<span class="sd">    rouq_mask : namedtuple</span>
+<span class="sd">        The rouq_mask.mask element is used to mask the BET results so that only</span>
+<span class="sd">        valid results are displayed.</span>
+
+<span class="sd">    save_file : boolean</span>
+<span class="sd">        When save_file = True a png of the figure is created in the</span>
+<span class="sd">        working directory.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">rouq_mask</span><span class="o">.</span><span class="n">mask</span>
+
+    <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No valid relative pressure ranges. BET combo plot not created.&#39;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">bet_results</span><span class="o">.</span><span class="n">raw_data</span>
+    <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">err</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="n">err_max</span><span class="p">,</span> <span class="n">err_max_idx</span><span class="p">,</span> <span class="n">err_min</span><span class="p">,</span> <span class="n">err_min_idx</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">max_min</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+
+    <span class="n">min_start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">err_min_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">min_stop</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">err_min_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">max_start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">err_max_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">max_stop</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">err_max_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">,</span> <span class="n">r_val</span><span class="p">,</span> <span class="n">p_value</span><span class="p">,</span> <span class="n">std_err</span> <span class="o">=</span>\
+        <span class="n">sp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">linregress</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">[</span><span class="n">min_start</span><span class="p">:</span> <span class="n">min_stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+                            <span class="n">df</span><span class="o">.</span><span class="n">bet</span><span class="p">[</span><span class="n">min_start</span><span class="p">:</span><span class="n">min_stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">min_liney</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">min_liney</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">slope</span> <span class="o">*</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">[</span><span class="n">min_start</span><span class="p">]</span> <span class="o">-</span> <span class="o">.</span><span class="mi">01</span><span class="p">)</span> <span class="o">+</span> <span class="n">intercept</span>
+    <span class="n">min_liney</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">slope</span> <span class="o">*</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">[</span><span class="n">min_stop</span><span class="p">]</span> <span class="o">+</span> <span class="o">.</span><span class="mi">01</span><span class="p">)</span> <span class="o">+</span> <span class="n">intercept</span>
+    <span class="n">min_linex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">min_linex</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">[</span><span class="n">min_start</span><span class="p">]</span> <span class="o">-</span> <span class="o">.</span><span class="mi">01</span>
+    <span class="n">min_linex</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">[</span><span class="n">min_stop</span><span class="p">]</span> <span class="o">+</span> <span class="o">.</span><span class="mi">01</span>
+
+    <span class="n">slope_max</span><span class="p">,</span> <span class="n">intercept_max</span><span class="p">,</span> <span class="n">r_value_max</span><span class="p">,</span> <span class="n">p_value_max</span><span class="p">,</span> <span class="n">std_err_max</span> <span class="o">=</span> \
+        <span class="n">sp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">linregress</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">[</span><span class="n">max_start</span><span class="p">:</span> <span class="n">max_stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+                            <span class="n">df</span><span class="o">.</span><span class="n">bet</span><span class="p">[</span><span class="n">max_start</span><span class="p">:</span> <span class="n">max_stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">max_liney</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">max_liney</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">slope_max</span> <span class="o">*</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">[</span><span class="n">max_start</span><span class="p">]</span> <span class="o">-</span> <span class="o">.</span><span class="mi">01</span><span class="p">)</span> <span class="o">+</span> <span class="n">intercept_max</span>
+    <span class="n">max_liney</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">slope_max</span> <span class="o">*</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">[</span><span class="n">max_stop</span><span class="p">]</span> <span class="o">+</span> <span class="o">.</span><span class="mi">01</span><span class="p">)</span> <span class="o">+</span> <span class="n">intercept_max</span>
+    <span class="n">max_linex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">max_linex</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">[</span><span class="n">max_start</span><span class="p">]</span> <span class="o">-</span> <span class="o">.</span><span class="mi">01</span>
+    <span class="n">max_linex</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">[</span><span class="n">max_stop</span><span class="p">]</span> <span class="o">+</span> <span class="o">.</span><span class="mi">01</span>
+
+    <span class="n">figure</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;BET Plot&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">min_linex</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">max_linex</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="mf">1.1</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;1/[n(P/Po-1)]&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">min_liney</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mf">1.1</span><span class="p">,</span> <span class="n">max_liney</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mf">1.1</span><span class="p">))</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;P/Po&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">b</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">[</span><span class="n">min_start</span><span class="p">:</span><span class="n">min_stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">bet</span><span class="p">[</span><span class="n">min_start</span><span class="p">:</span><span class="n">min_stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Min Error Experimental Data&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span>
+             <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fillstyle</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">min_linex</span><span class="p">,</span> <span class="n">min_liney</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Min Error Linear </span><span class="se">\</span>
+<span class="s1">Regression&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">[</span><span class="n">max_start</span><span class="p">:</span><span class="n">max_stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">bet</span><span class="p">[</span><span class="n">max_start</span><span class="p">:</span><span class="n">max_stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Max Error Experimental Data&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span>
+             <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">max_linex</span><span class="p">,</span> <span class="n">max_liney</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Max Error Linear Regression&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;Min Error Linear Regression: </span><span class="se">\n</span><span class="s1">m = </span><span class="si">%.3f</span><span class="s1"> </span><span class="se">\n</span><span class="s1">b = </span><span class="si">%.3f</span><span class="s1"> </span><span class="se">\n</span><span class="s1">R = </span><span class="se">\</span>
+<span class="si">%.3f</span><span class="s1"> </span><span class="se">\n\n</span><span class="s1">Max Error Linear Regression: </span><span class="se">\n</span><span class="s1">m = </span><span class="si">%.3f</span><span class="s1"> </span><span class="se">\n</span><span class="s1">b = </span><span class="si">%.3f</span><span class="s1"> </span><span class="se">\</span>
+<span class="se">\n</span><span class="s1">R = </span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">,</span> <span class="n">r_val</span><span class="p">,</span> <span class="n">slope_max</span><span class="p">,</span> <span class="n">intercept_max</span><span class="p">,</span><span class="n">r_value_max</span><span class="p">),</span> 
+                <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;round&quot;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">695</span><span class="p">,</span> <span class="o">.</span><span class="mi">017</span><span class="p">),</span>
+                <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">[</span><span class="n">min_stop</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">bet</span><span class="p">[</span><span class="n">min_start</span><span class="p">]),</span> <span class="n">size</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">save_file</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">figure</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;betplot_</span><span class="si">%s</span><span class="s1">.png&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">info</span><span class="p">),</span>
+                       <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;BET plot saved as: betplot_</span><span class="si">%s</span><span class="s1">.png&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">info</span><span class="p">))</span>
+    <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="bet_iso_combo_plot"><a class="viewcode-back" href="../../../modules/vis.html#beatmap.vis.bet_iso_combo_plot">[docs]</a><span class="k">def</span> <span class="nf">bet_iso_combo_plot</span><span class="p">(</span><span class="n">bet_results</span><span class="p">,</span> <span class="n">rouq_mask</span><span class="p">,</span> <span class="n">save_file</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates an image displaying the relative pressure range with minimum</span>
+<span class="sd">    error and the BET isotherm on the same plot. The point where n/nm = 1 is</span>
+<span class="sd">    is the point where the BET monolayer loading is achieved.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    bet_results : named tuple</span>
+<span class="sd">        The bet_results.raw_data element is used to</span>
+<span class="sd">        create a plot of isotherm data.</span>
+
+<span class="sd">    rouq_mask : named tuple</span>
+<span class="sd">        The rouq_mask.mask element is used to mask the BET results so that only</span>
+<span class="sd">        valid results are displayed.</span>
+
+<span class="sd">    save_file : boolean</span>
+<span class="sd">        When save_file = True a png of the figure is created in the</span>
+<span class="sd">        working directory.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">rouq_mask</span><span class="o">.</span><span class="n">mask</span>
+
+    <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No valid relative pressure ranges. BET isotherm </span><span class="se">\</span>
+<span class="s1">combo plot not created.&#39;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">bet_results</span><span class="o">.</span><span class="n">raw_data</span>
+    <span class="n">nm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">nm</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+    <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">err</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="n">err_max</span><span class="p">,</span> <span class="n">err_max_idx</span><span class="p">,</span> <span class="n">err_min</span><span class="p">,</span> <span class="n">err_min_idx</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">max_min</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+    <span class="n">c_min_err</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">err_min_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">err_min_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+    <span class="n">nnm_min</span> <span class="o">=</span> <span class="n">nm</span><span class="p">[</span><span class="n">err_min_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">err_min_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">ppo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">.</span><span class="mi">9001</span><span class="p">,</span> <span class="o">.</span><span class="mi">001</span><span class="p">)</span>
+    <span class="n">synth_min</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">ppo</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">c_min_err</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">ppo</span><span class="p">)</span>
+    <span class="n">expnnm_min</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">n</span> <span class="o">/</span> <span class="n">nnm_min</span>
+    <span class="n">err_min_i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">err_min_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">err_min_j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">err_min_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">expnnm_min_used</span> <span class="o">=</span> <span class="n">expnnm_min</span><span class="p">[</span><span class="n">err_min_j</span><span class="p">:</span><span class="n">err_min_i</span><span class="p">]</span>
+    <span class="n">ppo_expnnm_min_used</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">[</span><span class="n">err_min_j</span><span class="p">:</span><span class="n">err_min_i</span><span class="p">]</span>
+
+    <span class="n">f</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;BET Isotherm and Experimental data&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">synth_min</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;n/nm&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;P/Po&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">b</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppo</span><span class="p">,</span> <span class="n">synth_min</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Theoretical isotherm&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppo_expnnm_min_used</span><span class="p">,</span> <span class="n">expnnm_min_used</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Experimental isotherm - used data&#39;</span><span class="p">,</span>
+             <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">,</span> <span class="n">expnnm_min</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">fillstyle</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Experimental isotherm&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span>
+             <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">save_file</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;isothermcomp_</span><span class="si">%s</span><span class="s1">.png&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">info</span><span class="p">),</span>
+                  <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Experimental and theoretical isotherm plot saved as:</span><span class="se">\</span>
+<span class="s1">isothermcomp_</span><span class="si">%s</span><span class="s1">.png&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">info</span><span class="p">))</span>
+    <span class="k">return</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">BEaTmap</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/index.html">Module and Function Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

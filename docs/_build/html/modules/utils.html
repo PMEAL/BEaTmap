@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>utils &#8212; BEaTmap  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="io" href="io.html" />
+    <link rel="prev" title="core" href="core.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <span class="target" id="module-beatmap.utils"><span id="utils"></span></span><div class="section" id="id1">
+<h1>utils<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#beatmap.utils.index_of_value" title="beatmap.utils.index_of_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.utils.index_of_value</span></code></a>(array, value)</p></td>
+<td><p>Finds the index of a value in an array most similar to value passed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#beatmap.utils.max_min" title="beatmap.utils.max_min"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.utils.max_min</span></code></a>(array)</p></td>
+<td><p>Finds maximum and minimum of an array.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#beatmap.utils.lin_interp" title="beatmap.utils.lin_interp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.utils.lin_interp</span></code></a>(df, val)</p></td>
+<td><p>Linerarly interpolates between two points.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="beatmap.utils.index_of_value">
+<code class="sig-prename descclassname">beatmap.utils.</code><code class="sig-name descname">index_of_value</code><span class="sig-paren">(</span><em class="sig-param">array</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/utils/_utils.html#index_of_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.utils.index_of_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the index of a value in an array most similar to value passed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>array</em>) – Array of values.</p></li>
+<li><p><strong>value</strong> (<em>numeric</em>) – Value you wish to find in array.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>idx</strong> – For 2D idx[0] = i index, idx[1] = j index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.utils.max_min">
+<code class="sig-prename descclassname">beatmap.utils.</code><code class="sig-name descname">max_min</code><span class="sig-paren">(</span><em class="sig-param">array</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/utils/_utils.html#max_min"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.utils.max_min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds maximum and minimum of an array.</p>
+<p>If multiple max and min values exist, all are returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>array</strong> (<em>array</em>) – Array of values.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>maximum</strong> (<em>float</em>) – Maximum value of array.</p></li>
+<li><p><strong>max_idx</strong> (<em>array</em>) – For 2D max_idx[0] = i index, max_idx[1] = j index.</p></li>
+<li><p><strong>minimum</strong> (<em>float</em>) – Minimum value of array.</p></li>
+<li><p><strong>min_idx</strong> (<em>array</em>) – For 2D min_idx[0] = i index, min_idx[1] = j index</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.utils.lin_interp">
+<code class="sig-prename descclassname">beatmap.utils.</code><code class="sig-name descname">lin_interp</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">val</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/utils/_utils.html#lin_interp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.utils.lin_interp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linerarly interpolates between two points.</p>
+<p>Specifically designed to find the relp corresponding to some value of n.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>dataframe</em>) – Contains raw data, realtaive pressure (relp) and amount adsorbed (n).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>interp_val</strong> – The relp corresponding to some n, between two (n, relp) points.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">BEaTmap</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Module and Function Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#modules">Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="core.html">core</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="io.html">io</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vis.html">vis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module and Function Reference</a><ul>
+      <li>Previous: <a href="core.html" title="previous chapter">core</a></li>
+      <li>Next: <a href="io.html" title="next chapter">io</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

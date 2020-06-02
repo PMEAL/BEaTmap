@@ -1,0 +1,452 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>core &#8212; BEaTmap  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="utils" href="utils.html" />
+    <link rel="prev" title="Module and Function Reference" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <span class="target" id="module-beatmap.core"><span id="core"></span></span><div class="section" id="id1">
+<h1>core<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#beatmap.core.bet" title="beatmap.core.bet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.core.bet</span></code></a>(bet_results)</p></td>
+<td><p>Performs BET analysis on isotherm data for all relative pressure ranges.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#beatmap.core.single_point_bet" title="beatmap.core.single_point_bet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.core.single_point_bet</span></code></a>(df, a_o)</p></td>
+<td><p>Performs single point BET analysis on an isotherm data set for all relative pressure ranges.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#beatmap.core.check_1" title="beatmap.core.check_1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.core.check_1</span></code></a>(df)</p></td>
+<td><p>Checks that n(p-po) aka check1 is increasing.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#beatmap.core.check_2" title="beatmap.core.check_2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.core.check_2</span></code></a>(intercept)</p></td>
+<td><p>Checks that y intercept of the BET plot’s linear regression is positive.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#beatmap.core.check_3" title="beatmap.core.check_3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.core.check_3</span></code></a>(df, nm)</p></td>
+<td><p>Checks that nm, amount adsorbed in the monolayer, is in the range of data points used in BET analysis.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#beatmap.core.check_4" title="beatmap.core.check_4"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.core.check_4</span></code></a>(df, nm, slope, intercept)</p></td>
+<td><p>Checks that relative pressure is consistent.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#beatmap.core.check_5" title="beatmap.core.check_5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.core.check_5</span></code></a>(df[, points])</p></td>
+<td><p>Checks that relative pressure ranges contain a minium number of data</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#beatmap.core.rouq_mask" title="beatmap.core.rouq_mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.core.rouq_mask</span></code></a>(bet_results[, …])</p></td>
+<td><p>Calls all check functions and combines their masks into one “rouqerol mask”.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#beatmap.core.ssa_answer" title="beatmap.core.ssa_answer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beatmap.core.ssa_answer</span></code></a>(bet_results, rouq_mask)</p></td>
+<td><p>Prints a single specific surface area answer from the valid relative pressure range with either the lowest error or most number of points.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="beatmap.core.bet">
+<code class="sig-prename descclassname">beatmap.core.</code><code class="sig-name descname">bet</code><span class="sig-paren">(</span><em class="sig-param">bet_results</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/core/_bet.html#bet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.core.bet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs BET analysis on isotherm data for all relative pressure ranges.</p>
+<p>This function performs BET analysis of any relative pressure range where
+the starting relative pressure is less than the ending relative pressure.</p>
+<p>Results of the analysis are written to arrays, the indexes of the arrays
+correspond to the starting and ending relative pressure.</p>
+<p>eg the specific surface area value with the indicies [3,9] is the specific
+surface area for the relative pressure range that begins with the 4th data
+point and ends with the 10th.</p>
+<p>Arrays of results are stored in the bet_results named tuple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bet_results</strong> (<em>namedtuple</em>) – <p>Contains all information required for BET analysis. Results of BET
+analysis are also stored in this named tuple. Relevant fields for BET
+anaylsis are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.raw_data</span></code> (dataframe) : experimental isotherm data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.a_o</span></code> (flaot) : the cross sectional area of the</p></li>
+</ul>
+<p>adsorbate molecule, in square angstrom.</p>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>bet_results</strong> – Contains the results of BET analysis.
+Relevant fields are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.ssa</span></code> (array) : 2D array of specific surface area</p></li>
+</ul>
+<p>values, in m^2/g, indicies correspond to first and last datapoint
+used in the analysis.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.c</span></code> (array) : 2D array of BET constants values,</p></li>
+</ul>
+<p>indicies correspond to first and last datapoint used in the
+analysis.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.nm</span></code> (array) : 2D array of monolayer adsorbed</p></li>
+</ul>
+<p>amounts, in mol/g, indicies correspond to first and last datapoint
+used in the analysis.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.err</span></code> (array) : 2D array of average error between</p></li>
+</ul>
+<p>a datapoint and the theoretical BET isotherm. Indicies correspond
+to first and last datapoint used in the analysis.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.slope</span></code> (array) : 2D array of slope values for the</p></li>
+</ul>
+<p>BET plot trendline. Indicies correspond to first and last datapoint
+used in the analysis.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.intercept</span></code> (array) : 2D array of intercept values</p></li>
+</ul>
+<p>for the BET plot trendline. Indicies correspond to first and last
+datapoint used in the analysis.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.r</span></code> (array) : 2D array of r values for the BET plot</p></li>
+</ul>
+<p>trendline. Indicies correspond to first and last datapoint used in
+the analysis.</p>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>namedtuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.core.single_point_bet">
+<code class="sig-prename descclassname">beatmap.core.</code><code class="sig-name descname">single_point_bet</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">a_o</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/core/_bet.html#single_point_bet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.core.single_point_bet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs single point BET analysis on an isotherm data set for all
+relative pressure ranges. Can be used to check for agreement between BET
+and single point BET.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bet_results</strong> (<em>namedtuple</em>) – <p>Contains all information required for BET analysis. Results of BET
+analysis are also stored in this named tuple.
+Relevant fields for single point BET anaylsis are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.raw_data</span></code> (dataframe) : experimental isotherm data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bet_results.a_o</span></code> (flaot) : the cross sectional area of the</p></li>
+</ul>
+<p>adsorbate molecule, in square angstrom.</p>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>singlept_results</strong> –</p>
+<p>Contains the results of single point BET analysis. Relevant fields are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">singlept_results.ssa</span></code> (array) : 2D array of specific surface</p></li>
+</ul>
+<p>area values, in m^2/g, indicies correspond to first and last
+datapoint used in the analysis.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">singlept_results.nm</span></code> (array) : 2D array of monolayer adsorbed</p></li>
+</ul>
+<p>amounts, in mol/g, indicies correspond to first and last datapoint
+used in the analysis.</p>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>namedtuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.core.check_1">
+<code class="sig-prename descclassname">beatmap.core.</code><code class="sig-name descname">check_1</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/core/_bet.html#check_1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.core.check_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks that n(p-po) aka check1 is increasing.</p>
+<p>This is a necessary condition for linearity of the BET dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>dataframe</em>) – dataframe of imported experimental isothermal adsorption data.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>check1</strong> – array of 1s and 0s where 0 corresponds to relative pressure ranges
+where n(p-po) isn’t consistently increasing with relative pressure, ie
+ranges that fail this check.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.core.check_2">
+<code class="sig-prename descclassname">beatmap.core.</code><code class="sig-name descname">check_2</code><span class="sig-paren">(</span><em class="sig-param">intercept</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/core/_bet.html#check_2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.core.check_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks that y intercept of the BET plot’s linear regression is positive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>intercept</strong> (<em>array</em>) – 2D array of y-intercept values.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>check2</strong> – array of 1s and 0s where 0 corresponds to relative pressure ranges
+where the y-intercept is negative or zero, ie ranges that fail this
+check.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.core.check_3">
+<code class="sig-prename descclassname">beatmap.core.</code><code class="sig-name descname">check_3</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">nm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/core/_bet.html#check_3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.core.check_3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks that nm, amount adsorbed in the monolayer, is in the range of
+data points used in BET analysis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>dataframe</em>) – dataframe of imported experimental isothermal adsorption data</p></li>
+<li><p><strong>nm</strong> (<em>array</em>) – 2D array of BET specific amount of adsorbate in the monolayer, the
+coordinates of the array corresponding to relative pressures, units
+[moles / gram].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>check3</strong> – array of 1s and 0s where 0 corresponds to relative pressure ranges nm
+is not included in the range of experimental n values, ie ranges that
+fail this check.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.core.check_4">
+<code class="sig-prename descclassname">beatmap.core.</code><code class="sig-name descname">check_4</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">nm</em>, <em class="sig-param">slope</em>, <em class="sig-param">intercept</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/core/_bet.html#check_4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.core.check_4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks that relative pressure is consistent.</p>
+<p>The relative pressure corresponding to nm is found from linear
+interpolation of the experiemental data.</p>
+<p>A second relative pressure is found by setting n to nm in the BET equation
+and solving for relative pressure.</p>
+<p>The two relative pressures are compared and must agree within 10% to pass
+this check.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>dataframe</em>) – dataframe of imported experimental isothermal adsorption data</p></li>
+<li><p><strong>nm</strong> (<em>array</em>) – 2D array of BET specific amount of adsorbate in the monolayer,
+the coordinates of the array corresponding to relative pressures,
+units [moles / gram]</p></li>
+<li><p><strong>slope</strong> (<em>array</em>) – 2D array of slope values resulting from linear regression applied to
+relevant experimental data</p></li>
+<li><p><strong>intercept</strong> (<em>array</em>) – 2D array of y-intercept values resulting from linear regression applied
+to relevant experimental data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>check4</strong> – array of 1s and 0s where 0 corresponds to relative pressure values that
+do not agree within 10%, ie ranges that fail this check</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.core.check_5">
+<code class="sig-prename descclassname">beatmap.core.</code><code class="sig-name descname">check_5</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">points=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/core/_bet.html#check_5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.core.check_5" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Checks that relative pressure ranges contain a minium number of data</dt><dd><p>points.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>dataframe</em>) – dataframe of imported experimental isothermal adsorption data</p></li>
+<li><p><strong>points</strong> (<em>int</em>) – minimum number of data points required for BET analysis to be
+considered valid default value is 5</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>check5</strong> – array of 1s and 0s where 0 corresponds to ranges of experimental data
+that contain less than the minimum number of points</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.core.rouq_mask">
+<code class="sig-prename descclassname">beatmap.core.</code><code class="sig-name descname">rouq_mask</code><span class="sig-paren">(</span><em class="sig-param">bet_results</em>, <em class="sig-param">check1=True</em>, <em class="sig-param">check2=True</em>, <em class="sig-param">check3=True</em>, <em class="sig-param">check4=True</em>, <em class="sig-param">check5=True</em>, <em class="sig-param">points=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/core/_bet.html#rouq_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.core.rouq_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls all check functions and combines their masks
+into one “rouqerol mask”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bet_results</strong> (<em>namedtuple</em>) – Contains all the necessary arrays to be passed to check 1-5.</p></li>
+<li><p><strong>check1</strong> (<em>boolean</em>) – True means the will be evalued, False means the check will not be
+evaluated.</p></li>
+<li><p><strong>check2</strong> (<em>boolean</em>) – True means the will be evalued, False means the check will not be
+evaluated.</p></li>
+<li><p><strong>check3</strong> (<em>boolean</em>) – True means the will be evalued, False means the check will not be
+evaluated.</p></li>
+<li><p><strong>check4</strong> (<em>boolean</em>) – True means the will be evalued, False means the check will not be
+evaluated.</p></li>
+<li><p><strong>check5</strong> (<em>boolean</em>) – True means the will be evalued, False means the check will not be
+evaluated.</p></li>
+<li><p><strong>points</strong> (<em>int</em>) – The minimum number of experimental data points for a relative pressure
+interval to be considered valid.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>rouq_mask</strong> – Contains arrays for the result of each check and a masked array that is
+the result of all selected checks.
+Fields of the named tuple are:</p>
+<p>-<code class="docutils literal notranslate"><span class="pre">rouq_mask.mask</span></code> (MaskedArray) : object where invalid BET results
+are masked.</p>
+<p>-<a href="#id2"><span class="problematic" id="id3">``</span></a>rouq_mask.check1 (array) : array of 1s and 0s where 0 corresponds
+failing check1
+-<a href="#id4"><span class="problematic" id="id5">``</span></a>rouq_mask.check2 (array) : array of 1s and 0s where 0 corresponds
+failing check2
+-<a href="#id6"><span class="problematic" id="id7">``</span></a>rouq_mask.check3 (array) : array of 1s and 0s where 0 corresponds
+failing check3
+-<a href="#id8"><span class="problematic" id="id9">``</span></a>rouq_mask.check4 (array) : array of 1s and 0s where 0 corresponds
+failing check4
+-<a href="#id10"><span class="problematic" id="id11">``</span></a>rouq_mask.check5 (array) : array of 1s and 0s where 0 corresponds
+failing check5</p>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>namedtuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="beatmap.core.ssa_answer">
+<code class="sig-prename descclassname">beatmap.core.</code><code class="sig-name descname">ssa_answer</code><span class="sig-paren">(</span><em class="sig-param">bet_results</em>, <em class="sig-param">rouq_mask</em>, <em class="sig-param">criterion='error'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/beatmap/core/_bet.html#ssa_answer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#beatmap.core.ssa_answer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints a single specific surface area answer from the valid relative
+pressure range with either the lowest error or most number of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bet_results</strong> (<em>named tuple</em>) – <code class="docutils literal notranslate"><span class="pre">bet_results.ssa</span></code> contains the array of specific surface values.</p></li>
+<li><p><strong>rouq_mask</strong> (<em>named tuple</em>) – <code class="docutils literal notranslate"><span class="pre">rouq_mask.mask</span></code> contains the mask used to remove invaid specific
+surface area values from consideration.</p></li>
+<li><p><strong>criterion</strong> (<em>string</em>) – Used to specify the criterion for a final specific surface area answer,
+either ‘error’ or ‘points’. Defaults to ‘error’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">BEaTmap</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Module and Function Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#modules">Modules</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html">utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="io.html">io</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vis.html">vis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module and Function Reference</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Module and Function Reference</a></li>
+      <li>Next: <a href="utils.html" title="next chapter">utils</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

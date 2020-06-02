@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>beatmap.io._dataio &#8212; BEaTmap  documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for beatmap.io._dataio</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Tue May  7 13:00:16 2019</span>
+
+<span class="sd">@author: ellsworthbell</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">beatmap.core</span> <span class="k">as</span> <span class="nn">bet</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+
+
+<div class="viewcode-block" id="import_data"><a class="viewcode-back" href="../../../modules/io.html#beatmap.io.import_data">[docs]</a><span class="k">def</span> <span class="nf">import_data</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Imports isothermal adsoprtion data from a csv file.</span>
+
+<span class="sd">    The .csv file format expected is a two column table,</span>
+<span class="sd">    the first column being &quot;n&quot; (specific amount adsorbed, mol/g)</span>
+<span class="sd">    and the second being the relative pressure.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bet_results : namedtuple</span>
+<span class="sd">        Contains all information required for BET analysis.</span>
+<span class="sd">        Relevant fields are:</span>
+
+<span class="sd">        - ``bet_results.file`` (string) : file name or path.</span>
+<span class="sd">        - ``bet_results.info`` (string) : adsorbate-adsorbent info as a string.</span>
+<span class="sd">        - ``bet_results.a_o`` (float) : adsorbate cross sectional area.</span>
+<span class="sd">        - ``bet_results.raw_data`` (dataframe) : imported isotherm data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">file</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter file name/path:&quot;</span><span class="p">)</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter adsorbate-adsorbent information (this will be </span><span class="se">\</span>
+<span class="s2">incorporated into file names):&quot;</span><span class="p">)</span>
+    <span class="n">a_o_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter cross sectional area of adsorbate in </span><span class="se">\</span>
+<span class="s2">square Angstrom:&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">a_o</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">a_o_input</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The ao provided is not numeric.&#39;</span><span class="p">)</span>
+        <span class="n">a_o_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Try again, enter the cross sectional area of </span><span class="se">\</span>
+<span class="s2">adsorbate in square Angstrom: &quot;</span><span class="p">)</span>
+        <span class="n">a_o</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">a_o_input</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Adsorbate used has an adsorbed cross sectional area of </span><span class="se">\</span>
+<span class="si">%.2f</span><span class="s1"> sq. Angstrom.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a_o</span><span class="p">))</span>
+
+    <span class="c1"># importing data and creating &#39;bet&#39; and &#39;check1&#39; data points</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;File not found.&#39;</span><span class="p">)</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Try again, entering the file name/path:&quot;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="n">labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="s1">&#39;relp&#39;</span><span class="p">,</span> <span class="n">labels</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="s1">&#39;n&#39;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">n</span>  <span class="c1"># necessary? why that here?</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;bet&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">data</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">relp</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">relp</span><span class="p">))</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;check1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">data</span><span class="o">.</span><span class="n">relp</span><span class="p">)</span>
+
+    <span class="c1"># checking data quality</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+    <span class="n">minus1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">n</span><span class="p">[:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="n">minus1</span>
+    <span class="n">test_sum</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">test</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">test_sum</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\n</span><span class="s2">Isotherm data is suspect.</span>
+<span class="s2">Adsorbed moles do not consistantly increase as relative pressure increases&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\n</span><span class="s2">Isotherm data quality appears good.</span>
+<span class="s2">Adsorbed molar amounts are increasing as relative pressure increases.&quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># checking isotherm type</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">relp</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">n</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">dist_along</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dist</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()))</span>
+
+    <span class="c1"># build a spline representation of the contour</span>
+    <span class="n">spline</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">splprep</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="n">u</span><span class="o">=</span><span class="n">dist_along</span><span class="p">,</span>
+                                       <span class="n">w</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))),</span>
+                                       <span class="n">s</span><span class="o">=.</span><span class="mi">0000000001</span><span class="p">)</span>
+    <span class="n">interp_d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">dist_along</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dist_along</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">50</span><span class="p">)</span>
+    <span class="n">interp_x</span><span class="p">,</span> <span class="n">interp_y</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">splev</span><span class="p">(</span><span class="n">interp_d</span><span class="p">,</span> <span class="n">spline</span><span class="p">)</span>
+
+    <span class="c1"># take derivative of the spline (to find inflection points)</span>
+    <span class="n">spline_1deriv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">interp_y</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">interp_x</span><span class="p">)</span>
+    <span class="n">spline_2deriv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">spline_1deriv</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">interp_x</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+    <span class="n">zero_crossings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">spline_2deriv</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">zero_crossings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">spline_2deriv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Isotherm is type I.&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">zero_crossings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">spline_2deriv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Isotherm is type III.&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">zero_crossings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">spline_2deriv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Isotherm is type II.&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">zero_crossings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">spline_2deriv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Isotherm is type V.&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">zero_crossings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">spline_2deriv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Isotherm is type IV.&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Isotherm is type VI.&#39;</span><span class="p">)</span>
+
+    <span class="n">bet_results</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;bet_results&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;a_o&#39;</span><span class="p">,</span> <span class="s1">&#39;raw_data&#39;</span><span class="p">,</span>
+                                             <span class="s1">&#39;ssa&#39;</span><span class="p">,</span> <span class="s1">&#39;nm&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;err&#39;</span><span class="p">,</span> <span class="s1">&#39;slope&#39;</span><span class="p">,</span>
+                                             <span class="s1">&#39;intercept&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">))</span>
+    <span class="n">bet_results</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">file</span>
+    <span class="n">bet_results</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="n">info</span>
+    <span class="n">bet_results</span><span class="o">.</span><span class="n">a_o</span> <span class="o">=</span> <span class="n">a_o</span>
+    <span class="n">bet_results</span><span class="o">.</span><span class="n">raw_data</span> <span class="o">=</span> <span class="n">data</span>
+    <span class="k">return</span> <span class="n">bet_results</span></div>
+
+
+<div class="viewcode-block" id="import_list_data"><a class="viewcode-back" href="../../../modules/io.html#beatmap.io.import_list_data">[docs]</a><span class="k">def</span> <span class="nf">import_list_data</span><span class="p">(</span><span class="n">relp</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Imports isothermal adsoprtion data.</span>
+
+<span class="sd">    User provides two lists, one of relative pressures and the other of amount</span>
+<span class="sd">    adsorbed with units of [mol/g].</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    relp : list</span>
+<span class="sd">        Experimental isotherm relative pressure values.</span>
+
+<span class="sd">    n : list</span>
+<span class="sd">        Experimental amount adsorbed values, mols per gram.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bet_results : namedtuple</span>
+<span class="sd">        Contains all information required for BET analysis.</span>
+<span class="sd">        Relevant fields are:</span>
+
+<span class="sd">        - ``bet_results.file`` (string) : file name or path.</span>
+<span class="sd">        - ``bet_results.info`` (string): adsorbate-adsorbent info as a string.</span>
+<span class="sd">        - ``bet_results.a_o`` (float) : adsorbate cross sectional area.</span>
+<span class="sd">        - ``bet_results.raw_data`` (dataframe) : imported isotherm data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">file</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter name for dataset:&quot;</span><span class="p">)</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter name of adsorbate used:&quot;</span><span class="p">)</span>
+    <span class="n">a_o_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter cross sectional area of adsorbate in </span><span class="se">\</span>
+<span class="s2">square Angstrom:&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">a_o</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">a_o_input</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The ao provided is not numeric.&#39;</span><span class="p">)</span>
+        <span class="n">a_o_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Try again, enter the cross sectional area of </span><span class="se">\</span>
+<span class="s2">adsorbate in square Angstrom:&quot;</span><span class="p">)</span>
+        <span class="n">a_o</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">a_o_input</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Adsorbate used has an adsorbed cross sectional area of </span><span class="se">\</span>
+<span class="si">%.2f</span><span class="s1"> sq. Angstrom.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a_o</span><span class="p">))</span>
+
+    <span class="c1"># importing data and creating &#39;bet&#39; and &#39;check1&#39; data points</span>
+    <span class="n">dict_from_lists</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;relp&#39;</span><span class="p">:</span> <span class="n">relp</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="n">n</span><span class="p">}</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dict_from_lists</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;bet&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">data</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">relp</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">relp</span><span class="p">))</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;check1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">data</span><span class="o">.</span><span class="n">relp</span><span class="p">)</span>
+
+    <span class="c1"># checking data quality</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+    <span class="n">minus1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">n</span><span class="p">[:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="n">minus1</span>
+    <span class="n">test_sum</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">test</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">test_sum</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\n</span><span class="s2">Isotherm data is suspect.</span>
+<span class="s2">Adsorbed moles do not consistantly increase as relative pressure increases&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\n</span><span class="s2">Isotherm data quality appears good.</span>
+<span class="s2">Adsorbed molar amounts are increasing as relative pressure increases.&quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># checking isotherm type</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">relp</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">n</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">dist_along</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dist</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()))</span>
+
+    <span class="c1"># build a spline representation of the contour</span>
+    <span class="n">spline</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">splprep</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="n">u</span><span class="o">=</span><span class="n">dist_along</span><span class="p">,</span>
+                                       <span class="n">w</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))),</span>
+                                       <span class="n">s</span><span class="o">=.</span><span class="mi">0000000001</span><span class="p">)</span>
+    <span class="n">interp_d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">dist_along</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dist_along</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">50</span><span class="p">)</span>  <span class="c1"># len(x)</span>
+    <span class="n">interp_x</span><span class="p">,</span> <span class="n">interp_y</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">splev</span><span class="p">(</span><span class="n">interp_d</span><span class="p">,</span> <span class="n">spline</span><span class="p">)</span>
+
+    <span class="c1"># take derivative of the spline (to find inflection points)</span>
+    <span class="n">spline_1deriv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">interp_y</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">interp_x</span><span class="p">)</span>
+    <span class="n">spline_2deriv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">spline_1deriv</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">interp_x</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+    <span class="n">zero_crossings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">spline_2deriv</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">zero_crossings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">spline_2deriv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Isotherm is type I.&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">zero_crossings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">spline_2deriv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Isotherm is type III.&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">zero_crossings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">spline_2deriv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Isotherm is type II.&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">zero_crossings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">spline_2deriv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Isotherm is type V.&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">zero_crossings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">spline_2deriv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Isotherm is type IV.&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Isotherm is type VI.&#39;</span><span class="p">)</span>
+
+    <span class="n">bet_results</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;bet_results&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;a_o&#39;</span><span class="p">,</span> <span class="s1">&#39;raw_data&#39;</span><span class="p">,</span>
+                                             <span class="s1">&#39;ssa&#39;</span><span class="p">,</span> <span class="s1">&#39;nm&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;err&#39;</span><span class="p">,</span> <span class="s1">&#39;slope&#39;</span><span class="p">,</span>
+                                             <span class="s1">&#39;intercept&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">))</span>
+    <span class="n">bet_results</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">file</span>
+    <span class="n">bet_results</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="n">info</span>
+    <span class="n">bet_results</span><span class="o">.</span><span class="n">a_o</span> <span class="o">=</span> <span class="n">a_o</span>
+    <span class="n">bet_results</span><span class="o">.</span><span class="n">raw_data</span> <span class="o">=</span> <span class="n">data</span>
+
+    <span class="k">return</span> <span class="n">bet_results</span></div>
+
+
+<div class="viewcode-block" id="export_raw_data"><a class="viewcode-back" href="../../../modules/io.html#beatmap.io.export_raw_data">[docs]</a><span class="k">def</span> <span class="nf">export_raw_data</span><span class="p">(</span><span class="n">bet_results</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exports isothermal adsoprtion data.</span>
+
+<span class="sd">    Exported data is saved as a .csv file in the parent directory.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    bet_results : namedtuple</span>
+<span class="sd">        Contains all information required for BET analysis.</span>
+<span class="sd">        Relevant fields are:</span>
+
+<span class="sd">        - ``bet_results.raw_data`` (dataframe) : of the raw isotherm data</span>
+<span class="sd">        written to a .csv</span>
+<span class="sd">        - ``bet_results.info`` (string) : adsorbate-adsorbent information used</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">export_file_name</span> <span class="o">=</span> <span class="n">bet_results</span><span class="o">.</span><span class="n">info</span> <span class="o">+</span> <span class="s1">&#39;raw_data_export.csv&#39;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">bet_results</span><span class="o">.</span><span class="n">raw_data</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">export_file_name</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Raw data saved as: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">export_file_name</span><span class="p">))</span>
+    <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="export_processed_data"><a class="viewcode-back" href="../../../modules/io.html#beatmap.io.export_processed_data">[docs]</a><span class="k">def</span> <span class="nf">export_processed_data</span><span class="p">(</span><span class="n">bet_results</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exports processed isothermal adsoprtion data.</span>
+
+<span class="sd">    Exported data is saved as a .csv file in the parent directory.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    bet_results : namedtuple</span>
+<span class="sd">        Contains all information required for BET analysis.</span>
+<span class="sd">        Relevant fields are:</span>
+
+<span class="sd">        - ``bet_results.raw_data`` (dataframe) : of the raw isotherm data</span>
+<span class="sd">        written to a .csv</span>
+<span class="sd">        - ``bet_results.info`` (string) : adsorbate-adsorbent information used</span>
+
+<span class="sd">    points : int</span>
+<span class="sd">        The minimum number of experimental data points for a relative pressure</span>
+<span class="sd">        interval to be considered valid. Default is 5.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">bet_results</span><span class="o">.</span><span class="n">raw_data</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">end_relp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+        <span class="n">end_relp</span><span class="p">[</span><span class="n">i</span><span class="p">:]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">relp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">begin_relp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">end_relp</span><span class="p">)</span>
+
+    <span class="n">mask1</span> <span class="o">=</span> <span class="n">bet</span><span class="o">.</span><span class="n">check_1</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">mask2</span> <span class="o">=</span> <span class="n">bet</span><span class="o">.</span><span class="n">check_2</span><span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">intercept</span><span class="p">)</span>
+    <span class="n">mask3</span> <span class="o">=</span> <span class="n">bet</span><span class="o">.</span><span class="n">check_3</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">bet_results</span><span class="o">.</span><span class="n">nm</span><span class="p">)</span>
+    <span class="n">mask4</span> <span class="o">=</span> <span class="n">bet</span><span class="o">.</span><span class="n">check_4</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">bet_results</span><span class="o">.</span><span class="n">nm</span><span class="p">,</span> <span class="n">bet_results</span><span class="o">.</span><span class="n">slope</span><span class="p">,</span>
+                        <span class="n">bet_results</span><span class="o">.</span><span class="n">intercept</span><span class="p">)</span>
+    <span class="n">mask5</span> <span class="o">=</span> <span class="n">bet</span><span class="o">.</span><span class="n">check_5</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span>
+
+    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">begin_relp</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+                                      <span class="n">end_relp</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">processed_data</span><span class="p">,</span>
+                                      <span class="n">bet_results</span><span class="o">.</span><span class="n">ssa</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">processed_data</span><span class="p">,</span>
+                                      <span class="n">bet_results</span><span class="o">.</span><span class="n">nm</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">processed_data</span><span class="p">,</span>
+                                      <span class="n">bet_results</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">processed_data</span><span class="p">,</span>
+                                      <span class="n">bet_results</span><span class="o">.</span><span class="n">err</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">processed_data</span><span class="p">,</span>
+                                      <span class="n">bet_results</span><span class="o">.</span><span class="n">slope</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">processed_data</span><span class="p">,</span>
+                                      <span class="n">bet_results</span><span class="o">.</span><span class="n">intercept</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">processed_data</span><span class="p">,</span>
+                                      <span class="n">bet_results</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">processed_data</span><span class="p">,</span> <span class="n">mask1</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">processed_data</span><span class="p">,</span> <span class="n">mask2</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">processed_data</span><span class="p">,</span> <span class="n">mask3</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">processed_data</span><span class="p">,</span> <span class="n">mask4</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">processed_data</span><span class="p">,</span> <span class="n">mask5</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+
+    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">processed_data</span><span class="p">,</span>
+                                  <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;begin relative pressure&#39;</span><span class="p">,</span>
+                                           <span class="s1">&#39;end relative pressure&#39;</span><span class="p">,</span>
+                                           <span class="s1">&#39;spec sa [m2/g]&#39;</span><span class="p">,</span> <span class="s1">&#39;bet constant&#39;</span><span class="p">,</span>
+                                           <span class="s1">&#39;nm [mol/g]&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="s1">&#39;slope&#39;</span><span class="p">,</span>
+                                           <span class="s1">&#39;y-int&#39;</span><span class="p">,</span> <span class="s1">&#39;r value&#39;</span><span class="p">,</span> <span class="s1">&#39;check1&#39;</span><span class="p">,</span>
+                                           <span class="s1">&#39;check2&#39;</span><span class="p">,</span> <span class="s1">&#39;check3&#39;</span><span class="p">,</span> <span class="s1">&#39;check4&#39;</span><span class="p">,</span>
+                                           <span class="s1">&#39;check5&#39;</span><span class="p">])</span>
+
+    <span class="n">export_file_name</span> <span class="o">=</span> <span class="n">bet_results</span><span class="o">.</span><span class="n">info</span> <span class="o">+</span> <span class="s1">&#39;processed_data_export.csv&#39;</span>
+    <span class="n">processed_data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">export_file_name</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Processed data saved as: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">export_file_name</span><span class="p">))</span>
+    <span class="k">return</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">BEaTmap</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/index.html">Module and Function Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
