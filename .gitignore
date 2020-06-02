@@ -2,3 +2,4 @@
 *.png
 *.pyc
 beatmap.egg-info
+docs/_build
