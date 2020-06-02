@@ -1,5 +1,5 @@
 *.csv
 *.png
 *.pyc
+*.DS_Store
 beatmap.egg-info
-docs/_build
