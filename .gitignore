@@ -1,3 +1,4 @@
 *.csv
 *.png
 *.pyc
+beatmap.egg-info
