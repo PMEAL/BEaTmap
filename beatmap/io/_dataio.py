@@ -24,14 +24,14 @@ def import_data():
 
     Returns
     -------
-    bet_results : namedtuple
+    isotherm_data : namedtuple
         Contains all information required for BET analysis.
         Relevant fields are:
 
-        - ``bet_results.file`` (string) : file name or path.
-        - ``bet_results.info`` (string) : adsorbate-adsorbent info as a string.
-        - ``bet_results.a_o`` (float) : adsorbate cross sectional area.
-        - ``bet_results.raw_data`` (dataframe) : imported isotherm data.
+        - ``isotherm_data.iso_data`` (dataframe) : imported isotherm data.
+        - ``isotherm_data.a_o`` (float) : adsorbate cross sectional area.
+        - ``isotherm_data.info`` (string) : string of adsorbate-adsorbent info.
+        - ``isotherm_data.file`` (string) : file name or path.
     """
 
     file = input("Enter file name/path:")
@@ -42,7 +42,7 @@ square Angstrom:")
 
     try:
         a_o = float(a_o_input)
-    except:
+    except ValueError:
         print('The ao provided is not numeric.')
         a_o_input = input("Try again, enter the cross sectional area of \
 adsorbate in square Angstrom: ")
@@ -51,7 +51,7 @@ adsorbate in square Angstrom: ")
     print('\nAdsorbate used has an adsorbed cross sectional area of \
 %.2f sq. Angstrom.' % (a_o))
 
-    # importing data and creating 'bet' and 'check1' data points
+    # importing data and creating 'bet' and 'check2' data points
     try:
         data = pd.read_csv(file)
     except FileNotFoundError:
@@ -63,7 +63,6 @@ adsorbate in square Angstrom: ")
     data.rename(columns={labels[0]: 'relp', labels[1]: 'n'}, inplace=True)
     data['n'] = data.n  # necessary? why that here?
     data['bet'] = (1 / data.n) * (data.relp / (1-data.relp))
-    data['check1'] = data.n * (1 - data.relp)
 
     # checking data quality
     test = np.zeros(len(data))
@@ -110,14 +109,10 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
     else:
         print('Isotherm is type VI.')
 
-    bet_results = namedtuple('bet_results', ('file', 'info', 'a_o', 'raw_data',
-                                             'ssa', 'nm', 'c', 'err', 'slope',
-                                             'intercept', 'r'))
-    bet_results.file = file
-    bet_results.info = info
-    bet_results.a_o = a_o
-    bet_results.raw_data = data
-    return bet_results
+    iso_data = namedtuple('iso_data', 'iso_df a_o info file')
+    isotherm_data = iso_data(data, a_o, info, file)
+
+    return isotherm_data
 
 
 def import_list_data(relp, n):
@@ -136,14 +131,14 @@ def import_list_data(relp, n):
 
     Returns
     -------
-    bet_results : namedtuple
+    isotherm_data : namedtuple
         Contains all information required for BET analysis.
         Relevant fields are:
 
-        - ``bet_results.file`` (string) : file name or path.
-        - ``bet_results.info`` (string): adsorbate-adsorbent info as a string.
-        - ``bet_results.a_o`` (float) : adsorbate cross sectional area.
-        - ``bet_results.raw_data`` (dataframe) : imported isotherm data.
+        - ``isotherm_data.iso_data`` (dataframe) : imported isotherm data.
+        - ``isotherm_data.a_o`` (float) : adsorbate cross sectional area.
+        - ``isotherm_data.info`` (string) : string of adsorbate-adsorbent info.
+        - ``isotherm_data.file`` (string) : file name or path.
     """
 
     file = input("Enter name for dataset:")
@@ -153,7 +148,7 @@ square Angstrom:")
 
     try:
         a_o = float(a_o_input)
-    except:
+    except ValueError:
         print('The ao provided is not numeric.')
         a_o_input = input("Try again, enter the cross sectional area of \
 adsorbate in square Angstrom:")
@@ -162,11 +157,11 @@ adsorbate in square Angstrom:")
     print('\nAdsorbate used has an adsorbed cross sectional area of \
 %.2f sq. Angstrom.' % (a_o))
 
-    # importing data and creating 'bet' and 'check1' data points
+    # importing data and creating 'bet' and 'check2' data points
     dict_from_lists = {'relp': relp, 'n': n}
     data = pd.DataFrame(dict_from_lists)
     data['bet'] = (1 / data.n) * (data.relp / (1-data.relp))
-    data['check1'] = data.n * (1 - data.relp)
+    data['check2'] = data.n * (1 - data.relp)
 
     # checking data quality
     test = np.zeros(len(data))
@@ -213,18 +208,13 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
     else:
         print('Isotherm is type VI.')
 
-    bet_results = namedtuple('bet_results', ('file', 'info', 'a_o', 'raw_data',
-                                             'ssa', 'nm', 'c', 'err', 'slope',
-                                             'intercept', 'r'))
-    bet_results.file = file
-    bet_results.info = info
-    bet_results.a_o = a_o
-    bet_results.raw_data = data
+    iso_data = namedtuple('iso_data', 'iso_df a_o info file')
+    isotherm_data = iso_data(data, a_o, info, file)
 
-    return bet_results
+    return isotherm_data
 
 
-def export_raw_data(bet_results):
+def export_raw_data(isotherm_data):
     """Exports isothermal adsoprtion data.
 
     Exported data is saved as a .csv file in the parent directory.
@@ -232,11 +222,11 @@ def export_raw_data(bet_results):
     Parameters
     ----------
 
-    bet_results : namedtuple
+    isotherm_data : namedtuple
         Contains all information required for BET analysis.
         Relevant fields are:
 
-        - ``bet_results.raw_data`` (dataframe) : of the raw isotherm data
+        - ``isotherm_data.iso_df`` (dataframe) : of the raw isotherm data
         written to a .csv
         - ``bet_results.info`` (string) : adsorbate-adsorbent information used
 
@@ -245,8 +235,8 @@ def export_raw_data(bet_results):
 
     """
 
-    export_file_name = bet_results.info + 'raw_data_export.csv'
-    df = bet_results.raw_data
+    export_file_name = isotherm_data.info + 'raw_data_export.csv'
+    df = isotherm_data.iso_df
     df.to_csv(export_file_name, index=None, header=True)
     print('Raw data saved as: %s' % (export_file_name))
     return
@@ -264,10 +254,6 @@ def export_processed_data(bet_results, points=5):
         Contains all information required for BET analysis.
         Relevant fields are:
 
-        - ``bet_results.raw_data`` (dataframe) : of the raw isotherm data
-        written to a .csv
-        - ``bet_results.info`` (string) : adsorbate-adsorbent information used
-
     points : int
         The minimum number of experimental data points for a relative pressure
         interval to be considered valid. Default is 5.
@@ -277,7 +263,7 @@ def export_processed_data(bet_results, points=5):
 
     """
 
-    df = bet_results.raw_data
+    df = bet_results.iso_df
     i = 0
     end_relp = np.zeros((len(df), len(df)))
     while i < len(df):
@@ -286,8 +272,8 @@ def export_processed_data(bet_results, points=5):
 
     begin_relp = np.transpose(end_relp)
 
-    mask1 = bet.check_1(df)
-    mask2 = bet.check_2(bet_results.intercept)
+    mask1 = bet.check_1(bet_results.intercept)
+    mask2 = bet.check_2(df)
     mask3 = bet.check_3(df, bet_results.nm)
     mask4 = bet.check_4(df, bet_results.nm, bet_results.slope,
                         bet_results.intercept)
@@ -320,7 +306,7 @@ def export_processed_data(bet_results, points=5):
                                            'end relative pressure',
                                            'spec sa [m2/g]', 'bet constant',
                                            'nm [mol/g]', 'error', 'slope',
-                                           'y-int', 'r value', 'check1',
+                                           'y-int', 'r value', 'check2',
                                            'check2', 'check3', 'check4',
                                            'check5'])
 

@@ -12,7 +12,7 @@ from prettytable import PrettyTable
 from beatmap import utils as util
 
 
-def ascii_tables(bet_results, rouq_mask):
+def ascii_tables(bet_results, mask_results):
     """Creates and prints ASCII formatted tables of BET results.
 
     Parameters
@@ -21,30 +21,30 @@ def ascii_tables(bet_results, rouq_mask):
         Contains elements that result from BET analysis.
         Relevant fields are:
 
-        - ``bet_results.raw_data`` (dataframe) : experimental isotherm data.
+        - ``bet_results.iso_df`` (dataframe) : experimental isotherm data.
         - ``bet_results.ssa`` (array) : specific surface areas for all relp
         ranges.
         - ``bet_results.c`` (array) : BET constants for all relp ranges.
         - ``bet_results.err`` (array) : error values for all relp ranges.
 
-    rouq_mask : namedtuple
+    mask_results : namedtuple
         Contains the results of applying the Rouquerol criteria to BET results.
         Relevant fields are:
 
-        - ``rouq_mask.mask`` (MaskedArray) : object where invalid BET results
-        are masked.
+        - ``mask_results.mask`` (MaskedArray) : object where invalid BET
+        results are masked.
 
     Returns
     -------
 
     """
 
-    mask = rouq_mask.mask
+    mask = mask_results.mask
     if mask.all() == True:
         print('No valid relative pressure ranges. ASCII tables not created.')
         return
 
-    df = bet_results.raw_data
+    df = bet_results.iso_df
     ssa = np.ma.array(bet_results.ssa, mask=mask)
     c = np.ma.array(bet_results.c, mask=mask)
     err = np.ma.array(bet_results.err, mask=mask)
@@ -131,7 +131,7 @@ def ascii_tables(bet_results, rouq_mask):
     return
 
 
-def dataframe_tables(bet_results, rouq_mask):
+def dataframe_tables(bet_results, mask_results):
     """Creates and populates pandas dataframes summarizing BET results.
 
    Parameters
@@ -140,18 +140,18 @@ def dataframe_tables(bet_results, rouq_mask):
         Contains elements that result from BET analysis.
         Relevant fields are:
 
-        - ``bet_results.raw_data`` (dataframe) : experimental isotherm data.
+        - ``bet_results.iso_df`` (dataframe) : experimental isotherm data.
         - ``bet_results.ssa`` (array) : specific surface areas for all relp
         ranges.
         - ``bet_results.c`` (array) : BET constants for all relp ranges.
         - ``bet_results.err`` (array) : error values for all relp ranges.
 
-    rouq_mask : namedtuple
+    mask_results : namedtuple
         Contains the results of applying the Rouquerol criteria to BET results.
         Relevant fields are:
 
-        - ``rouq_mask.mask`` (MaskedArray) : object where invalid BET results
-        are masked.
+        - ``mask_results.mask`` (MaskedArray) : object where invalid BET
+        results are masked.
 
     Returns
     -------
@@ -171,7 +171,7 @@ def dataframe_tables(bet_results, rouq_mask):
 
     """
 
-    mask = rouq_mask.mask
+    mask = mask_results.mask
 
     if mask.all() == True:
         print('No valid relative pressure ranges. Tables not created.')
@@ -194,15 +194,14 @@ def dataframe_tables(bet_results, rouq_mask):
                   'End P/Po': ['n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a'],
                   'Error': ['n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a']
                   }
-
+        print('No valid relative pressure ranges. \
+Standard deviations not calculated.')
         c_table = pd.DataFrame(data=c_dict)
-        ssa_sdev = 'No valid relative pressure ranges.\
-Standard deviation not calculated.'
-        c_sdev = 'No valid relative pressure ranges.\
-Standard deviation not calculated.'
+        ssa_sdev = 0
+        c_sdev = 0
         return ssa_table, c_table, ssa_sdev, c_sdev
 
-    df = bet_results.raw_data
+    df = bet_results.iso_df
     ssa = np.ma.array(bet_results.ssa, mask=mask)
     c = np.ma.array(bet_results.c, mask=mask)
     err = np.ma.array(bet_results.err, mask=mask)

@@ -12,7 +12,7 @@ import beatmap.utils as util
 from collections import namedtuple
 
 
-def bet(bet_results):
+def bet(iso_df, a_o, info, *args):
     """Performs BET analysis on isotherm data for all relative pressure ranges.
 
     This function performs BET analysis of any relative pressure range where
@@ -27,24 +27,45 @@ def bet(bet_results):
 
     Arrays of results are stored in the bet_results named tuple.
 
+    Indexing of named tuple elements is in order of priority, data used by
+    other function are given priority.
+
+    Rather than pass individual parameters, this function can accept
+    *isotherm_data (where isotherm_data is a named tuple output by
+    a data import function).
+
     Parameters
     ----------
-    bet_results : namedtuple
-        Contains all information required for BET analysis. Results of BET
-        analysis are also stored in this named tuple. Relevant fields for BET
-        anaylsis are:
+    iso_df: dataframe
+        Isotherm data, output by a data import function.
 
-        - ``bet_results.raw_data`` (dataframe) : experimental isotherm data.
+    a_o : float
+        Cross sectional area of adsorbate, in square Angstrom, output by a
+        data import function.
 
-        - ``bet_results.a_o`` (flaot) : the cross sectional area of the
-        adsorbate molecule, in square angstrom.
-
+    info : string
+        Adsorbate-adsorbent information, output by a data import
+        function.
 
     Returns
     -------
     bet_results : namedtuple
         Contains the results of BET analysis.
-        Relevant fields are:
+        Tuple elements are, in order of index:
+
+            - ``bet_results.intercept`` (array) : 2D array of intercept values
+            for the BET plot trendline. Indicies correspond to first and last
+            datapoint used in the analysis.
+
+            - ``bet_results.iso_df`` (dataframe) : Experimental isotherm data.
+
+            - ``bet_results.nm`` (array) : 2D array of monolayer adsorbed
+            amounts, in mol/g, indicies correspond to first and last datapoint
+            used in the analysis.
+
+            - ``bet_results.slope`` (array) : 2D array of slope values for the
+            BET plot trendline. Indicies correspond to first and last datapoint
+            used in the analysis.
 
             - ``bet_results.ssa`` (array) : 2D array of specific surface area
             values, in m^2/g, indicies correspond to first and last datapoint
@@ -54,45 +75,36 @@ def bet(bet_results):
             indicies correspond to first and last datapoint used in the
             analysis.
 
-            - ``bet_results.nm`` (array) : 2D array of monolayer adsorbed
-            amounts, in mol/g, indicies correspond to first and last datapoint
-            used in the analysis.
-
             - ``bet_results.err`` (array) : 2D array of average error between
             a datapoint and the theoretical BET isotherm. Indicies correspond
             to first and last datapoint used in the analysis.
-
-            - ``bet_results.slope`` (array) : 2D array of slope values for the
-            BET plot trendline. Indicies correspond to first and last datapoint
-            used in the analysis.
-
-            - ``bet_results.intercept`` (array) : 2D array of intercept values
-            for the BET plot trendline. Indicies correspond to first and last
-            datapoint used in the analysis.
 
             - ``bet_results.r`` (array) : 2D array of r values for the BET plot
             trendline. Indicies correspond to first and last datapoint used in
             the analysis.
 
+            - ``bet_results.num_pts`` (array) : 2D array of the number of
+            experimental data points per relative pressure range.
+
+            -``bet_results.info`` (string) : string of adsorbate-adsorbent info
+            by other functions to name files.
+
     """
 
-    df = bet_results.raw_data
-    a_o = bet_results.a_o
+    ssa_array = np.zeros((len(iso_df), len(iso_df)))
+    c_array = np.zeros((len(iso_df), len(iso_df)))
+    nm_array = np.zeros((len(iso_df), len(iso_df)))
+    err_array = np.zeros((len(iso_df), len(iso_df)))
+    slope = np.zeros((len(iso_df), len(iso_df)))
+    intercept = np.zeros((len(iso_df), len(iso_df)))
+    r = np.zeros((len(iso_df), len(iso_df)))
+    bet_c = np.zeros(len(iso_df))
+    number_pts = np.zeros((len(iso_df), len(iso_df)))
 
-    ssa_array = np.zeros((len(df), len(df)))
-    c_array = np.zeros((len(df), len(df)))
-    nm_array = np.zeros((len(df), len(df)))
-    err_array = np.zeros((len(df), len(df)))
-    slope = np.zeros((len(df), len(df)))
-    intercept = np.zeros((len(df), len(df)))
-    r = np.zeros((len(df), len(df)))
-    bet_c = np.zeros(len(df.relp))
-    number_pts = np.zeros((len(df.relp), len(df.relp)))
-
-    for i in range(len(df)):
-        for j in range(len(df)):
+    for i in range(len(iso_df)):
+        for j in range(len(iso_df)):
             if i > j:
-                a = df.iloc[j:i+1]
+                a = iso_df.iloc[j:i+1]
                 X = a.relp
                 y = a.bet
                 m, b, r_value, p_value, std_err =\
@@ -106,13 +118,13 @@ def bet(bet_results):
                 if b != 0:
                     c = m/b + 1  # avoiding divide by zero issues
                     nm = 1 / (b * c)
-                    bet_c = (1 / (nm * c)) + (c - 1) * df.relp / (nm * c)
+                    bet_c = (1 / (nm * c)) + (c - 1) * iso_df.relp / (nm * c)
                 spec_sa = nm * 6.022*10**23 * a_o * 10**-20
                 ssa_array[i, j] = spec_sa
                 c_array[i, j] = c
                 nm_array[i, j] = nm
                 number_pts[i, j] = i - j + 1
-                errors = np.nan_to_num(abs(bet_c - df.bet) / bet_c)
+                errors = np.nan_to_num(abs(bet_c - iso_df.bet) / bet_c)
                 if i - j == 1:
                     err_array[i, j] = 0
                 else:
@@ -121,16 +133,11 @@ def bet(bet_results):
                 # used to compute C, so, min and max error corresponds to the
                 # best and worst fit over the interval used in BET analysis,
                 # not the entire isotherm
-
-                bet_results.ssa = ssa_array
-                bet_results.nm = nm_array
-                bet_results.c = c_array
-                bet_results.err = err_array
-                bet_results.slope = np.nan_to_num(slope)
-                bet_results.intercept = np.nan_to_num(intercept)
-                bet_results.r = r
-                bet_results.number_pts = number_pts
-
+                results = namedtuple('results', 'intercept iso_df nm slope ssa\
+                                     c err r num_pts info')
+                bet_results = results(np.nan_to_num(intercept), iso_df, nm_array, slope,
+                                      ssa_array, c_array, err_array, r,
+                                      number_pts, info)
     return bet_results
 
 
@@ -187,39 +194,7 @@ def single_point_bet(df, a_o):
     return singlept_results
 
 
-def check_1(df):
-    """Checks that n(p-po) aka check1 is increasing.
-
-    This is a necessary condition for linearity of the BET dataset.
-
-    Parameters
-    ----------
-    df : dataframe
-        dataframe of imported experimental isothermal adsorption data.
-
-    Returns
-    -------
-    check1 : array
-        array of 1s and 0s where 0 corresponds to relative pressure ranges
-        where n(p-po) isn't consistently increasing with relative pressure, ie
-        ranges that fail this check.
-
-    """
-
-    check1 = np.ones((len(df), len(df)))
-    minus1 = np.concatenate(([0], df.check1[: -1]))
-    test = (df.check1 - minus1 >= 0)
-    test = np.tile(test, (len(df), 1))
-    check1 = check1 * test
-    check1 = check1.T
-
-    if np.any(check1) is False:
-        print('All relative pressure ranges fail check 1.')
-
-    return check1
-
-
-def check_2(intercept):
+def check_1(intercept):
     """Checks that y intercept of the BET plot's linear regression is positive.
 
     Parameters
@@ -229,14 +204,46 @@ def check_2(intercept):
 
     Returns
     -------
-    check2 : array
-        array of 1s and 0s where 0 corresponds to relative pressure ranges
+    check1 : array
+        Array of 1s and 0s where 0 corresponds to relative pressure ranges
         where the y-intercept is negative or zero, ie ranges that fail this
         check.
 
     """
 
-    check2 = (intercept[:, :] > 0)
+    check1 = (intercept[:, :] > 0)
+
+    if np.any(check1) is False:
+        print('All relative pressure ranges fail check 1.')
+
+    return check1
+
+
+def check_2(df):
+    """Checks that n(p-po) aka check2 is increasing.
+
+    This is a necessary condition for linearity of the BET dataset.
+
+    Parameters
+    ----------
+    df : dataframe
+        Dataframe of imported experimental isothermal adsorption data.
+
+    Returns
+    -------
+    check2 : array
+        Array of 1s and 0s where 0 corresponds to relative pressure ranges
+        where n(p-po) isn't consistently increasing with relative pressure, ie
+        ranges that fail this check.
+
+    """
+    df['check2'] = df.n * (1 - df.relp)
+    check2 = np.ones((len(df), len(df)))
+    minus1 = np.concatenate(([0], df.check2[: -1]))
+    test = (df.check2 - minus1 >= 0)
+    test = np.tile(test, (len(df), 1))
+    check2 = check2 * test
+    check2 = check2.T
 
     if np.any(check2) is False:
         print('All relative pressure ranges fail check 2.')
@@ -251,7 +258,7 @@ def check_3(df, nm):
     Parameters
     ----------
     df : dataframe
-        dataframe of imported experimental isothermal adsorption data
+        Dataframe of imported experimental isothermal adsorption data.
 
     nm : array
         2D array of BET specific amount of adsorbate in the monolayer, the
@@ -261,7 +268,7 @@ def check_3(df, nm):
     Returns
     -------
     check3 : array
-        array of 1s and 0s where 0 corresponds to relative pressure ranges nm
+        Array of 1s and 0s where 0 corresponds to relative pressure ranges nm
         is not included in the range of experimental n values, ie ranges that
         fail this check.
 
@@ -295,26 +302,26 @@ def check_4(df, nm, slope, intercept):
     Parameters
     ----------
     df : dataframe
-        dataframe of imported experimental isothermal adsorption data
+        Dataframe of imported experimental isothermal adsorption data.
 
     nm : array
         2D array of BET specific amount of adsorbate in the monolayer,
         the coordinates of the array corresponding to relative pressures,
-        units [moles / gram]
+        units [moles / gram].
 
     slope : array
         2D array of slope values resulting from linear regression applied to
-        relevant experimental data
+        relevant experimental data.
 
     intercept : array
         2D array of y-intercept values resulting from linear regression applied
-        to relevant experimental data
+        to relevant experimental data.
 
     Returns
     -------
     check4 : array
-        array of 1s and 0s where 0 corresponds to relative pressure values that
-        do not agree within 10%, ie ranges that fail this check
+        Array of 1s and 0s where 0 corresponds to relative pressure values that
+        do not agree within 10%, ie ranges that fail this check.
 
     """
 
@@ -351,17 +358,17 @@ def check_5(df, points=5):
     Parameters
     ----------
     df : dataframe
-        dataframe of imported experimental isothermal adsorption data
+        Dataframe of imported experimental isothermal adsorption data.
 
     points : int
-        minimum number of data points required for BET analysis to be
-        considered valid default value is 5
+        Minimum number of data points required for BET analysis to be
+        considered valid default value is 5.
 
     Returns
     -------
     check5 : array
-        array of 1s and 0s where 0 corresponds to ranges of experimental data
-        that contain less than the minimum number of points
+        Array of 1s and 0s where 0 corresponds to ranges of experimental data
+        that contain less than the minimum number of points.
 
     """
 
@@ -378,15 +385,28 @@ def check_5(df, points=5):
     return check5
 
 
-def rouq_mask(bet_results, check1=True, check2=True, check3=True,
-              check4=True, check5=True, points=5):
+def rouq_mask(intercept, iso_df, nm, slope, *args, check1=True, check2=True,
+              check3=True, check4=True, check5=True, points=5):
     """Calls all check functions and combines their masks
     into one "rouqerol mask".
 
+    Rather than pass individual parameters, this function can accept
+    *bet_results (where bet_results is a named tuple output by the bet
+    function).
+
     Parameters
     ----------
-    bet_results : namedtuple
-        Contains all the necessary arrays to be passed to check 1-5.
+    intercept : array
+        2D array of intercept values, used in check1.
+
+    iso_df : dataframe
+        Dataframe of isotherm data, used in check2.
+
+    nm : array
+        2D array of amount in the monolayer values, used in check3 and check4.
+
+    slope : array
+        2D array of slope values, used in check4
 
     check1 : boolean
         True means the will be evalued, False means the check will not be
@@ -423,51 +443,48 @@ def rouq_mask(bet_results, check1=True, check2=True, check3=True,
         are masked.
 
         -``rouq_mask.check1 (array) : array of 1s and 0s where 0 corresponds
-        failing check1
+        failing check1.
         -``rouq_mask.check2 (array) : array of 1s and 0s where 0 corresponds
-        failing check2
+        failing check2.
         -``rouq_mask.check3 (array) : array of 1s and 0s where 0 corresponds
-        failing check3
+        failing check3.
         -``rouq_mask.check4 (array) : array of 1s and 0s where 0 corresponds
-        failing check4
+        failing check4.
         -``rouq_mask.check5 (array) : array of 1s and 0s where 0 corresponds
-        failing check5
+        failing check5.
 
     """
 
-    df = bet_results.raw_data
-
-    mask = np.ones((len(df), len(df)))
-    for i in range(len(df)):
-        for j in range(len(df)):
+    mask = np.ones((len(iso_df), len(iso_df)))
+    for i in range(len(iso_df)):
+        for j in range(len(iso_df)):
             if j >= i:
                 mask[i, j] = 0
 
     if check1 is True:
-        check1 = check_1(df)
+        check1 = check_1(intercept)
     else:
-        check1 = np.ones((len(df), len(df)))
+        check1 = np.ones((len(iso_df), len(iso_df)))
 
     if check2 is True:
-        check2 = check_2(bet_results.intercept)
+        check2 = check_2(iso_df)
     else:
-        check2 = np.ones((len(df), len(df)))
+        check2 = np.ones((len(iso_df), len(iso_df)))
 
     if check3 is True:
-        check3 = check_3(df, bet_results.nm)
+        check3 = check_3(iso_df, nm)
     else:
-        check3 = np.ones((len(df), len(df)))
+        check3 = np.ones((len(iso_df), len(iso_df)))
 
     if check4 is True:
-        check4 = check_4(df, bet_results.nm, bet_results.slope,
-                         bet_results.intercept)
+        check4 = check_4(iso_df, nm, slope, intercept)
     else:
-        check4 = np.ones((len(df), len(df)))
+        check4 = np.ones((len(iso_df), len(iso_df)))
 
     if check5 is True:
-        check5 = check_5(df, points)
+        check5 = check_5(iso_df, points)
     else:
-        check5 = np.ones((len(df), len(df)))
+        check5 = np.ones((len(iso_df), len(iso_df)))
 
     mask = np.multiply(check1, mask)
     mask = np.multiply(check2, mask)
@@ -479,19 +496,15 @@ def rouq_mask(bet_results, check1=True, check2=True, check3=True,
     invertedmask = np.logical_not(mask)  # inverting mask so that 0 = valid,
     # 1 = invalid, to work well with numpy masks
 
-    rouq_mask = namedtuple('rouq_mask', ('mask', 'check1', 'check2', 'check3',
-                                         'check4', 'check5'))
-    rouq_mask.mask = invertedmask
-    rouq_mask.check1 = check1
-    rouq_mask.check2 = check2
-    rouq_mask.check3 = check3
-    rouq_mask.check4 = check4
-    rouq_mask.check5 = check5
+    rouq_mask = namedtuple('rouq_mask', 'mask check1 check2 check3\
+                           check4 check5')
+    mask_results = rouq_mask(invertedmask, check1, check2, check3, check4,
+                             check5)
 
-    return rouq_mask
+    return mask_results
 
 
-def ssa_answer(bet_results, rouq_mask, criterion='error'):
+def ssa_answer(bet_results, mask_results, criterion='error'):
     """ Prints a single specific surface area answer from the valid relative
     pressure range with either the lowest error or most number of points.
 
@@ -513,7 +526,13 @@ def ssa_answer(bet_results, rouq_mask, criterion='error'):
 
     """
 
-    mask = rouq_mask.mask
+    mask = mask_results.mask
+
+    if mask.all() == True:
+        print('No valid relative pressure ranges. Specific surface area not \
+calculated.')
+        return
+
     ssa = np.ma.array(bet_results.ssa, mask=mask)
 
     if criterion == 'error':
@@ -525,12 +544,12 @@ def ssa_answer(bet_results, rouq_mask, criterion='error'):
         return
 
     if criterion == 'points':
-        pts = np.ma.array(bet_results.number_pts, mask=mask)
+        pts = np.ma.array(bet_results.num_pts, mask=mask)
         max_pts = np.max(pts)
         ssa_ans_array = np.ma.masked_where(pts < max_pts, ssa)
         try:
             ssa_ans = float(ssa_ans_array.compressed())
-        except:
+        except ValueError:
             print('Error, so single specific surface area answer. Multiple\
 relative pressure ranges with the maximum number of points.')
             return 0

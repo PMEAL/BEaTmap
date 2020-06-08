@@ -12,7 +12,7 @@ import seaborn as sns
 from beatmap import utils as util
 
 
-def experimental_data_plot(bet_results, save_file=False):
+def experimental_data_plot(isotherm_data, save_file=False):
     """Creates a scatter plot of experimental data.
 
     Typical isotherm presentation where
@@ -20,8 +20,8 @@ def experimental_data_plot(bet_results, save_file=False):
 
     Parameters
     ----------
-    bet_results : namedtuple
-        The bet_results.raw_data field is used to
+    isotherm_data : namedtuple
+        The isotherm_data.iso_df element is used to
         create a plot of isotherm data.
 
     save_file : boolean
@@ -33,7 +33,7 @@ def experimental_data_plot(bet_results, save_file=False):
 
     """
 
-    df = bet_results.raw_data
+    df = isotherm_data.iso_df
     fig, (ax) = plt.subplots(1, 1, figsize=(10, 10))
     ax.set_xlim(0, 1.0)
     ax.set_ylim(0, df['n'].iloc[-1] * 1.05)
@@ -44,14 +44,14 @@ def experimental_data_plot(bet_results, save_file=False):
     ax.plot(df.relp, df.n, c='grey', marker='o', linewidth=0)
 
     if save_file is True:
-        fig.savefig('experimentaldata_%s.png' % (bet_results.info),
+        fig.savefig('experimentaldata_%s.png' % (isotherm_data.info),
                     bbox_inches='tight')
         print('Experimental data plot saved as: experimentaldata_%s.png'
-              % (bet_results.info))
+              % (isotherm_data.info))
     return()
 
 
-def ssa_heatmap(bet_results, rouq_mask, save_file=True, gradient='Greens'):
+def ssa_heatmap(bet_results, mask_results, save_file=True, gradient='Greens'):
     """Creates a heatmap of specific surface areas.
 
     Shading corresponds to specific surface area, normalized for the minimum
@@ -60,11 +60,11 @@ def ssa_heatmap(bet_results, rouq_mask, save_file=True, gradient='Greens'):
     Parameters
     ----------
     bet_results : namedtuple
-        The bet_results.ssa field is used to create a heatmap of specific
+        The bet_results.ssa element is used to create a heatmap of specific
         surface area answers.
 
-    rouq_mask : namedtuple
-        The rouq_mask.mask field is used to mask the
+    mask_results : namedtuple
+        The mask_results.mask element is used to mask the
         specific surface area heatmap so that only valid results are
         displayed.
 
@@ -74,21 +74,21 @@ def ssa_heatmap(bet_results, rouq_mask, save_file=True, gradient='Greens'):
 
     gradient : string
         Color gradient for heatmap, must be a vaild color gradient name
-        in the seaborn package
+        in the seaborn package.
 
     Returns
     -------
 
     """
 
-    mask = rouq_mask.mask
+    mask = mask_results.mask
 
     if mask.all() == True:
         print('No valid relative pressure ranges. Specific surface area \
 heatmap not created.')
         return
 
-    df = bet_results.raw_data
+    df = bet_results.iso_df
 
     # creating a masked array of ssa values
     ssa = np.ma.array(bet_results.ssa, mask=mask)
@@ -116,7 +116,7 @@ heatmap not created.')
     return
 
 
-def err_heatmap(bet_results, rouq_mask, save_file=True, gradient='Greys'):
+def err_heatmap(bet_results, mask_results, save_file=True, gradient='Greys'):
     """Creates a heatmap of error values.
 
     Shading corresponds to average error between experimental data and the
@@ -127,11 +127,12 @@ def err_heatmap(bet_results, rouq_mask, save_file=True, gradient='Greys'):
     Parameters
     ----------
     bet_results : namedtuple
-        The bet_results.err field is used to create a heatmap of error values,
+        The bet_results.err element is used to create a heatmap of error
+        values.
 
-    rouq_mask : namedtuple
-        The rouq_mask.mask field is used to mask the error heatmap so that only
-        valid results are displayed.
+    mask_results : namedtuple
+        The mask_results.mask element is used to mask the error heatmap so that
+        only valid results are displayed.
 
     save_file : boolean
         When save_file = True a png of the figure is created in the
@@ -145,13 +146,13 @@ def err_heatmap(bet_results, rouq_mask, save_file=True, gradient='Greys'):
     -------
 
     """
-    mask = rouq_mask.mask
+    mask = mask_results.mask
 
     if mask.all() == True:
         print('No valid relative pressure ranges. Error heat map not created.')
         return
 
-    df = bet_results.raw_data
+    df = bet_results.iso_df
 
     # creating a masked array of error values
     err = np.ma.array(bet_results.err, mask=mask)
@@ -180,7 +181,7 @@ def err_heatmap(bet_results, rouq_mask, save_file=True, gradient='Greys'):
     return
 
 
-def bet_combo_plot(bet_results, rouq_mask, save_file=True):
+def bet_combo_plot(bet_results, mask_results, save_file=True):
     """Creates two BET plots, for the minimum and maxium error data sets.
 
     Only datapoints in the minimum and maximum error data sets are plotted.
@@ -191,12 +192,12 @@ def bet_combo_plot(bet_results, rouq_mask, save_file=True):
     ----------
 
     bet_results : namedtuple
-        Namedtuple where the bet_results.raw_data element is used to
+        Namedtuple where the bet_results.iso_df element is used to
         create a plot of isotherm BET values.
 
-    rouq_mask : namedtuple
-        The rouq_mask.mask element is used to mask the BET results so that only
-        valid results are displayed.
+    mask_results : namedtuple
+        The mask_results.mask element is used to mask the BET results so that
+        only valid results are displayed.
 
     save_file : boolean
         When save_file = True a png of the figure is created in the
@@ -207,13 +208,13 @@ def bet_combo_plot(bet_results, rouq_mask, save_file=True):
 
     """
 
-    mask = rouq_mask.mask
+    mask = mask_results.mask
 
     if mask.all() == True:
         print('No valid relative pressure ranges. BET combo plot not created.')
         return
 
-    df = bet_results.raw_data
+    df = bet_results.iso_df
     err = np.ma.array(bet_results.err, mask=mask)
 
     err_max, err_max_idx, err_min, err_min_idx = util.max_min(err)
@@ -265,7 +266,7 @@ Regression')
     ax1.legend(loc='upper left', framealpha=1)
     ax1.annotate('Min Error Linear Regression: \nm = %.3f \nb = %.3f \nR = \
 %.3f \n\nMax Error Linear Regression: \nm = %.3f \nb = %.3f \
-\nR = %.3f' % (slope, intercept, r_val, slope_max, intercept_max,r_value_max), 
+\nR = %.3f' % (slope, intercept, r_val, slope_max, intercept_max, r_value_max),
                 bbox=dict(boxstyle="round", fc='white', ec="gray", alpha=1),
                 textcoords='axes fraction', xytext=(.695, .017),
                 xy=(df.relp[min_stop], df.bet[min_start]), size=11)
@@ -277,7 +278,7 @@ Regression')
     return
 
 
-def bet_iso_combo_plot(bet_results, rouq_mask, save_file=True):
+def iso_combo_plot(bet_results, mask_results, save_file=True):
     """Creates an image displaying the relative pressure range with minimum
     error and the BET isotherm on the same plot. The point where n/nm = 1 is
     is the point where the BET monolayer loading is achieved.
@@ -286,12 +287,12 @@ def bet_iso_combo_plot(bet_results, rouq_mask, save_file=True):
     ----------
 
     bet_results : named tuple
-        The bet_results.raw_data element is used to
+        The bet_results.iso_df element is used to
         create a plot of isotherm data.
 
-    rouq_mask : named tuple
-        The rouq_mask.mask element is used to mask the BET results so that only
-        valid results are displayed.
+    mask_results : named tuple
+        The mask_results.mask element is used to mask the BET results so that
+        only valid results are displayed.
 
     save_file : boolean
         When save_file = True a png of the figure is created in the
@@ -302,14 +303,14 @@ def bet_iso_combo_plot(bet_results, rouq_mask, save_file=True):
 
     """
 
-    mask = rouq_mask.mask
+    mask = mask_results.mask
 
     if mask.all() == True:
         print('No valid relative pressure ranges. BET isotherm \
 combo plot not created.')
         return
 
-    df = bet_results.raw_data
+    df = bet_results.iso_df
     nm = np.ma.array(bet_results.nm, mask=mask)
     c = np.ma.array(bet_results.c, mask=mask)
     err = np.ma.array(bet_results.err, mask=mask)
@@ -345,7 +346,7 @@ combo plot not created.')
              linewidth=1, marker='')
     ax1.legend(loc='upper left', framealpha=1)
 
-    if save_file == True:
+    if save_file is True:
         f.savefig('isothermcomp_%s.png' % (bet_results.info),
                   bbox_inches='tight')
         print('Experimental and theoretical isotherm plot saved as:\

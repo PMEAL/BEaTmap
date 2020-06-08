@@ -4,7 +4,7 @@ import beatmap as bt
 import the data from a .cvs file using the import_data() function
 data may be imported from lists using import_list_data()
 """
-bet_results = bt.io.import_data()
+isotherm_data = bt.io.import_data()
 
 """
 relp = [0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.125,
@@ -21,43 +21,60 @@ bet_results  = bt.io.import_list_data(relp, n)
 """
 experimental_data_plot() may be used to visualize the isotherm
 """
-bt.vis.experimental_data_plot(bet_results, True)
+bt.vis.experimental_data_plot(isotherm_data, save_file=True)
 
 """
 the bet() function applies BET theory to the isotherm and returns arrays of
 surface area, monolayer amounts, bet constant, error,
 and linear regression values
 """
-bet_results = bt.core.bet(bet_results)
+
+bet_results = bt.core.bet(isotherm_data.iso_df, isotherm_data.a_o,
+                          isotherm_data.info)
+
+"""
+alternative parameter declaration:
+bet_results = bt.core.bet(*isotherm_data)
+"""
 
 """
 the combine_masks() function is used to create a mask that may be applied to
 the arrays (specific surface area, bet constant, etc)
 by default all checks are applied
 """
-rouq_mask = bt.core.rouq_mask(bet_results, check1=True, check2=True,
-                              check3=True, check4=True, check5=True, points=5)
 
-ssa_ans = bt.core.ssa_answer(bet_results, rouq_mask, criterion='points')
+mask_results = bt.core.rouq_mask(bet_results.intercept, bet_results.iso_df,
+                                 bet_results.nm, bet_results.slope,
+                                 check1=True, check2=True, check3=True,
+                                 check4=True, check5=True, points=5)
+
+"""
+alternative parameter declaration:
+mask_results = bt.core.rouq_mask(*bet_results, check1=True, check2=True,
+                                 check3=True, check4=True, check5=True,
+                                 points=5)
+"""
+
+ssa_ans = bt.core.ssa_answer(bet_results, mask_results, criterion='points')
 
 """
 heatmaps, plots, and tables created from the masked arrays allow the
 valid results of BET theory to be visualized by applying mask
 ssa_heatmap() creates a heatmap of specific surface area values
 """
-bt.vis.ssa_heatmap(bet_results, rouq_mask)
+bt.vis.ssa_heatmap(bet_results, mask_results)
 
 """
 err_heatmap() creates a heatmap of error values
 """
-bt.vis.err_heatmap(bet_results, rouq_mask)
+bt.vis.err_heatmap(bet_results, mask_results)
 
 """
 bet_combo_plot() compares the two unmasked relative pressure ranges
 that have the lowest and highest error (best and worst agreement
 between experimental data and theoretical values)
 """
-bt.vis.bet_combo_plot(bet_results, rouq_mask)
+bt.vis.bet_combo_plot(bet_results, mask_results)
 
 """
 bet_iso_combo_plot() also compares relative pressure ranges with the
@@ -65,18 +82,18 @@ highest and lowest error. The BET equation is visualized in the 'decomposed'
 form, the y - axis is normalized, n/nm. The point where the experimental data
 crosses n/nm = 1 shows where monolayer coverage occurs
 """
-bt.vis.bet_iso_combo_plot(bet_results, rouq_mask)
+bt.vis.iso_combo_plot(bet_results, mask_results)
 
 """
 ascii_tables() creates two tables summarizing
 the valid results of applying BET theory
 """
-bt.vis.ascii_tables(bet_results, rouq_mask)
+bt.vis.ascii_tables(bet_results, mask_results)
 
 """
 export_raw_data() creates a .csv file of the isotherm data
 """
 bt.io.export_processed_data(bet_results, points=5)
 
-ssa_table, c_table, ssa_std, c_std = bt.vis.dataframe_tables(bet_results, rouq_mask)
-
+ssa_table, c_table, ssa_std, c_std = \
+    bt.vis.dataframe_tables(bet_results, mask_results)

@@ -56,7 +56,7 @@ def max_min(array):
 
 def lin_interp(df, val):
     """Linerarly interpolates between two points.
-    
+
     Specifically designed to find the relp corresponding to some value of n.
 
     Parameters
