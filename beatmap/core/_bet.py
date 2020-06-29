@@ -362,7 +362,7 @@ def check_5(df, points=5):
 
     points : int
         Minimum number of data points required for BET analysis to be
-        considered valid default value is 5.
+        considered valid, default value is 5.
 
     Returns
     -------

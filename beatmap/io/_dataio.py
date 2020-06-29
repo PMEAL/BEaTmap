@@ -314,3 +314,100 @@ def export_processed_data(bet_results, points=5):
     processed_data.to_csv(export_file_name, index=None, header=True)
     print('Processed data saved as: %s' % (export_file_name))
     return
+
+
+def run_beatmap_import_data(file, info, a_o):
+    """Import function for the run_beatmap function.
+
+    The .csv file format expected is a two column table,
+    the first column being "n" (specific amount adsorbed, mol/g)
+    and the second being the relative pressure.
+
+    Parameters
+    ----------
+    a_o : float
+        Adsorbate cross sectional area.
+    info : string
+        String of adsorbate-adsorbent info, used for file naming.
+    file : String
+        File name or path. It is recommended to store .csv files in the parent
+        directory and use relative import by providing the file name.
+        eg 'mydata.csv'
+
+    Returns
+    -------
+    isotherm_data : namedtuple
+        Contains all information required for BET analysis.
+        Relevant fields are:
+
+        - ``isotherm_data.iso_data`` (dataframe) : imported isotherm data.
+        - ``isotherm_data.a_o`` (float) : adsorbate cross sectional area.
+        - ``isotherm_data.info`` (string) : string of adsorbate-adsorbent info.
+        - ``isotherm_data.file`` (string) : file name or path.
+    """
+
+    print('\nAdsorbate used has an adsorbed cross sectional area of \
+%.2f sq. Angstrom.' % (a_o))
+
+    # importing data and creating 'bet' and 'check2' data points
+    try:
+        data = pd.read_csv(file)
+    except FileNotFoundError:
+        print('File not found.')
+        file = input("Try again, entering the file name/path:")
+        data = pd.read_csv(file)
+
+    labels = list(data)
+    data.rename(columns={labels[0]: 'relp', labels[1]: 'n'}, inplace=True)
+    data['n'] = data.n  # necessary? why that here?
+    data['bet'] = (1 / data.n) * (data.relp / (1-data.relp))
+
+    # checking data quality
+    test = np.zeros(len(data))
+    minus1 = np.concatenate(([0], data.n[: -1]))
+    test = data.n - minus1
+    test_sum = sum(x < 0 for x in test)
+    if test_sum > 0:
+        print("""\nIsotherm data is suspect.
+Adsorbed moles do not consistantly increase as relative pressure increases""")
+    else:
+        print("""\nIsotherm data quality appears good.
+Adsorbed molar amounts are increasing as relative pressure increases.""")
+
+    # checking isotherm type
+    x = data.relp.values
+    y = data.n.values
+
+    dist = np.sqrt((x[:-1] - x[1:])**2 + (y[:-1] - y[1:])**2)
+    dist_along = np.concatenate(([0], dist.cumsum()))
+
+    # build a spline representation of the contour
+    spline, u = sp.interpolate.splprep([x, y], u=dist_along,
+                                       w=np.multiply(1, np.ones(len(x))),
+                                       s=.0000000001)
+    interp_d = np.linspace(dist_along[0], dist_along[-1], 50)
+    interp_x, interp_y = sp.interpolate.splev(interp_d, spline)
+
+    # take derivative of the spline (to find inflection points)
+    spline_1deriv = np.diff(interp_y)/np.diff(interp_x)
+    spline_2deriv = np.diff(spline_1deriv)/np.diff(interp_x[1:])
+
+    zero_crossings = np.where(np.diff(np.sign(spline_2deriv)))[0]
+
+    if len(zero_crossings) == 0 and np.sign(spline_2deriv[0]) == -1:
+        print('Isotherm is type I.')
+    elif len(zero_crossings) == 0 and np.sign(spline_2deriv[0]) == 1:
+        print('Isotherm is type III.')
+    elif len(zero_crossings) == 1 and np.sign(spline_2deriv[0]) == -1:
+        print('Isotherm is type II.')
+    elif len(zero_crossings) == 1 and np.sign(spline_2deriv[0]) == 1:
+        print('Isotherm is type V.')
+    elif len(zero_crossings) == 2 and np.sign(spline_2deriv[0]) == -1:
+        print('Isotherm is type IV.')
+    else:
+        print('Isotherm is type VI.')
+
+    iso_data = namedtuple('iso_data', 'iso_df a_o info file')
+    isotherm_data = iso_data(data, a_o, info, file)
+
+    return isotherm_data
