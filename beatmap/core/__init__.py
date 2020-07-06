@@ -37,3 +37,4 @@ from ._bet import check_4
 from ._bet import check_5
 from ._bet import rouq_mask
 from ._bet import ssa_answer
+from ._bet import run_beatmap

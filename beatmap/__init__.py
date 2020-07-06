@@ -1,6 +1,7 @@
 __version__ = '0.0.1'
 
+from . import vis
+from . import io
 from . import utils
 from . import core
-from . import io
-from . import vis
+from .core import run_beatmap
