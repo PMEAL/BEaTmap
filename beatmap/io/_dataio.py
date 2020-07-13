@@ -8,11 +8,11 @@ Created on Tue May  7 13:00:16 2019
 import numpy as np
 import pandas as pd
 import scipy as sp
-import beatmap.core as bet
+from beatmap import core as bet
 from collections import namedtuple
 
 
-def import_data():
+def import_data(file=None, info=None, a_o=None):
     """Imports isothermal adsoprtion data from a csv file.
 
     The .csv file format expected is a two column table,
@@ -34,26 +34,28 @@ def import_data():
         - ``isotherm_data.file`` (string) : file name or path.
     """
 
-    file = input("Enter file name/path:")
-    info = input("Enter adsorbate-adsorbent information (this will be \
+    if file is None:
+        file = input("Enter file name/path:")
+    if info is None:
+        info = input("Enter adsorbate-adsorbent information (this will be \
 incorporated into file names):")
-    a_o_input = input("Enter cross sectional area of adsorbate in \
+    if a_o is None:
+        a_o = input("Enter cross sectional area of adsorbate in \
 square Angstrom:")
-
-    try:
-        a_o = float(a_o_input)
-    except ValueError:
-        print('The ao provided is not numeric.')
-        a_o_input = input("Try again, enter the cross sectional area of \
+        try:
+            a_o = float(a_o)
+        except ValueError:
+            print('The ao provided is not numeric.')
+            a_o = input("Try again, enter the cross sectional area of \
 adsorbate in square Angstrom: ")
-        a_o = float(a_o_input)
+            a_o = float(a_o)
 
     print('\nAdsorbate used has an adsorbed cross sectional area of \
 %.2f sq. Angstrom.' % (a_o))
 
     # importing data and creating 'bet' and 'check2' data points
     try:
-        data = pd.read_csv(file)
+        data = pd.read_csv(file, header=None)
     except FileNotFoundError:
         print('File not found.')
         file = input("Try again, entering the file name/path:")
@@ -235,7 +237,7 @@ def export_raw_data(isotherm_data):
 
     """
 
-    export_file_name = isotherm_data.info + 'raw_data_export.csv'
+    export_file_name = isotherm_data.info + '_raw_data_export.csv'
     df = isotherm_data.iso_df
     df.to_csv(export_file_name, index=None, header=True)
     print('Raw data saved as: %s' % (export_file_name))
@@ -306,11 +308,11 @@ def export_processed_data(bet_results, points=5):
                                            'end relative pressure',
                                            'spec sa [m2/g]', 'bet constant',
                                            'nm [mol/g]', 'error', 'slope',
-                                           'y-int', 'r value', 'check2',
+                                           'y-int', 'r value', 'check1',
                                            'check2', 'check3', 'check4',
                                            'check5'])
 
-    export_file_name = bet_results.info + 'processed_data_export.csv'
+    export_file_name = bet_results.info + '_processed_data_export.csv'
     processed_data.to_csv(export_file_name, index=None, header=True)
     print('Processed data saved as: %s' % (export_file_name))
     return
@@ -351,7 +353,7 @@ def run_beatmap_import_data(file, info, a_o):
 
     # importing data and creating 'bet' and 'check2' data points
     try:
-        data = pd.read_csv(file)
+        data = pd.read_csv(file, header=None)
     except FileNotFoundError:
         print('File not found.')
         file = input("Try again, entering the file name/path:")
@@ -369,7 +371,7 @@ def run_beatmap_import_data(file, info, a_o):
     test_sum = sum(x < 0 for x in test)
     if test_sum > 0:
         print("""\nIsotherm data is suspect.
-Adsorbed moles do not consistantly increase as relative pressure increases""")
+Adsorbed moles do not consistantly increase as relative pressure increases.""")
     else:
         print("""\nIsotherm data quality appears good.
 Adsorbed molar amounts are increasing as relative pressure increases.""")

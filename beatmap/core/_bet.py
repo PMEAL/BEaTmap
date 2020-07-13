@@ -8,149 +8,10 @@ Created on Wed May  8 11:05:19 2019
 
 import numpy as np
 import scipy as sp
-import beatmap.utils as util
+from beatmap import io as io
+from beatmap import utils as util
+from beatmap import vis as figs
 from collections import namedtuple
-
-
-def run_beatmap(file=None, info=None, a_o=None, check1=True, check2=True,
-                check3=True, check4=True, check5=True, points=5,
-                save_figures=True, export_data=False, ssa_criterion='error',
-                ssa_gradient='Greens', err_gradient='Greys'):
-    """A single function that executes all necessary BEaTmap algorithims.
-
-    This function is built to be as user friendly as possible. The file
-    name/path of the isotherm data, information about the isotherm, and the
-    cross sectional surface area of the adsorbate can be passed using the
-    file, info, and a_o parameters respectively. Or, if left empty, the user
-    be prompted to input them.
-
-    eg. ``run_beatmap('myfile.csv', 'nitrogen on carbon', 16.2)`` or
-    ``run_beatmap()`` will execute the function. In the later case the user
-    will provide the parameters passed in the former through promts in their
-    console.
-
-    Additional parameters to set which of the Roquerol criteria are applied,
-    the minimum number of data points per valid relative pressure range,
-    the criteria used to select a single specific surface area, and more, are
-    defined and set to reasonable default values.
-
-    Parameters
-    ----------
-    file : string
-        File name (if file is in parent directory) or file path.
-
-    info : string
-        Adsorbate-adsorbent information.
-
-    a_o : float
-        Cross sectional area of adsorbate, in square Angstrom.
-
-    check1 : boolean
-        If check1 is True any relative pressure ranges with a negative y
-        intercept are considered invalid.
-
-    check2 : boolean
-        If check2 is True any relative pressure ranges where n(p-po) is
-        decreasing are considered invalid.
-
-    check3 : boolean
-        If check3 is True any relative pressure ranges where the monolayer
-        amount falls outside of the relative pressure range are considered
-        invalid.
-
-    check4 : boolean
-        If check4 is True any relative pressure range where there is
-        disagreement of more than 10% between the actual relative pressure
-        where monolayer coverage occurs and the relative pressure where
-        monolayer coverage occurs on the theoretical isotherm are considered
-        invalid.
-
-    check5 : boolean
-        If check5 is True relative pressure ranges that contain fewer points
-        than specified by the user are considered invalid.
-
-    points : interger
-        The minimum number of points for a valid relative pressure range.
-
-    save_figures : boolean
-        If save_figures is True any figures created by this function will be
-        saved as .png files in the parent directory.
-
-    export_data : boolean
-        If export data is True .csv files of the isotherm data and the BEaTmap
-        results will be created and saved in the parent directory.
-
-    ssa_criterion : string
-        Used to set which criterion is used to provide a single specific
-        surface area value. 'error' will output the valid ssa answer with the
-        lowest error, 'points' will output the ssa answer with the most
-        datapoints.
-
-    ssa_gradient : string
-        Color gradient for heatmap, must be a vaild color gradient name
-        in the seaborn package.
-
-    err_gradient : string
-        Color gradient for heatmap, must be a vaild color gradient name
-        in the seaborn package, default is grey.
-
-    Returns
-    -------
-    """
-
-    if file is None:
-        file = input("Enter file name/path:")
-    if info is None:
-        info = input("Enter adsorbate-adsorbent information (this will be \
-incorporated into file names):")
-    if a_o is None:
-        a_o = input("Enter cross sectional area of adsorbate in \
-square Angstrom:")
-        try:
-            a_o = float(a_o)
-        except ValueError:
-            print('The ao provided is not numeric.')
-            a_o = input("Try again, enter the cross sectional area of \
-adsorbate in square Angstrom: ")
-            a_o = float(a_o)
-
-# run_beatmap_import_data imports isotherm data from a .csv file and returns
-# the results in the isotherm_data namedtuple
-    isotherm_data = bt.io.run_beatmap_import_data(file, info, a_o)
-
-    bt.vis.experimental_data_plot(isotherm_data, save_file=True)
-
-# bet_results uses isotherm_data, applies BET analysis and returns the results
-# in the bet_results namedtuple
-
-    bet_results = bt.core.bet(isotherm_data.iso_df, isotherm_data.a_o,
-                              isotherm_data.info)
-
-# mask_results uses isotherm_data and bet_results, applies the roquerol
-# criteria specified by the user, and returns the results in the
-# mask_results named tuple
-
-    mask_results = bt.core.rouq_mask(bet_results.intercept, bet_results.iso_df,
-                                     bet_results.nm, bet_results.slope,
-                                     check1=True, check2=True, check3=True,
-                                     check4=True, check5=True, points=5)
-
-# mask_results are used to highlight the valid bet_results in the following
-# functions
-
-    ssa_ans = bt.core.ssa_answer(bet_results, mask_results, ssa_criterion)
-
-    bt.vis.ssa_heatmap(bet_results, mask_results, save_figures)
-    bt.vis.err_heatmap(bet_results, mask_results, save_figures)
-    bt.vis.bet_combo_plot(bet_results, mask_results, save_figures)
-    bt.vis.iso_combo_plot(bet_results, mask_results, save_figures)
-    bt.vis.ascii_tables(bet_results, mask_results)
-
-    if export_data is True:
-        bt.io.export_raw_data(isotherm_data)
-        bt.io.export_processed_data(bet_results, points)
-
-    return bet_results
 
 
 def bet(iso_df, a_o, info, *args):
@@ -276,9 +137,9 @@ def bet(iso_df, a_o, info, *args):
                 # not the entire isotherm
                 results = namedtuple('results', 'intercept iso_df nm slope ssa\
                                      c err r num_pts info')
-                bet_results = results(np.nan_to_num(intercept), iso_df, nm_array, slope,
-                                      ssa_array, c_array, err_array, r,
-                                      number_pts, info)
+                bet_results = results(np.nan_to_num(intercept), iso_df,
+                                      nm_array, slope, ssa_array, c_array,
+                                      err_array, r, number_pts, info)
     return bet_results
 
 
@@ -471,20 +332,25 @@ def check_4(df, nm, slope, intercept):
     for i in range(np.shape(check4)[0]):
         for j in range(np.shape(check4)[1]):
             if nm[i, j] != 0 and i > 0 and j > 0:
+                # find relp corresponding to nm
                 relpm = util.lin_interp(df, nm[i, j])
+                # BET eq solved for relp is a quadratic, coeff = [a, b, c]
                 coeff = [-1 * slope[i, j] * nm[i, j], slope[i, j]
                          * nm[i, j] - 1 - intercept[i, j] * nm[i, j],
                          intercept[i, j] * nm[i, j]]
+                # find roots 
+                # (relp value where nm occurs on theoretical isotherm)
                 roots = np.roots(coeff)  # note: some roots are imaginary
                 roots = [item.real for item in roots if len(roots) == 2]
-                if len(roots) == 2:
-                    relp_m = roots[1]
-                    if relpm == 0:
-                        diff = 1
-                    else:
-                        diff = abs((relp_m - relpm) / relpm)
-                    if diff < .1:
-                        check4[i, j] = 1
+                # find the difference between 
+                relp_m_1 = roots[0]
+                diff_1 = abs((relp_m_1 - relpm) / relpm)
+                relp_m_2 = roots[1]
+                diff_2 = abs((relp_m_2 - relpm) / relpm)
+                diff = min(diff_1, diff_2)
+
+                if diff < .1:
+                    check4[i, j] = 1
 
     if np.any(check4) is False:
         print('All relative pressure ranges fail check 4.')
@@ -697,3 +563,153 @@ relative pressure ranges with the maximum number of points.')
         print('The specific surface area value, based on %s is %.2f m2/g.' %
               (criterion, ssa_ans))
         return ssa_ans
+
+
+def run_beatmap(file=None, info=None, a_o=None, check1=True, check2=True,
+                check3=True, check4=True, check5=True, points=5,
+                save_figures=True, export_data=False, ssa_criterion='error',
+                ssa_gradient='Greens', err_gradient='Greys'):
+    """A single function that executes all necessary BEaTmap algorithims.
+
+    This function is built to be as user friendly as possible. The file
+    name/path of the isotherm data, information about the isotherm, and the
+    cross sectional surface area of the adsorbate can be passed using the
+    file, info, and a_o parameters respectively. Or, if left empty, the user
+    be prompted to input them.
+
+    eg. ``run_beatmap('myfile.csv', 'nitrogen on carbon', 16.2)`` or
+    ``run_beatmap()`` will execute the function. In the later case the user
+    will provide the parameters passed in the former through promts in their
+    console.
+
+    Additional parameters to set which of the Roquerol criteria are applied,
+    the minimum number of data points per valid relative pressure range,
+    the criteria used to select a single specific surface area, and more, are
+    defined and set to reasonable default values.
+
+    Parameters
+    ----------
+    file : string
+        File name (if file is in parent directory) or file path.
+
+    info : string
+        Adsorbate-adsorbent information.
+
+    a_o : float
+        Cross sectional area of adsorbate, in square Angstrom.
+
+    check1 : boolean
+        If check1 is True any relative pressure ranges with a negative y
+        intercept are considered invalid.
+
+    check2 : boolean
+        If check2 is True any relative pressure ranges where n(p-po) is
+        decreasing are considered invalid.
+
+    check3 : boolean
+        If check3 is True any relative pressure ranges where the monolayer
+        amount falls outside of the relative pressure range are considered
+        invalid.
+
+    check4 : boolean
+        If check4 is True any relative pressure range where there is
+        disagreement of more than 10% between the actual relative pressure
+        where monolayer coverage occurs and the relative pressure where
+        monolayer coverage occurs on the theoretical isotherm are considered
+        invalid.
+
+    check5 : boolean
+        If check5 is True relative pressure ranges that contain fewer points
+        than specified by the user are considered invalid.
+
+    points : interger
+        The minimum number of points for a valid relative pressure range.
+
+    save_figures : boolean
+        If save_figures is True any figures created by this function will be
+        saved as .png files in the parent directory.
+
+    export_data : boolean
+        If export data is True .csv files of the isotherm data and the BEaTmap
+        results will be created and saved in the parent directory.
+
+    ssa_criterion : string
+        Used to set which criterion is used to provide a single specific
+        surface area value. 'error' will output the valid ssa answer with the
+        lowest error, 'points' will output the ssa answer with the most
+        datapoints.
+
+    ssa_gradient : string
+        Color gradient for heatmap, must be a vaild color gradient name
+        in the seaborn package.
+
+    err_gradient : string
+        Color gradient for heatmap, must be a vaild color gradient name
+        in the seaborn package, default is grey.
+
+    Returns
+    -------
+    """
+
+    if file is None:
+        file = input("Enter file name/path:")
+    if info is None:
+        info = input("Enter adsorbate-adsorbent information (this will be \
+incorporated into file names):")
+    if a_o is None:
+        a_o = input("Enter cross sectional area of adsorbate in \
+square Angstrom:")
+        try:
+            a_o = float(a_o)
+        except ValueError:
+            print('The ao provided is not numeric.')
+            a_o = input("Try again, enter the cross sectional area of \
+adsorbate in square Angstrom: ")
+            a_o = float(a_o)
+
+# run_beatmap_import_data imports isotherm data from a .csv file and returns
+# the results in the isotherm_data namedtuple
+    isotherm_data = io.run_beatmap_import_data(file, info, a_o)
+
+    figs.experimental_data_plot(isotherm_data, save_file=True)
+
+# bet_results uses isotherm_data, applies BET analysis and returns the results
+# in the bet_results namedtuple
+
+    bet_results = bet(isotherm_data.iso_df, isotherm_data.a_o,
+                      isotherm_data.info)
+
+# mask_results uses isotherm_data and bet_results, applies the roquerol
+# criteria specified by the user, and returns the results in the
+# mask_results named tuple
+
+    mask_results = rouq_mask(bet_results.intercept, bet_results.iso_df,
+                             bet_results.nm, bet_results.slope,
+                             check1=True, check2=True, check3=True,
+                             check4=True, check5=True, points=5)
+
+# mask_results are used to highlight the valid bet_results in the following
+# functions
+
+    ssa_ans = ssa_answer(bet_results, mask_results, ssa_criterion)
+
+    figs.ssa_heatmap(bet_results, mask_results, save_figures)
+    figs.err_heatmap(bet_results, mask_results, save_figures)
+    figs.bet_combo_plot(bet_results, mask_results, save_figures)
+    figs.iso_combo_plot(bet_results, mask_results, save_figures)
+    figs.ascii_tables(bet_results, mask_results)
+
+    if export_data is True:
+        io.export_raw_data(isotherm_data)
+        io.export_processed_data(bet_results, points)
+
+    combo_results = namedtuple('results', 'ssa c nm err intercept slope r mask\
+                               check1 check2 check3 check4 check5')
+    results = combo_results(bet_results.ssa, bet_results.c,
+                            bet_results.nm, bet_results.err,
+                            bet_results.intercept, bet_results.slope,
+                            bet_results.r, mask_results.mask,
+                            mask_results.check1, mask_results.check2,
+                            mask_results.check3, mask_results.check4,
+                            mask_results.check5)
+    return results
