@@ -669,7 +669,7 @@ adsorbate in square Angstrom: ")
 
 # run_beatmap_import_data imports isotherm data from a .csv file and returns
 # the results in the isotherm_data namedtuple
-    isotherm_data = io.run_beatmap_import_data(file, info, a_o)
+    isotherm_data = io.import_data(file, info, a_o)
 
     figs.experimental_data_plot(isotherm_data, save_file=True)
 
