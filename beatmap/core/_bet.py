@@ -90,8 +90,7 @@ def bet(iso_df, a_o, info, *args):
 
             -``bet_results.info`` (string) : string of adsorbate-adsorbent info
             by other functions to name files.
-
-    """
+"""
 
     ssa_array = np.zeros((len(iso_df), len(iso_df)))
     c_array = np.zeros((len(iso_df), len(iso_df)))
@@ -536,9 +535,8 @@ def ssa_answer(bet_results, mask_results, criterion='error'):
     mask = mask_results.mask
 
     if mask.all() == True:
-        print('No valid relative pressure ranges. Specific surface area not \
+        raise ValueError('No valid relative pressure ranges. Specific surface area not \
 calculated.')
-        return
 
     ssa = np.ma.array(bet_results.ssa, mask=mask)
 
@@ -548,9 +546,9 @@ calculated.')
         ssa_ans = ssa[int(error_min_idx[0]), int(error_min_idx[1])]
         print('The specific surface area value, based on %s is %.2f m2/g.' %
               (criterion, ssa_ans))
-        return
+        return ssa_ans
 
-    if criterion == 'points':
+    elif criterion == 'points':
         pts = np.ma.array(bet_results.num_pts, mask=mask)
         max_pts = np.max(pts)
         ssa_ans_array = np.ma.masked_where(pts < max_pts, ssa)
@@ -563,6 +561,9 @@ relative pressure ranges with the maximum number of points.')
         print('The specific surface area value, based on %s is %.2f m2/g.' %
               (criterion, ssa_ans))
         return ssa_ans
+        
+    else:
+        raise ValueError('Invalid criterion, must be points or error.')
 
 
 def run_beatmap(file=None, info=None, a_o=None, check1=True, check2=True,

@@ -44,9 +44,6 @@ incorporated into file names):")
 square Angstrom:")
         a_o = float(a_o)
 
-    
-
-
     print('\nAdsorbate used has an adsorbed cross sectional area of \
 %.2f sq. Angstrom.' % (a_o))
 
@@ -57,6 +54,9 @@ square Angstrom:")
 
     if type(a_o) == str:
         raise ValueError ("a_o must be int or float.")
+
+    if (data['n'] == 0).any():
+        raise ValueError('Cannot have n = 0 values in dataframe.')
 
     data['n'] = data.n  # necessary? why that here?
     data['bet'] = (1 / data.n) * (data.relp / (1-data.relp))

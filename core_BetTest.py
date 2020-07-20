@@ -7,163 +7,137 @@ import unittest
 class Testcore(unittest.TestCase):
 
     def setup_class(self):
-        # setting up test cases for check_1
-        self.c1_ok_intercepts = np.array([[2, 3], [-1, 0]])
-        self.c1_ok_ints_result = np.array([[True, True], [False, False]])
-
-        self.c1_empty = np.array([[], []])
-        self.c1_empty_result = np.array([])
-
-        self.c1_non_list = 3
-
-        self.c1_strings = np.array([['a', 'e'], ['p', 'l']])
-
-        # setting up test cases for check_2
-        d_c2_ok = {'relp': [.1, .2, .21], 'n': [.003, .0031, .0031]}
-        self.c2_ok_df = pd.DataFrame(data=d_c2_ok)
-        self.c2_ok_df_result = np.array([[1., 1., 1.], [0., 0., 0.],
-                                         [0., 0., 0.]])
-
-        d_c2_empty = {'relp': [], 'n': []}
-        self.c2_empty_df = pd.DataFrame(data=d_c2_empty)
-        self.c2_empty_df_result = np.empty((0, 0))
-
-        d_c2_string = {'relp': ['a', 'sdf', ' '], 'n': ['w', '/', 'po']}
-        self.c2_string_df = pd.DataFrame(data=d_c2_string)
-
-        d_c2_misname = {'pressure': [.1, .2, .21], 'mols': [.003, .0031, .0031]}
-        self.c2_misname_df = pd.DataFrame(data=d_c2_misname)
-
-        self.c2_array = np.array([[2, 3], [-1, 0]])
-
-        # setting up test cases for check_3
-        d_c3_ok = {'relp': [.1, .2, .21], 'n': [.001, .003, .004]}
-        nm_c3_ok = np.array([[0,0,0],[.001, 0, 0],[.0025, .0035, 0]])
-        self.c3_ok = {'df' : pd.DataFrame(data=d_c3_ok), 'nm' : nm_c3_ok}
-        self.c3_ok_result = np.array([[0,0,0],[1, 0, 0],[1, 1, 0]])
+        # mock isotherm data for check and mask tests
+        # same data as all the 'ok' data import tests
+        self.ok_test = {'file': 'test_ok.csv',
+                        'info': 'test ok file',
+                        'a_o': 11.11}
         
+        d_bet_ok = {'relp': [.1, .2, .21, .3, .4, .5],
+                    'n': [.001, .002, .004, .005, .0055, .006],
+                    'bet': [111.111111, 125.000000, 66.455696,
+                            85.714286, 121.212121, 166.666667]}
 
-        # setting up test cases for check_4
+        self.ok_iso_df = pd.DataFrame(data=d_bet_ok)
 
-        # setting up test cases for check_5
+        self.ok_bet_results = bt.core.bet(self.ok_iso_df, 11.11,
+                                          'test ok file')
+        self.ok_mask_results = bt.core.rouq_mask(*self.ok_bet_results)
+
+        # mock results for check_1
+        self.ok_check_1_result =np.array([
+                                    [False, False, False, False, False, False],
+                                    [True, False, False, False, False, False],
+                                    [True,  True, False, False, False, False],
+                                    [True,  True,  True, False, False, False],
+                                    [True,  True,  True, False, False, False],
+                                    [True,  True, False, False, False, False]])
+
+        # mock results for check_2
+        self.ok_check_2_result = np.array([[1., 1., 1., 1., 1., 1.],
+                                           [1., 1., 1., 1., 1., 1.],
+                                           [1., 1., 1., 1., 1., 1.],
+                                           [1., 1., 1., 1., 1., 1.],
+                                           [0., 0., 0., 0., 0., 0.],
+                                           [0., 0., 0., 0., 0., 0.]])
+
+        # mock results for check_3
+        self.ok_check_3_result = np.array([[0., 0., 0., 0., 0., 0.],
+                                           [0., 0., 0., 0., 0., 0.],
+                                           [0., 0., 0., 0., 0., 0.],
+                                           [0., 0., 1., 0., 0., 0.],
+                                           [0., 0., 0., 0., 0., 0.],
+                                           [1., 1., 0., 0., 0., 0.]])
+
+        # mock results for check_4
+        self.ok_check_4_result = np.array([[0., 0., 0., 0., 0., 0.],
+                                           [0., 0., 0., 0., 0., 0.],
+                                           [0., 0., 0., 0., 0., 0.],
+                                           [0., 0., 1., 0., 0., 0.],
+                                           [0., 0., 0., 0., 0., 0.],
+                                           [0., 0., 0., 0., 0., 0.]])
+
+        # mock results for check_5
+        self.ok_check_5_result = np.array([[0., 0., 0., 0., 0., 0.],
+                                           [0., 0., 0., 0., 0., 0.],
+                                           [0., 0., 0., 0., 0., 0.],
+                                           [0., 0., 0., 0., 0., 0.],
+                                           [1., 0., 0., 0., 0., 0.],
+                                           [1., 1., 0., 0., 0., 0.]])
+
+        # mock results for combo mask
+        self.ok_rouq_mask_result = np.array([
+                                    [True, True, True, True, True, True],
+                                    [True, True, True, True, True, True],
+                                    [True, True, True, True, True, True],
+                                    [True, True, True, True, True, True],
+                                    [True, True, True, True, True, True],
+                                    [True, True, True, True, True, True]])
+
+        # mock results for ssa_answer test vulcan_chex.csv data
+        d_ssa_test = {'file': 'vulcan_chex.csv',
+                        'info': 'chex on carbon black',
+                        'a_o': 39}
+        ssa_imported = bt.io.import_data(**d_ssa_test)
+        self.ssa_test_bet_results = bt.core.bet(*ssa_imported)
+        self.ssa_test_mask_results = bt.core.rouq_mask(*self.ssa_test_bet_results)
+
+        self.ok_bet_results = bt.core.bet(self.ok_iso_df, 11.11,
+                                          'test ok file')
 
     def test_check_1(self):
-        # test check_1 when a proper array is passed
-        temp = bt.core.check_1(self.c1_ok_intercepts)
-        assert np.all(temp == self.c1_ok_ints_result)
+        temp = bt.core.check_1(self.ok_bet_results.intercept)
+        assert np.all(temp == self.ok_check_1_result)
 
-        # test check_1 when an empty array is passed
-        temp = bt.core.check_1(self.c1_empty)
-        assert np.all(temp == self.c1_empty_result)
-
-        # test check_1 when a non list type is passed
-        self.assertRaises(TypeError, bt.core.check_1, self.c1_non_list)
-
-        # test check_1 when an array of strings is passed
-        self.assertRaises(TypeError, bt.core.check_1, self.c1_strings)
 
     def test_check_2(self):
-        # test check 2 when a proper dataframe is passed
-        temp = bt.core.check_2(self.c2_ok_df)
-        assert np.all(temp == self.c2_ok_df_result)
-
-        # test check 2 when an empty dataframe is passed
-        temp = bt.core.check_2(self.c2_empty_df)
-        assert np.all(temp == self.c2_empty_df_result)
-
-        # test check 2 when a dataframe of strings is passed
-        self.assertRaises(TypeError, bt.core.check_2, self.c2_string_df)
-
-        # test check 2 when a misnamed dataframe is passed
-        self.assertRaises(AttributeError, bt.core.check_2, self.c2_misname_df)
-
-        # test check 2 when an array is passed
-        self.assertRaises(AttributeError, bt.core.check_2, self.c2_array)
-'''
+        temp = bt.core.check_2(self.ok_bet_results.iso_df)
+        assert np.all(temp == self.ok_check_2_result)
 
     def test_check_3(self):
-        # test check 3 when a proper dataframe and array are passed
-        temp = bt.core.check_3(**self.c3_ok)
-        assert np.all(temp == self.c3_ok_result)
-
-        # test check 3 when an empty dataframe and an array of floats is passed
-        temp = bt.core.check_3(**self.c3_empty)
-        assert np.all(temp == self.c3_empty_result)
-
-        # test check 3 when a dataframe of strings and
-        # an array of floats is passed
-        self.assertRaises(TypeError, bt.core.check_3, )
-
-        # test check 3 when a misnamed dataframe and
-        # an array of floats is passed
-        self.assertRaises(AttributeError, bt.core.check_3, )
-
-        # test check 3 when an array of strings is passed for nm
-        self.assertRaises(TypeError, bt.core.check_3, )
-
+        temp = bt.core.check_3(self.ok_bet_results.iso_df,
+                               self.ok_bet_results.nm)
+        assert np.all(temp == self.ok_check_3_result)
 
     def test_check_4(self):
-        # test check 4 when all are proper
-
-        # test check 4 when df contains non numeric
-
-        # test check 4 when df is empty
-
-        # test check 4 when df is misnamed
-
-        # test check 4 when nm is non numeric
-
-        # test check 4 when nm is empty
-
-        # test check 4 when slope is non numeric
-
-        # test check 4 when slope is empty
-
-        # test check 4 when intercept is non numeric
-
-        # test check 4 when intercept is empty
-
+        temp = bt.core.check_4(self.ok_bet_results.iso_df,
+                               self.ok_bet_results.nm,
+                               self.ok_bet_results.slope,
+                               self.ok_bet_results.intercept)
+        assert np.all(temp == self.ok_check_4_result)
 
     def test_check_5(self):
-        # test check 5 when all are proper
+        temp = bt.core.check_5(self.ok_bet_results.iso_df)
+        assert np.all(temp == self.ok_check_5_result)
 
-        # test check 5 when points > size
+        with self.assertRaises(TypeError):
+            bt.core.check_5(self.ok_bet_results.iso_df, 'five')
 
-        # test check 5 when points are negative
-
-        # test check 5 when points are non numeric
-
+    def test_rouq_mask(self):
+        # testing with ok data
+        temp = bt.core.rouq_mask(self.ok_bet_results.intercept,
+                                 self.ok_bet_results.iso_df,
+                                 self.ok_bet_results.nm,
+                                 self.ok_bet_results.slope)
+        assert np.all(temp.mask == self.ok_rouq_mask_result)
 
     def test_ssa_answer(self):
-        # test ssa_answer when all are proper
+        temp = bt.core.ssa_answer(self.ssa_test_bet_results,
+                                  self.ssa_test_mask_results, 'error')
+        assert temp == 231.47986411971542
+        temp = bt.core.ssa_answer(self.ssa_test_bet_results,
+                                  self.ssa_test_mask_results, 'points')
+        assert temp == 228.96104514464378
+        
+        with self.assertRaises(ValueError):
+            bt.core.ssa_answer(self.ssa_test_bet_results, self.ssa_test_mask_results, 'incorrect')
+        
+        with self.assertRaises(ValueError):
+            bt.core.ssa_answer(self.ok_bet_results, self.ok_mask_results)
+            
 
-        # test ssa_answer when bet_results is empty
+            
 
-        # test ssa_answer when mask_results is empty
-
-        # test ssa_answer when bet_results is non numeric
-
-        # test ssa_answer when mask_results is non numeric
-
-        # test ssa_answer when criterion != 'error' or 'points'
-
-
-    def test_bet(self):
-
-        # test bet when all are proper
-
-        # test bet when a_o is non numeric
-
-        # test bet when a_o is empty
-
-        # test bet when info is empty
-
-        # test bet when iso_df contains non numeric
-
-        # test bet when iso_df is empty
-
-        # test bet when iso_df is misnamed
-'''
 
 if __name__ == '__main__':
 
