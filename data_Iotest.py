@@ -3,8 +3,7 @@ import unittest
 import pandas as pd
 import numpy as np
 import math
-from collections import namedtuple
-import os, sys
+
 
 
 class Testio (unittest.TestCase):
@@ -78,7 +77,7 @@ class Testio (unittest.TestCase):
                                     'a_o': 11.11}
         
         # setting up a_o not numeric test
-        self.ao_not_numeric_list_test = {'relp': [[.1, .2, .21, .3, .4, .5], 
+        self.ao_not_numeric_list_test = {'relp': [.1, .2, .21, .3, .4, .5], 
                                         'n': [.001, .002, .004, .005, .0055, .006], 
                                         'file': 'my file',
                                         'info': 'my info',
@@ -94,8 +93,8 @@ class Testio (unittest.TestCase):
         assert temp.a_o == self.ok_test['a_o']
 
         # test empty data file
-        #with self.assertRaises(EmptyDataError):
-            #bt.io.import_data(**self.empty_test)
+        with self.assertRaises(pd.errors.EmptyDataError):
+            bt.io.import_data(**self.empty_test)
 
         # test data file with headers
         with self.assertRaises(TypeError):
@@ -117,8 +116,8 @@ class Testio (unittest.TestCase):
             bt.io.import_data(**self.missing_file_test)
         
         # test xlsx data file
-        #with self.assertRaises(ParserError):
-            #bt.io.import_data(**self.missing_file_test)
+        with self.assertRaises(pd.errors.ParserError):
+            bt.io.import_data(**self.xlsx_file_test)
             
         # test a_o is a string
         with self.assertRaises(TypeError):
@@ -130,7 +129,17 @@ class Testio (unittest.TestCase):
         assert temp.iso_df.equals(bt.io.import_list_data(**self.list_data_test).iso_df)
         
         # test not list like
-        temp = bt.io.import_list_data(**self.not_list_test)
+        with self.assertRaises(ValueError):
+                bt.io.import_list_data(**self.not_list_test)
+
+        # test bad list shape
+        with self.assertRaises(ValueError):
+                bt.io.import_list_data(**self.bad_list_shape_test)
+
+        # test non numeric a_o
+        with self.assertRaises(ValueError):
+                bt.io.import_list_data(**self.ao_not_numeric_list_test)
+        
 '''
     def test_export_raw_data(self):
 
