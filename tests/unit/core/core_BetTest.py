@@ -12,7 +12,7 @@ class Testcore(unittest.TestCase):
         self.ok_test = {'file': 'test_ok.csv',
                         'info': 'test ok file',
                         'a_o': 11.11}
-        
+
         d_bet_ok = {'relp': [.1, .2, .21, .3, .4, .5],
                     'n': [.001, .002, .004, .005, .0055, .006],
                     'bet': [111.111111, 125.000000, 66.455696,
@@ -25,7 +25,7 @@ class Testcore(unittest.TestCase):
         self.ok_mask_results = bt.core.rouq_mask(*self.ok_bet_results)
 
         # mock results for check_1
-        self.ok_check_1_result =np.array([
+        self.ok_check_1_result = np.array([
                                     [False, False, False, False, False, False],
                                     [True, False, False, False, False, False],
                                     [True,  True, False, False, False, False],
@@ -57,7 +57,7 @@ class Testcore(unittest.TestCase):
                                            [0., 0., 0., 0., 0., 0.],
                                            [0., 0., 0., 0., 0., 0.]])
 
-        # mock results for check_5
+        # mock results for check_5, points = 5
         self.ok_check_5_result = np.array([[0., 0., 0., 0., 0., 0.],
                                            [0., 0., 0., 0., 0., 0.],
                                            [0., 0., 0., 0., 0., 0.],
@@ -76,11 +76,12 @@ class Testcore(unittest.TestCase):
 
         # mock results for ssa_answer test vulcan_chex.csv data
         d_ssa_test = {'file': 'vulcan_chex.csv',
-                        'info': 'chex on carbon black',
-                        'a_o': 39}
+                      'info': 'chex on carbon black',
+                      'a_o': 39}
         ssa_imported = bt.io.import_data(**d_ssa_test)
         self.ssa_test_bet_results = bt.core.bet(*ssa_imported)
-        self.ssa_test_mask_results = bt.core.rouq_mask(*self.ssa_test_bet_results)
+        self.ssa_test_mask_results = \
+            bt.core.rouq_mask(*self.ssa_test_bet_results)
 
         self.ok_bet_results = bt.core.bet(self.ok_iso_df, 11.11,
                                           'test ok file')
@@ -88,7 +89,6 @@ class Testcore(unittest.TestCase):
     def test_check_1(self):
         temp = bt.core.check_1(self.ok_bet_results.intercept)
         assert np.all(temp == self.ok_check_1_result)
-
 
     def test_check_2(self):
         temp = bt.core.check_2(self.ok_bet_results.iso_df)
@@ -113,6 +113,19 @@ class Testcore(unittest.TestCase):
         with self.assertRaises(TypeError):
             bt.core.check_5(self.ok_bet_results.iso_df, 'five')
 
+    def test_bet(self):
+        temp = bt.core.bet(self.ok_iso_df, 11.11, 'test ok file')
+        assert (temp.intercept == self.ok_bet_results.intercept).all()
+        assert temp.iso_df.equals(self.ok_bet_results.iso_df)
+        assert (temp.nm == self.ok_bet_results.nm).all()
+        assert (temp.slope == self.ok_bet_results.slope).all()
+        assert (temp.ssa == self.ok_bet_results.ssa).all()
+        assert (temp.c == self.ok_bet_results.c).all()
+        assert (temp.err == self.ok_bet_results.err).all()
+        assert (temp.r == self.ok_bet_results.r).all()
+        assert (temp.num_pts == self.ok_bet_results.num_pts).all()
+        assert temp.info == self.ok_bet_results.info
+
     def test_rouq_mask(self):
         # testing with ok data
         temp = bt.core.rouq_mask(self.ok_bet_results.intercept,
@@ -128,15 +141,13 @@ class Testcore(unittest.TestCase):
         temp = bt.core.ssa_answer(self.ssa_test_bet_results,
                                   self.ssa_test_mask_results, 'points')
         assert temp == 228.96104514464378
-        
+
         with self.assertRaises(ValueError):
-            bt.core.ssa_answer(self.ssa_test_bet_results, self.ssa_test_mask_results, 'incorrect')
-        
+            bt.core.ssa_answer(self.ssa_test_bet_results,
+                               self.ssa_test_mask_results, 'incorrect')
+
         with self.assertRaises(ValueError):
             bt.core.ssa_answer(self.ok_bet_results, self.ok_mask_results)
-            
-
-            
 
 
 if __name__ == '__main__':

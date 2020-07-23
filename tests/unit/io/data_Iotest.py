@@ -2,6 +2,7 @@ import beatmap as bt
 import unittest
 import pandas as pd
 
+
 class Testio (unittest.TestCase):
 
     def setup_class(self):
@@ -93,8 +94,12 @@ class Testio (unittest.TestCase):
             bt.io.import_data(**self.empty_test)
 
         # test data file with headers
-        with self.assertRaises(TypeError):
-            bt.io.import_data(**self.header_test)
+
+        temp = bt.io.import_data(**self.header_test)
+        assert temp.iso_df.equals(bt.io.import_data(**self.header_test).iso_df)
+        assert temp.file == self.header_test['file']
+        assert temp.info == self.header_test['info']
+        assert temp.a_o == self.header_test['a_o']
 
         # test short datafile
         with self.assertRaises(TypeError):
@@ -133,6 +138,7 @@ class Testio (unittest.TestCase):
         # test non numeric a_o
         with self.assertRaises(ValueError):
             bt.io.import_list_data(**self.ao_not_numeric_list_test)
+
 
 if __name__ == '__main__':
 

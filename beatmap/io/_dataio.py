@@ -9,8 +9,39 @@ import numpy as np
 import pandas as pd
 import scipy as sp
 from beatmap import core as bet
+from beatmap import utils as util
 from collections import namedtuple
 
+def check_header(file, th=0.9):
+    """Checks csv file being imported for headers.
+
+    Parameters
+    ----------
+    file : string
+        File name or filepath.
+
+    th : float
+        Threshold value that must be met to determine file has no headers.
+        
+    Returns
+    -------
+    'infer' : string
+        If threshold not met the file is determined to have headers and 'infer'
+        is returned to pass to header parameter in pandas.read_csv().
+        
+    None : NoneType
+        If threshold not met the file is determined to not have headers and
+        'infer' is returned to pass to header parameter in pandas.read_csv().
+
+    """
+    
+    df1 = pd.read_csv(file, header='infer')
+    df2 = pd.read_csv(file, header=None)
+    sim = (df1.dtypes.values == df2.dtypes.values).mean()
+    if sim < th:
+        return 'infer'
+    else:
+        return None
 
 def import_data(file=None, info=None, a_o=None):
     """Imports isothermal adsoprtion data from a csv file.
@@ -47,7 +78,15 @@ square Angstrom:")
     print('\nAdsorbate used has an adsorbed cross sectional area of \
 %.2f sq. Angstrom.' % (a_o))
 
-    data = pd.read_csv(file, header=None)
+    df1 = pd.read_csv(file, header='infer')
+    df2 = pd.read_csv(file, header=None)
+    sim = (df1.dtypes.values == df2.dtypes.values).mean()
+    if sim < .95:
+        header_check = 'infer'
+    else:
+        header_check = None
+
+    data = pd.read_csv(file, header=header_check)
 
     labels = list(data)
     data.rename(columns={labels[0]: 'relp', labels[1]: 'n'}, inplace=True)
