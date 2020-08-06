@@ -1,11 +1,3 @@
-      #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed May  8 11:05:19 2019
-
-@author: ellsworthbell
-"""
-
 import numpy as np
 import scipy as sp
 from beatmap import io as io
@@ -90,8 +82,7 @@ def bet(iso_df, a_o, info, *args):
 
             -``bet_results.info`` (string) : string of adsorbate-adsorbent info
             by other functions to name files.
-"""
-
+    """
     ssa_array = np.zeros((len(iso_df), len(iso_df)))
     c_array = np.zeros((len(iso_df), len(iso_df)))
     nm_array = np.zeros((len(iso_df), len(iso_df)))
@@ -337,11 +328,11 @@ def check_4(df, nm, slope, intercept):
                 coeff = [-1 * slope[i, j] * nm[i, j], slope[i, j]
                          * nm[i, j] - 1 - intercept[i, j] * nm[i, j],
                          intercept[i, j] * nm[i, j]]
-                # find roots 
+                # find roots
                 # (relp value where nm occurs on theoretical isotherm)
                 roots = np.roots(coeff)  # note: some roots are imaginary
                 roots = [item.real for item in roots if len(roots) == 2]
-                # find the difference between 
+                # find the difference between
                 relp_m_1 = roots[0]
                 diff_1 = abs((relp_m_1 - relpm) / relpm)
                 relp_m_2 = roots[1]
@@ -499,13 +490,11 @@ def rouq_mask(intercept, iso_df, nm, slope, *args, check1=True, check2=True,
     mask = np.multiply(check5, mask)
 
     mask.astype(bool)  # converting mask to boolean
-    invertedmask = np.logical_not(mask)  # inverting mask so that 0 = valid,
-    # 1 = invalid, to work well with numpy masks
+    # inverting mask so that 0 = valid, 1 = invalid, to work well with numpy masks
+    invertedmask = np.logical_not(mask)
 
-    rouq_mask = namedtuple('rouq_mask', 'mask check1 check2 check3\
-                           check4 check5')
-    mask_results = rouq_mask(invertedmask, check1, check2, check3, check4,
-                             check5)
+    rouq_mask = namedtuple("rouq_mask", "mask check1 check2 check3 check4 check5")
+    mask_results = rouq_mask(invertedmask, check1, check2, check3, check4, check5)
 
     return mask_results
 
@@ -535,8 +524,8 @@ def ssa_answer(bet_results, mask_results, criterion='error'):
     mask = mask_results.mask
 
     if mask.all() == True:
-        raise ValueError('No valid relative pressure ranges. Specific surface area not \
-calculated.')
+        raise ValueError("No valid relative pressure ranges. Specific surface"
+                         " area not calculated.")
 
     ssa = np.ma.array(bet_results.ssa, mask=mask)
 
@@ -555,13 +544,13 @@ calculated.')
         try:
             ssa_ans = float(ssa_ans_array.compressed())
         except ValueError:
-            print('Error, so single specific surface area answer. Multiple\
-relative pressure ranges with the maximum number of points.')
+            print("Error, so single specific surface area answer. Multiple"
+                  "relative pressure ranges with the maximum number of points.")
             return 0
         print('The specific surface area value, based on %s is %.2f m2/g.' %
               (criterion, ssa_ans))
         return ssa_ans
-        
+
     else:
         raise ValueError('Invalid criterion, must be points or error.')
 
@@ -651,46 +640,45 @@ def run_beatmap(file=None, info=None, a_o=None, check1=True, check2=True,
     Returns
     -------
     """
-
     if file is None:
-        file = input("Enter file name/path:")
+        file = input("Enter file name/path: ")
     if info is None:
-        info = input("Enter adsorbate-adsorbent information (this will be \
-incorporated into file names):")
+        info = input("Enter adsorbate-adsorbent information (this will be"
+                     " incorporated into file names): ")
     if a_o is None:
-        a_o = input("Enter cross sectional area of adsorbate in \
-square Angstrom:")
+        a_o = input("Enter cross sectional area of adsorbate in"
+                    " square Angstrom: ")
         try:
             a_o = float(a_o)
         except ValueError:
             print('The ao provided is not numeric.')
-            a_o = input("Try again, enter the cross sectional area of \
-adsorbate in square Angstrom: ")
+            a_o = input("Try again, enter the cross sectional area of"
+                        "adsorbate in square Angstrom: ")
             a_o = float(a_o)
 
-# run_beatmap_import_data imports isotherm data from a .csv file and returns
-# the results in the isotherm_data namedtuple
+    # run_beatmap_import_data imports isotherm data from a .csv file and returns
+    # the results in the isotherm_data namedtuple
     isotherm_data = io.import_data(file, info, a_o)
 
     figs.experimental_data_plot(isotherm_data, save_file=True)
 
-# bet_results uses isotherm_data, applies BET analysis and returns the results
-# in the bet_results namedtuple
+    # bet_results uses isotherm_data, applies BET analysis and returns the results
+    # in the bet_results namedtuple
 
     bet_results = bet(isotherm_data.iso_df, isotherm_data.a_o,
                       isotherm_data.info)
 
-# mask_results uses isotherm_data and bet_results, applies the roquerol
-# criteria specified by the user, and returns the results in the
-# mask_results named tuple
+    # mask_results uses isotherm_data and bet_results, applies the roquerol
+    # criteria specified by the user, and returns the results in the
+    # mask_results named tuple
 
     mask_results = rouq_mask(bet_results.intercept, bet_results.iso_df,
                              bet_results.nm, bet_results.slope,
                              check1=True, check2=True, check3=True,
                              check4=True, check5=True, points=5)
 
-# mask_results are used to highlight the valid bet_results in the following
-# functions
+    # mask_results are used to highlight the valid bet_results in the following
+    # functions
 
     ssa_ans = ssa_answer(bet_results, mask_results, ssa_criterion)
 
@@ -704,8 +692,8 @@ adsorbate in square Angstrom: ")
         io.export_raw_data(isotherm_data)
         io.export_processed_data(bet_results, points)
 
-    combo_results = namedtuple('results', 'ssa c nm err intercept slope r mask\
-                               check1 check2 check3 check4 check5')
+    combo_results = namedtuple("results", "ssa c nm err intercept slope r mask"
+                               " check1 check2 check3 check4 check5")
     results = combo_results(bet_results.ssa, bet_results.c,
                             bet_results.nm, bet_results.err,
                             bet_results.intercept, bet_results.slope,

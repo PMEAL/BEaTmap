@@ -22,19 +22,19 @@ def check_header(file, th=0.9):
 
     th : float
         Threshold value that must be met to determine file has no headers.
-        
+
     Returns
     -------
     'infer' : string
         If threshold not met the file is determined to have headers and 'infer'
         is returned to pass to header parameter in pandas.read_csv().
-        
+
     None : NoneType
         If threshold not met the file is determined to not have headers and
         'infer' is returned to pass to header parameter in pandas.read_csv().
 
     """
-    
+
     df1 = pd.read_csv(file, header='infer')
     df2 = pd.read_csv(file, header=None)
     sim = (df1.dtypes.values == df2.dtypes.values).mean()
@@ -66,27 +66,28 @@ def import_data(file=None, info=None, a_o=None):
     """
 
     if file is None:
-        file = input("Enter file name/path:")
+        file = input("Enter file name/path: ")
     if info is None:
-        info = input("Enter adsorbate-adsorbent information (this will be \
-incorporated into file names):")
+        info = input("Enter adsorbate-adsorbent information (this will be"
+                     " incorporated into file names): ")
     if a_o is None:
-        a_o = input("Enter cross sectional area of adsorbate in \
-square Angstrom:")
+        a_o = input("Enter cross sectional area of adsorbate in"
+                    " square Angstrom: ")
         a_o = float(a_o)
 
-    print('\nAdsorbate used has an adsorbed cross sectional area of \
-%.2f sq. Angstrom.' % (a_o))
+    print("\nAdsorbate used has an adsorbed cross sectional area of"
+          " %.2f sq. Angstrom.' % (a_o)")
 
-    df1 = pd.read_csv(file, header='infer')
-    df2 = pd.read_csv(file, header=None)
-    sim = (df1.dtypes.values == df2.dtypes.values).mean()
-    if sim < .95:
-        header_check = 'infer'
-    else:
-        header_check = None
+    # df1 = pd.read_csv(file, header='infer')
+    # df2 = pd.read_csv(file, header=None)
+    # sim = (df1.dtypes.values == df2.dtypes.values).mean()
+    # if sim < .95:
+    #     header_check = 'infer'
+    # else:
+    #     header_check = None
 
-    data = pd.read_csv(file, header=header_check)
+    # data = pd.read_csv(file, header=header_check)
+    data = pd.read_csv(file)
 
     labels = list(data)
     data.rename(columns={labels[0]: 'relp', labels[1]: 'n'}, inplace=True)
@@ -106,11 +107,11 @@ square Angstrom:")
     test = data.n - minus1
     test_sum = sum(x < 0 for x in test)
     if test_sum > 0:
-        print("""\nIsotherm data is suspect.
-Adsorbed moles do not consistantly increase as relative pressure increases""")
+        print("\nIsotherm data is suspect. moles do not consistantly increase as"
+              " relative pressure increases.")
     else:
-        print("""\nIsotherm data quality appears good.
-Adsorbed molar amounts are increasing as relative pressure increases.""")
+        print("\nIsotherm data quality appears good. Adsorbed molar amounts are"
+              " increasing as relative pressure increases.")
 
     # checking isotherm type
     x = data.relp.values
@@ -122,7 +123,7 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
     # build a spline representation of the contour
     spline, u = sp.interpolate.splprep([x, y], u=dist_along,
                                        w=np.multiply(1, np.ones(len(x))),
-                                       s=.0000000001)
+                                       s=1e-10)
     interp_d = np.linspace(dist_along[0], dist_along[-1], 50)
     interp_x, interp_y = sp.interpolate.splev(interp_d, spline)
 
@@ -206,11 +207,11 @@ square Angstrom:")
     test = data.n - minus1
     test_sum = sum(x < 0 for x in test)
     if test_sum > 0:
-        print("""\nIsotherm data is suspect.
-Adsorbed moles do not consistantly increase as relative pressure increases""")
+        print("\nIsotherm data is suspect. Adsorbed moles do not consistantly"
+              " increase as relative pressure increases")
     else:
-        print("""\nIsotherm data quality appears good.
-Adsorbed molar amounts are increasing as relative pressure increases.""")
+        print("\nIsotherm data quality appears good. Adsorbed molar amounts"
+              " are increasing as relative pressure increases.")
 
     # checking isotherm type
     x = data.relp.values
@@ -222,7 +223,7 @@ Adsorbed molar amounts are increasing as relative pressure increases.""")
     # build a spline representation of the contour
     spline, u = sp.interpolate.splprep([x, y], u=dist_along,
                                        w=np.multiply(1, np.ones(len(x))),
-                                       s=.0000000001)
+                                       s=1e-10)
     interp_d = np.linspace(dist_along[0], dist_along[-1], 50)  # len(x)
     interp_x, interp_y = sp.interpolate.splev(interp_d, spline)
 

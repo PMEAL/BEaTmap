@@ -10,6 +10,7 @@ import scipy as sp
 import matplotlib.pyplot as plt
 import seaborn as sns
 from beatmap import utils as util
+import matplotlib.ticker as ticker
 
 
 def experimental_data_plot(isotherm_data, save_file=False):
@@ -34,21 +35,21 @@ def experimental_data_plot(isotherm_data, save_file=False):
     """
 
     df = isotherm_data.iso_df
-    fig, (ax) = plt.subplots(1, 1, figsize=(10, 10))
+    fig, ax = plt.subplots(1, 1, figsize=(10, 10))
     ax.set_xlim(0, 1.0)
-    ax.set_ylim(0, df['n'].iloc[-1] * 1.05)
-    ax.set_title('Experimental Isotherm')
+    # ax.set_ylim(0, df['n'].iloc[-1] * 1.05)
+    # ax.set_title('Experimental Isotherm')
     ax.set_ylabel('n [mol/g]')
     ax.set_xlabel('P/Po')
-    ax.grid(b=True, which='major', color='gray', linestyle='-')
-    ax.plot(df.relp, df.n, c='grey', marker='o', linewidth=0)
+    ax.grid(b=True, which='major', color='gray', linestyle=':')
+    ax.plot(df.relp, df.n, c='k', marker='o', markerfacecolor="w", linewidth=0)
 
     if save_file is True:
         fig.savefig('experimentaldata_%s.png' % (isotherm_data.info),
                     bbox_inches='tight')
         print('Experimental data plot saved as: experimentaldata_%s.png'
               % (isotherm_data.info))
-    return()
+    return fig, ax
 
 
 def ssa_heatmap(bet_results, mask_results, save_file=True, gradient='Greens'):
@@ -84,8 +85,8 @@ def ssa_heatmap(bet_results, mask_results, save_file=True, gradient='Greens'):
     mask = mask_results.mask
 
     if mask.all() == True:
-        print('No valid relative pressure ranges. Specific surface area \
-heatmap not created.')
+        print("No valid relative pressure ranges. Specific surface area"
+              " heatmap not created.")
         return
 
     df = bet_results.iso_df
@@ -96,13 +97,20 @@ heatmap not created.')
     # finding max and min sa to normalize heatmap colours
     ssamax, ssa_max_idx, ssamin, ssa_min_idx = util.max_min(ssa)
     hm_labels = round(df.relp * 100, 1)
-    fig, ax = plt.subplots(1, 1, figsize=(13, 13))
+    fig, ax = plt.subplots(figsize=(7, 7))
+    # sns.heatmap(ssa, vmin=ssamin, vmax=ssamax, square=True, cmap=gradient,
+    #             mask=(ssa == 0), xticklabels=hm_labels, yticklabels=hm_labels,
+    #             linewidths=1, linecolor='w',
+    #             cbar_kws={'shrink': .78, 'aspect': len(df.relp)})
     sns.heatmap(ssa, vmin=ssamin, vmax=ssamax, square=True, cmap=gradient,
-                mask=(ssa == 0), xticklabels=hm_labels, yticklabels=hm_labels,
-                linewidths=1, linecolor='w',
+                mask=(ssa == 0), linewidths=1, linecolor='w',
                 cbar_kws={'shrink': .78, 'aspect': len(df.relp)})
     ax.invert_yaxis()
     ax.set_title('BET Specific Surface Area [m^2/g]')
+    ax.yaxis.set_major_locator(ticker.MultipleLocator(2))
+    ax.yaxis.set_major_formatter(ticker.ScalarFormatter())
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(2))
+    ax.xaxis.set_major_formatter(ticker.ScalarFormatter())
     plt.xticks(rotation=45, horizontalalignment='right')
     plt.xlabel('Start Relative Pressure')
     plt.yticks(rotation=45, horizontalalignment='right')
@@ -113,7 +121,7 @@ heatmap not created.')
                     bbox_inches='tight')
         print('Specific surface area heatmap saved as: ssa_heatmap_%s.png'
               % (bet_results.info))
-    return
+    return fig, ax
 
 
 def err_heatmap(bet_results, mask_results, save_file=True, gradient='Greys'):
@@ -166,8 +174,8 @@ def err_heatmap(bet_results, mask_results, save_file=True, gradient='Greys'):
                 linewidths=1, linecolor='w',
                 cbar_kws={'shrink': .78, 'aspect': len(df.relp)})
     ax.invert_yaxis()
-    ax.set_title('Average Error per Point Between Experimental and\
- Theoretical Isotherms')
+    ax.set_title("Average Error per Point Between Experimental and"
+                 " Theoretical Isotherms")
     plt.xticks(rotation=45, horizontalalignment='right')
     plt.xlabel('Start Relative Pressure')
     plt.yticks(rotation=45, horizontalalignment='right')
@@ -256,8 +264,8 @@ def bet_combo_plot(bet_results, mask_results, save_file=True):
     ax1.plot(df.relp[min_start:min_stop + 1], df.bet[min_start:min_stop + 1],
              label='Min Error Experimental Data', c='grey', marker='o',
              linewidth=0, fillstyle='none')
-    ax1.plot(min_linex, min_liney, color='black', label='Min Error Linear \
-Regression')
+    ax1.plot(min_linex, min_liney, color='black',
+             label='Min Error Linear Regression')
     ax1.plot(df.relp[max_start:max_stop + 1], df.bet[max_start:max_stop + 1],
              label='Max Error Experimental Data', c='grey', marker='x',
              linewidth=0)
