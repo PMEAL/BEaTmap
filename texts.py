@@ -28,14 +28,11 @@ To analyze your adsorption data using BEaTmap, here's how the workflow works:
 2. Save your data in a `csv` file, with the **first column** being **relative
 pressure** values and the **second** being the **adsorbed amount** in _mol per
 gram_.
-3. Upload the `csv` file using the drag and drop widget, or manually browse
-from your computer. Once you've uploaded the file, a quick peek of your data
-will be displyed as well.
-4. You'll also have to plug in the cross sectional area of the adsorbate in
-_square Angstrom per molecule_.
-5. From the **Sidebar**, click on **Settings**, where you can modify the
+3. Plug in the cross sectional area of the adsorbate in _square Angstrom per
+molecule_.
+4. From the **Sidebar**, click on **Settings**, where you can modify the
 underlying assumptions, calculation criterion, etc.
-6. Once you're happy with the settings, click on **Analyze**.
+5. Once you're happy with the settings, click on **Analyze**.
 """
 
 intro_sidebar = r"""

@@ -24,7 +24,7 @@ def main():
         "Settings": page_settings,
         "BET analysis": page_analysis,
         "Summary": page_summary,
-        "References": page_references
+        # "References": page_references
     }
 
     st.sidebar.title(":maple_leaf: BEaTmap")
@@ -44,6 +44,8 @@ def page_about(state):
     st.markdown(texts.intro)
     st.markdown("# :duck: Getting started")
     st.markdown(texts.getting_started)
+    st.markdown("# :books: References")
+    st.markdown(texts.references)
 
 
 def page_upload_data(state):
@@ -104,6 +106,10 @@ def page_settings(state):
 def page_analysis(state):
     """BET analysis and results"""
     st.markdown("# :straight_ruler:BET analysis")
+    # Bypass calculations if no data is found
+    if not state.bet_results:
+        st.error("You need to upload isotherm data first!")
+        return
     state.mask_results = bt.core.rouq_mask(
         intercept=state.bet_results.intercept,
         iso_df=state.bet_results.iso_df,
@@ -128,10 +134,14 @@ def page_analysis(state):
 
 def page_summary(state):
     r"""Summary of the analysis"""
+    st.markdown("# :chart_with_upwards_trend: Summary of BET analysis")
+    # Bypass calculations if no data is found
+    if not state.bet_results:
+        st.error("You need to upload isotherm data first!")
+        return
     ssa_table, c_table, ssa_ssd, c_std = bt.vis.dataframe_tables(
         state.bet_results, state.mask_results
     )
-    st.markdown("# :chart_with_upwards_trend: Summary of the analysis")
     st.markdown("## Specific surface area")
     st.success(f"Standard deviation of specific surface area: **{ssa_ssd:.3f}** $m^2/g$")
     st.write(ssa_table)
@@ -142,7 +152,7 @@ def page_summary(state):
 
 def page_references(state):
     r"""References used in BEaTmap"""
-    st.markdown("# References")
+    st.markdown("# :books: References")
     st.markdown(texts.references)
 
 
