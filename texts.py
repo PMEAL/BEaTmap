@@ -4,6 +4,7 @@ gas or vapour onto a solid surface. It can be thought of as an extension of
 the Langmuir adsorption isotherm to multilayer adsoption, where each layer
 of adsorbed molecules is described by the Langmuir equation. BET theory is
 commonly used to determine the specific surface area of porous materials [1].
+A linear form the BET equation is shown below:
 
 $$
 \frac{p}{n(p_o - p)} = \frac{c-1}{n_m c}\frac{p}{p_o} + \frac{1}{n_m c}
@@ -18,12 +19,23 @@ assumptions of BET Theory [2].
 developed as a  tool, allowing the user to quickly and easily get a graphical
 representation of how BET theory applies to an experimental adsoption isotherm
 and provide a more rigorous specific surface area answer.
+"""
 
-This web app is an implementation of BEaTmap. First isotherm data must be
-imported in the form of a `csv` file with the first column being relative
-pressure values and the second being specific amount of adsorbed molecules in
-mol per gram. Cross sectional area of the adsorbate must be provided in square
-Angstrom per molecule.
+getting_started = r"""
+To analyze your adsorption data using BEaTmap, here's how the workflow works:
+
+1. From the **Sidebar**, click on **Upload data**.
+2. Save your data in a `csv` file, with the **first column** being **relative
+pressure** values and the **second** being the **adsorbed amount** in _mol per
+gram_.
+3. Upload the `csv` file using the drag and drop widget, or manually browse
+from your computer. Once you've uploaded the file, a quick peek of your data
+will be displyed as well.
+4. You'll also have to plug in the cross sectional area of the adsorbate in
+_square Angstrom per molecule_.
+5. From the **Sidebar**, click on **Settings**, where you can modify the
+underlying assumptions, calculation criterion, etc.
+6. Once you're happy with the settings, click on **Analyze**.
 """
 
 intro_sidebar = r"""
@@ -43,3 +55,31 @@ checks = [
     r"""Set a minimum number of data points required for a relative pressure
     range to be considered valid."""
 ]
+
+upload_instruction = r"""
+Save your data in a `csv` file, with the first column being relative pressure
+values and the second being the adsorbed amount in mol per gram.
+Upload the `csv` file using the drag and drop widget, or manually browse from
+your computer.
+"""
+
+area_instruction = r"""
+Enter the cross sectional area of the adsorbate in square Angstrom per
+molecule.
+"""
+
+ssa_instruction = r"""
+The specific surface area values that result from BET analysis can be visulaized
+as a heatmap, where every cell represents a relative pressure range. The
+gradient of each cell corresponds to the specific surface area of that
+relative pressure range.
+"""
+
+references = r"""
+1. S. J. Gregg und K. S. W. Sing: **Adsorption, Surface Area and Porosity**
+2nd ed. _Academic Press, London, New York 1982_.
+
+2. Rouquerol, J., P. Llewellyn, and F. Rouquerol. **Is the BET equation
+applicable to microporous adsorbents.** _Stud. Surf. Sci. Catal 160.07 (2007):
+49-56._
+"""
