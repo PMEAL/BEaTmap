@@ -20,10 +20,8 @@ def main():
     state = _get_state()
     pages = {
         "About": page_about,
-        "Upload data": page_upload_data,
-        "Settings": page_settings,
-        "BET analysis": page_analysis,
-        "Summary": page_summary,
+        "BEaTmap Analysis": page_beatmap,
+        "Supplimental Analysis": page_supplimental,
         # "References": page_references
     }
 
@@ -48,7 +46,7 @@ def page_about(state):
     st.markdown(texts.references)
 
 
-def page_upload_data(state):
+def page_beatmap(state):
     r"""File uploader widget"""
     st.markdown("# :file_folder: Upload isotherm data")
     st.markdown(texts.upload_instruction)
@@ -60,7 +58,7 @@ def page_upload_data(state):
     st.markdown(texts.area_instruction)
     state.a_o = st.number_input(
         label="Enter adsorbate cross-sectional area (Angstrom per molecule)",
-        value=state.a_o or 10
+        value=state.a_o or 16.2
     )
     if state.uploaded_file and state.a_o:
         upload_success.success("File uploaded!")
@@ -70,8 +68,6 @@ def page_upload_data(state):
         # Plot isotherm data
         plot_isotherm_data(state.isotherm_data)
 
-
-def page_settings(state):
     """BET model settings"""
     st.markdown("# :wrench: Settings")
     st.markdown("## Model assumptions")
@@ -102,8 +98,6 @@ def page_settings(state):
     else:
         state.criterion_str = "points"
 
-
-def page_analysis(state):
     """BET analysis and results"""
     st.markdown("# :straight_ruler:BET analysis")
     # Bypass calculations if no data is found
@@ -132,7 +126,7 @@ def page_analysis(state):
     plot_ssa_heatmap(state.bet_results, state.mask_results)
 
 
-def page_summary(state):
+def page_supplimental(state):
     r"""Summary of the analysis"""
     st.markdown("# :chart_with_upwards_trend: Summary of BET analysis")
     # Bypass calculations if no data is found
@@ -148,6 +142,7 @@ def page_summary(state):
     st.markdown("## BET constant (C)")
     st.success(f"Standard deviation of BET constant (C): **{c_std:.3f}**")
     st.write(c_table)
+    plot_err_heatmap(state.bet_results, state.mask_results)
 
 
 def page_references(state):
@@ -201,9 +196,9 @@ def plot_isotherm_data(isotherm_data):
 
 def plot_ssa_heatmap(bet_results, mask_results):
     r"""Plot SSA heatmap"""
-    num_p = len(bet_results.iso_df.relp)
-    x, y = np.meshgrid(range(num_p), range(num_p))
-    temp = bet_results.ssa.copy()
+    x, y = np.meshgrid(bet_results.iso_df.relp, bet_results.iso_df.relp)
+    axis_values = bet_results.iso_df.relp.values.tolist()
+    temp = np.round(bet_results.ssa.copy(),2)
     temp[mask_results.mask] = 0
     dmin = np.amin(temp[~mask_results.mask])
     dmax = np.amax(temp[~mask_results.mask])
@@ -221,7 +216,7 @@ def plot_ssa_heatmap(bet_results, mask_results):
                 "Start relative pressure",
                 order="ascending",
             ),
-            axis=alt.Axis(tickMinStep=2, tickCount=10, labelSeparation=10)
+            axis=alt.Axis(tickCount=10, labelSeparation=10, tickMinStep=1)
         ),
         y=alt.Y(
             "End relative pressure:O",
@@ -231,8 +226,9 @@ def plot_ssa_heatmap(bet_results, mask_results):
             ),
             axis=alt.Axis(tickMinStep=2, tickCount=10, labelSeparation=10)
         ),
-        color=alt.Color("SSA:Q", scale=alt.Scale(domain=[dmin, dmax], scheme="Greens"))
+        color=alt.Color("SSA:Q", scale=alt.Scale(domain=[dmin, dmax], scheme="Greens")),
         # color=alt.Color('z:Q', scale=alt.Scale(range=["white", "green"]))
+        tooltip=['SSA','Start relative pressure', 'End relative pressure']
     ).configure_scale(
         bandPaddingInner=0.15
     ).configure_axis(
@@ -240,6 +236,63 @@ def plot_ssa_heatmap(bet_results, mask_results):
         titleFontSize=20
     ).properties(
         title="Specific surface area [m^2/g]",
+    ).configure_title(
+        fontSize=24
+    ).configure_legend(
+        padding=10,
+        strokeColor='gray',
+        cornerRadius=10,
+        labelFontSize=20,
+        titleFontSize=20,
+        gradientLength=250,
+        tickCount=5,
+        offset=40
+    ).interactive()
+
+    st.altair_chart(hmap)
+
+def plot_err_heatmap(bet_results, mask_results):
+    r"""Plot Error heatmap"""
+    x, y = np.meshgrid(bet_results.iso_df.relp, bet_results.iso_df.relp)
+    axis_values = bet_results.iso_df.relp.values.tolist()
+    temp = np.round(bet_results.err.copy(), 2)
+    temp[mask_results.mask] = 0
+    dmin = np.amin(temp[~mask_results.mask])
+    dmax = np.amax(temp[~mask_results.mask])
+    source = pd.DataFrame(
+        {
+            "Start relative pressure": x.ravel(),
+            "End relative pressure": y.ravel(),
+            "Error": temp.ravel()
+        }
+    )
+    hmap = alt.Chart(source).mark_rect(stroke='gray', strokeWidth=0.5).encode(
+        x=alt.X(
+            "Start relative pressure:O",
+            sort=alt.EncodingSortField(
+                "Start relative pressure",
+                order="ascending",
+            ),
+            axis=alt.Axis(tickCount=10, labelSeparation=10, tickMinStep=1)
+        ),
+        y=alt.Y(
+            "End relative pressure:O",
+            sort=alt.EncodingSortField(
+                "End relative pressure",
+                order="descending"
+            ),
+            axis=alt.Axis(tickMinStep=2, tickCount=10, labelSeparation=10)
+        ),
+        color=alt.Color("Error:Q", scale=alt.Scale(domain=[dmin, dmax], scheme="Greys")),
+        # color=alt.Color('Error:Q', scale=alt.Scale(range=["white", "green"]))
+        tooltip=['Error','Start relative pressure', 'End relative pressure']
+    ).configure_scale(
+        bandPaddingInner=0.15
+    ).configure_axis(
+        labelFontSize=20,
+        titleFontSize=20
+    ).properties(
+        title="Error",
     ).configure_title(
         fontSize=24
     ).configure_legend(
