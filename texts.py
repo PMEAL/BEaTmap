@@ -24,15 +24,16 @@ and provide a more rigorous specific surface area answer.
 getting_started = r"""
 To analyze your adsorption data using BEaTmap, here's how the workflow works:
 
-1. From the **Sidebar**, click on **Upload data**.
+1. From the **Sidebar**, click on **BEaTmap Analysis**.
 2. Save your data in a `csv` file, with the **first column** being **relative
 pressure** values and the **second** being the **adsorbed amount** in _mol per
 gram_.
 3. Plug in the cross sectional area of the adsorbate in _square Angstrom per
 molecule_.
-4. From the **Sidebar**, click on **Settings**, where you can modify the
-underlying assumptions, calculation criterion, etc.
-5. Once you're happy with the settings, click on **Analyze**.
+4. Select the underlying assumptions and calculation criterion. The criteria are
+reflected in the specific surface area heatmap.
+5. For additional tables and figures click over to the **Supplimental Analysis**
+page in the sidebar.
 """
 
 intro_sidebar = r"""
@@ -66,11 +67,33 @@ molecule.
 """
 
 ssa_instruction = r"""
-The specific surface area values that result from BET analysis can be visulaized
-as a heatmap, where every cell represents a relative pressure range. The
-gradient of each cell corresponds to the specific surface area of that
+The specific surface area values that result from BET analysis can be
+visulaized as a heatmap, where every cell represents a relative pressure range.
+The gradient of each cell corresponds to the specific surface area of that
 relative pressure range.
 """
+
+err_instruction = r"""
+The error values that result from BET analysis can be visulaized
+as a heatmap, where every cell represents a relative pressure range. The
+gradient of each cell corresponds to the average error between an experimental
+data point and the BET isotherm for that relative pressure range.
+"""
+
+bet_combo_instruction = r"""
+The BET plots for valid relative pressure range with the highest and lowest
+error. As criteria are relaxed the difference between the two becomes more
+apparent, demonstrating the importance of selection criteria.
+"""
+
+iso_combo_instruction = r"""
+Experimental isotherm data and the BET model isotherm with the lowest error
+value that meet all criteria are plotted below. Data points used in the BET
+analysis are highlighted. The point at which monolayer coverage occurs is
+indicated with a dashed line.
+"""
+
+
 
 references = r"""
 1. S. J. Gregg und K. S. W. Sing: **Adsorption, Surface Area and Porosity**
