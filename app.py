@@ -466,7 +466,7 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
         x=alt.X("P/Po", axis=alt.Axis(format='.2', grid=False)),
         color=" "
         ).properties(
-        title="Experimental isotherm data",
+        title="Experimental data and model isotherm",
         height=480,
         width=622
         )
