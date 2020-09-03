@@ -151,7 +151,11 @@ Adjust settings to proceede with analysis.")
 **{ssa_answer:.2f}** $m^2/g$")
 
     st.markdown(r"## BET plot")
-
+    st.markdown(texts.bet_plot_instruction)
+    bet_linreg_table = plot_bet(state.bet_results, state.mask_results,
+                                ssa_answer)
+    bet_linreg_table.set_index(' ', inplace=True)
+    st.write(bet_linreg_table)
     ssa_table, c_table, ssa_ssd, c_std = bt.vis.dataframe_tables(
         state.bet_results, state.mask_results
     )
@@ -166,7 +170,7 @@ Adjust settings to proceede with analysis.")
     st.write(c_table)
     st.markdown("## Isotherm combination plot")
     st.markdown(texts.iso_combo_instruction)
-    plot_isotherm_combo(state.bet_results, state.mask_results)
+    plot_isotherm_combo(state.bet_results, state.mask_results, ssa_answer)
     st.markdown("## BET minimum and maxium error plot")
     st.markdown(texts.bet_combo_instruction)
     linreg_table = plot_bet_combo(state.bet_results, state.mask_results)
@@ -217,7 +221,7 @@ def plot_isotherm_data(isotherm_data):
             "n (mol/g)": isotherm_data.iso_df.n
         }
     )
-    temp = alt.Chart(source).mark_point().encode(
+    temp = alt.Chart(source).mark_point(filled=True).encode(
         y=alt.Y("n (mol/g)", axis=alt.Axis(format='~e',
                                            tickCount=len(source)/4)),
         x=alt.X("P/Po", axis=alt.Axis(format='.1'))
@@ -364,8 +368,69 @@ def plot_err_heatmap(bet_results, mask_results):
 
     st.altair_chart(hmap, use_container_width=True)
 
+def plot_bet(bet_results, mask_results, ssa_answer):
 
-def plot_isotherm_combo(bet_results, mask_results):
+    mask = mask_results.mask
+
+    df = bet_results.iso_df
+    ssa = np.ma.array(bet_results.ssa, mask=mask)
+
+    index = bt.utils.index_of_value(ssa, ssa_answer)
+
+    start = int(index[1])
+    stop = int(index[0])
+
+
+    slope, intercept, r_val, p_value, std_err =\
+        sp.stats.linregress(df.relp[start: stop + 1],
+                            df.bet[start:stop + 1])
+
+    liney = np.zeros(2)
+    liney[0] = slope * (df.relp[start] - .01) + intercept
+    liney[1] = slope * (df.relp[stop] + .01) + intercept
+    linex = np.zeros(2)
+    linex[0] = df.relp[start] - .01
+    linex[1] = df.relp[stop] + .01
+
+    linreg_dict = {' ': ['Slope', 'Intercept', 'r'],
+                   'Trendline': [slope, intercept, r_val]}
+
+    linreg_table = pd.DataFrame(data=linreg_dict)
+
+    line_source = pd.DataFrame(
+        {
+            "P/Po": linex,
+            "1/(n(P/Po-1))": liney
+        }
+    )
+
+    line = alt.Chart(line_source).mark_line().encode(
+        y=alt.Y("1/(n(P/Po-1))", axis=alt.Axis(grid=False)),
+        x=alt.X("P/Po", axis=alt.Axis(format='.2', grid=False))).properties(
+        title="BET plot",
+        height=600,
+        width=600
+        )
+
+    data_source = pd.DataFrame(
+        {
+            "P/Po": df.relp[start:stop + 1],
+            "1/(n(P/Po-1))": np.round(df.bet[start:stop + 1], 2),
+            " ": len(df.bet[start:stop + 1]) * ['Min. Error \
+Experimental Data']
+        }
+    )
+
+    data = alt.Chart(data_source).mark_point(filled=True).encode(
+        y=alt.Y("1/(n(P/Po-1))", axis=alt.Axis(grid=False)),
+        x=alt.X("P/Po", axis=alt.Axis(format='.2', grid=False)),
+        tooltip=['1/(n(P/Po-1))', 'P/Po']).interactive()
+
+    st.altair_chart(line + data)
+
+    return linreg_table
+
+def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
     r"""Plot BET experimental isotherm data"""
 
     mask = mask_results.mask
@@ -373,26 +438,27 @@ def plot_isotherm_combo(bet_results, mask_results):
     df = bet_results.iso_df
     nm = np.ma.array(bet_results.nm, mask=mask)
     c = np.ma.array(bet_results.c, mask=mask)
-    err = np.ma.array(bet_results.err, mask=mask)
+    ssa = np.ma.array(bet_results.ssa, mask=mask)
 
-    err_max, err_max_idx, err_min, err_min_idx = bt.utils.max_min(err)
-    c_min_err = c[err_min_idx[0], err_min_idx[1]]
+    index = bt.utils.index_of_value(ssa, ssa_answer)
+    start = int(index[0])
+    stop = int(index[1])
 
-    nnm_min = nm[err_min_idx[0], err_min_idx[1]]
+    c_value = c[start, stop]
+
+    nnm = nm[start, stop]
     ppo = np.arange(0, .9001, .001)
-    synth_min = 1 / (1 - ppo) - 1 / (1 + (c_min_err - 1) * ppo)
-    expnnm_min = df.n / nnm_min
+    synth = 1 / (1 - ppo) - 1 / (1 + (c_value - 1) * ppo)
+    expnnm = df.n / nnm
 
-    err_min_i = int(err_min_idx[0] + 1)
-    err_min_j = int(err_min_idx[1])
-    expnnm_min_used = expnnm_min[err_min_j:err_min_i]
-    ppo_expnnm_min_used = df.relp[err_min_j:err_min_i]
+    expnnm_min_used = expnnm[stop:start+1]
+    ppo_expnnm_min_used = df.relp[stop:start+1]
 
     model_source = pd.DataFrame(
         {
             "P/Po": ppo,
-            "n/nm": synth_min,
-            " ": len(synth_min) * ['Model Isotherm']
+            "n/nm": synth,
+            " ": len(synth) * ['Model Isotherm']
         }
     )
     model = alt.Chart(model_source).mark_line().encode(
@@ -408,8 +474,8 @@ def plot_isotherm_combo(bet_results, mask_results):
     experimental_source = pd.DataFrame(
         {
             "P/Po": bet_results.iso_df.relp,
-            "n/nm": np.round(expnnm_min, 2),
-            " ": len(expnnm_min) * ['Experimental Data']
+            "n/nm": np.round(expnnm, 2),
+            " ": len(expnnm) * ['Experimental Data']
         }
     )
     experimental = alt.Chart(experimental_source).mark_point().encode(

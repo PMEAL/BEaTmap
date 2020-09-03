@@ -139,6 +139,10 @@ gradient of each cell corresponds to the average error between an experimental
 data point and the BET isotherm for that relative pressure range.
 """
 
+bet_plot_instruction = r"""
+The BET plot for the specific answer value displayed above.
+"""
+
 bet_combo_instruction = r"""
 The BET plots for valid relative pressure range with the highest and lowest
 error. As criteria are relaxed the difference between the two becomes more
@@ -146,8 +150,8 @@ apparent, demonstrating the importance of selection criteria.
 """
 
 iso_combo_instruction = r"""
-Experimental isotherm data and the BET model isotherm with the lowest error
-value that meet all criteria are plotted below. Data points used in the BET
+Experimental isotherm data and the BET model isotherm corresponding to the
+specific surface area value displayed above. Data points used in the BET
 analysis are highlighted. The point at which monolayer coverage occurs is
 where n/nm = 1.
 """
