@@ -224,7 +224,8 @@ def plot_isotherm_data(isotherm_data):
     temp = alt.Chart(source).mark_point(filled=True).encode(
         y=alt.Y("n (mol/g)", axis=alt.Axis(format='~e',
                                            tickCount=len(source)/4)),
-        x=alt.X("P/Po", axis=alt.Axis(format='.1'))
+        x=alt.X("P/Po", axis=alt.Axis(format='.1')),
+        tooltip=['n (mol/g)', 'P/Po']
     ).configure_mark(
         opacity=0.7
     ).configure_axis(
@@ -237,7 +238,7 @@ def plot_isotherm_data(isotherm_data):
         width=600
     ).configure_title(
         fontSize=18
-    )
+    ).interactive()
     st.altair_chart(temp, use_container_width=True)
 
 
