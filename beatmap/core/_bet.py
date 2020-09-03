@@ -529,6 +529,20 @@ def ssa_answer(bet_results, mask_results, criterion='error'):
 
     ssa = np.ma.array(bet_results.ssa, mask=mask)
 
+    if criterion == 'points':
+        pts = np.ma.array(bet_results.num_pts, mask=mask)
+        max_pts = np.max(pts)
+        ssa_ans_array = np.ma.masked_where(pts < max_pts, ssa)
+        try:
+            ssa_ans = float(ssa_ans_array.compressed())
+        except ValueError:
+            print("Error, so single specific surface area answer. Multiple \
+relative pressure ranges with the maximum number of points.")
+            return 0
+        print('The specific surface area value, based on %s is %.2f m2/g.' %
+              (criterion, ssa_ans))
+        return ssa_ans
+
     if criterion == 'error':
         err = np.ma.array(bet_results.err, mask=mask)
         errormax, error_max_idx, errormin, error_min_idx = util.max_min(err)
@@ -537,22 +551,14 @@ def ssa_answer(bet_results, mask_results, criterion='error'):
               (criterion, ssa_ans))
         return ssa_ans
 
-    elif criterion == 'points':
-        pts = np.ma.array(bet_results.num_pts, mask=mask)
-        max_pts = np.max(pts)
-        ssa_ans_array = np.ma.masked_where(pts < max_pts, ssa)
-        try:
-            ssa_ans = float(ssa_ans_array.compressed())
-        except ValueError:
-            print("Error, so single specific surface area answer. Multiple"
-                  "relative pressure ranges with the maximum number of points.")
-            return 0
-        print('The specific surface area value, based on %s is %.2f m2/g.' %
-              (criterion, ssa_ans))
-        return ssa_ans
+    if criterion == 'max':
+        return np.max(ssa)
+
+    if criterion == 'min':
+        return np.min(ssa)
 
     else:
-        raise ValueError('Invalid criterion, must be points or error.')
+        raise ValueError('Invalid criterion, must be points, error, min, or max.')
 
 
 def run_beatmap(file=None, info=None, a_o=None, check1=True, check2=True,
@@ -693,12 +699,12 @@ def run_beatmap(file=None, info=None, a_o=None, check1=True, check2=True,
         io.export_processed_data(bet_results, points)
 
     combo_results = namedtuple("results", "ssa c nm err intercept slope r mask"
-                               " check1 check2 check3 check4 check5")
+                               " check1 check2 check3 check4 check5 num_pts")
     results = combo_results(bet_results.ssa, bet_results.c,
                             bet_results.nm, bet_results.err,
                             bet_results.intercept, bet_results.slope,
                             bet_results.r, mask_results.mask,
                             mask_results.check1, mask_results.check2,
                             mask_results.check3, mask_results.check4,
-                            mask_results.check5)
+                            mask_results.check5, bet_results.num_pts)
     return results
