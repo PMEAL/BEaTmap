@@ -380,7 +380,6 @@ def plot_bet(bet_results, mask_results, ssa_answer):
     start = int(index[1])
     stop = int(index[0])
 
-
     slope, intercept, r_val, p_value, std_err =\
         sp.stats.linregress(df.relp[start: stop + 1],
                             df.bet[start:stop + 1])
@@ -429,6 +428,7 @@ Experimental Data']
     st.altair_chart(line + data)
 
     return linreg_table
+
 
 def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
     r"""Plot BET experimental isotherm data"""
