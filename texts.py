@@ -12,19 +12,19 @@ $$
 
 Analysis of adsorption isotherms by BET theory is easily done, but can provide
 misleading answers. BET theory was originally developed using isothermal
-adsorption data over the relative pressure range of .05 to .35, and required
+adsorption data over the relative pressure range of 0.05 to 0.35, and required
 several assumptions, some more reasonable than others, and some are impossible
-to fulfill. 
+to fulfill.
 
-### BET theory assumptions: 
+### BET theory assumptions
 * The surface is homogeneous (energy of adsorption at all surface sites is
-the same). 
-* Molecules only interact with molecules in adjacent layers. 
-* There is no limitation on the thickness of the monolayer. 
+the same).
+* Molecules only interact with molecules in adjacent layers.
+* There is no limitation on the thickness of the monolayer.
 * The energy of adsorption for the first layer, E1, is higher than the energy
 of adsorption for all other layers. Energy of adsorption in forming the
-multilayer is equal to the energy of condensation, EL. 
-* Interactions between adsorbed molecules in the same layer are neglected. 
+multilayer is equal to the energy of condensation, EL.
+* Interactions between adsorbed molecules in the same layer are neglected.
 * The second and further layers begin forming before the monolayer is
 completed.
 
@@ -41,25 +41,25 @@ layers form before the monolayer is complete is realistic.
 Rouquerol et al have proposed a set of criteria to select the relative pressure
 range of an isotherm where experimentally observed adsorption follows the
 assumptions made by BET theory, to the degree that a repeatable result is
-insured [3]. Additionally, two consistency checks have been put forth, to 
+insured [3]. Additionally, two consistency checks have been put forth, to
 confirm that the monolayer amount determined from the experimental data falls
-in the same range of relative pressures from which it was produced. 
+in the same range of relative pressures from which it was produced.
 
-### BET theory checks: 
+### BET theory checks
 * The BET constant must be positive (y-intercept of the BET plot’s line of best
-fit must be positive). 
-* The term n(P-Po) must increase as P/Po increases[2]. 
+fit must be positive).
+* The term n(P-Po) must increase as P/Po increases [2].
 
-### Consistency checks:
+### Consistency checks
 * The calculated monolayer adsorbed amount, nm, must fall in the relative
-pressure range used in BET analysis. 
+pressure range used in BET analysis.
 * After setting n = nm and C to the value of C found in BET analysis and
 solving the BET equation for P/Po, the P/Po calculated should agree with the
 P/Po corresponding to nm within 10%.
 
 Despite the work of Rouquerol et al there is no accepted set of best practices
 for performing and reporting BET analysis. Some researchers select linear
-regions of the isotherm data, others use the traditional range of .05 to .35,
+regions of the isotherm data, others use the traditional range of 0.05 to 0.35,
 while others apply Rouquerol criteria in their analysis. In many cases
 researchers confirm the results of BET analysis and justify their selection of
 relative pressure range for the isotherm after the  fact, by comparing their
