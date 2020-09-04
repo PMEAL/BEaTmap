@@ -108,7 +108,7 @@ checks = [
     This realtive pressure is then compared to the experimental relative
     pressure corresopnding to monolayer completion and must agree within 10%.""",
     r"""Set a minimum number of data points required for a relative pressure
-    range to be considered valid."""
+    range to be considered valid.""",
 ]
 
 upload_instruction = r"""
@@ -153,7 +153,6 @@ specific surface area value displayed above. Data points used in the BET
 analysis are highlighted. The point at which monolayer coverage occurs is
 where n/nm = 1.
 """
-
 
 
 references = r"""

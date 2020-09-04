@@ -41,9 +41,15 @@ def page_settings(state):
     options = ["Hello", "World", "Goodbye"]
     state.input = st.text_input("Set input value.", state.input or "")
     state.slider = st.slider("Set slider value.", 1, 10, state.slider)
-    state.radio = st.radio("Set radio value.", options, options.index(state.radio) if state.radio else 0)
+    state.radio = st.radio(
+        "Set radio value.", options, options.index(state.radio) if state.radio else 0
+    )
     state.checkbox = st.checkbox("Set checkbox value.", state.checkbox)
-    state.selectbox = st.selectbox("Select value.", options, options.index(state.selectbox) if state.selectbox else 0)
+    state.selectbox = st.selectbox(
+        "Select value.",
+        options,
+        options.index(state.selectbox) if state.selectbox else 0,
+    )
     state.multiselect = st.multiselect("Select value(s).", options, state.multiselect)
 
     # Dynamic state assignments
@@ -68,7 +74,6 @@ def display_state_values(state):
 
 
 class _SessionState:
-
     def __init__(self, session, hash_funcs):
         """Initialize SessionState instance."""
         self.__dict__["_state"] = {
@@ -117,7 +122,9 @@ class _SessionState:
             self._state["is_rerun"] = False
 
         elif self._state["hash"] is not None:
-            if self._state["hash"] != self._state["hasher"].to_bytes(self._state["data"], None):
+            if self._state["hash"] != self._state["hasher"].to_bytes(
+                self._state["data"], None
+            ):
                 self._state["is_rerun"] = True
                 self._state["session"].request_rerun()
 
