@@ -1,10 +1,14 @@
 import streamlit as st
-from streamlit.ReportThread import get_report_ctx
 from streamlit.hashing import _CodeHasher
-from streamlit.server.Server import Server
 
-
-__all__ = ["_get_state", "_SessionState"]
+try:
+    # Before Streamlit 0.65
+    from streamlit.ReportThread import get_report_ctx
+    from streamlit.server.Server import Server
+except ModuleNotFoundError:
+    # After Streamlit 0.65
+    from streamlit.report_thread import get_report_ctx
+    from streamlit.server.server import Server
 
 
 def main():
@@ -103,17 +107,12 @@ class _SessionState:
         self._state["session"].request_rerun()
 
     def sync(self):
-        """
-        Rerun the app with all state values up to date from the beginning to
-        fix rollbacks.
+        """Rerun the app with all state values up to date from the beginning to fix rollbacks."""
 
-        Notes
-        -----
-        Ensure to rerun only once to avoid infinite loops
-        caused by a constantly changing state value at each run.
-
-        Example: state.value += 1
-        """
+        # Ensure to rerun only once to avoid infinite loops
+        # caused by a constantly changing state value at each run.
+        #
+        # Example: state.value += 1
         if self._state["is_rerun"]:
             self._state["is_rerun"] = False
 
@@ -146,4 +145,3 @@ def _get_state(hash_funcs=None):
 
 if __name__ == "__main__":
     main()
-
