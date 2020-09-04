@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed May  8 11:46:59 2019
-
-@author: ellsworthbell
-"""
-
 import numpy as np
 import pandas as pd
 from prettytable import PrettyTable

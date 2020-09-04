@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue May  7 13:00:16 2019
-
-@author: ellsworthbell
-"""
 import numpy as np
 import pandas as pd
 import scipy as sp
