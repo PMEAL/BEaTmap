@@ -45,8 +45,8 @@ def plot_isotherm_data(isotherm_data):
         grid=True
     ).properties(
         title="Experimental isotherm data",
-        height=600,
-        width=600
+        height=500,
+        width=500
     ).configure_title(
         fontSize=figure_title_size
     ).interactive()
@@ -221,8 +221,8 @@ def plot_bet(bet_results, mask_results, ssa_answer):
         x=alt.X("P/Po", axis=alt.Axis(format='.2', grid=False))
     ).properties(
         title="BET plot",
-        height=400,
-        width=400
+        height=500,
+        width=500
     )
 
     line = alt.layer(line).configure_axis(
@@ -247,7 +247,7 @@ Experimental Data']
         x=alt.X("P/Po", axis=alt.Axis(format='.2', grid=False)),
         tooltip=['1/(n(P/Po-1))', 'P/Po']).interactive()
 
-    st.altair_chart(line + data)
+    st.altair_chart(line + data, use_container_width=True)
 
     return linreg_table
 

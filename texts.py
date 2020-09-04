@@ -86,13 +86,11 @@ pressure** values and the **second** being the **adsorbed amount** in _mol per
 gram_.
 2. Upload your data on this page and provide the cross sectional area of the
  adsorbate in _square Angstrom per molecule_.
-3. From the **Sidebar**, click on **BEaTmap Analysis**.
-4. Select the underlying assumptions and calculation criterion. The criteria
- are reflected in the specific surface area heatmap.
+3. From the **Sidebar**, click on **BEaTmap Analysis**. Select the underlying
+assumptions and calculation criterion. The criteria are reflected in the
+specific surface area heatmap.
 5. For additional tables and figures click over to the
  **Supplimental Analysis** page in the **Sidebar**.
-6. To learn more about BET analysis and the selection criteria, go to the
- **About BEaTmap** page in the **Sidebar**.
 """
 
 intro_sidebar = r"""
