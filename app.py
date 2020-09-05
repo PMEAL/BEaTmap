@@ -4,6 +4,12 @@ import pandas as pd
 import numpy as np
 import scipy as sp
 import streamlit as st
+st.beta_set_page_config(
+    page_title="BEaTmap",
+    page_icon=None,
+    layout='centered',
+    initial_sidebar_state='auto'
+)
 from matplotlib import rcParams
 from stateful import _get_state
 import altair_plots as plots
