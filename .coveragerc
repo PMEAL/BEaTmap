@@ -1,0 +1,19 @@
+[run]
+
+source =
+    beatmap
+
+[report]
+
+omit =
+    tests/**
+    **/__init__.py
+    beatmap/__version__.py
+    webapp/**
+    example.py
+    setup.py
+
+exclude_lines =
+    pragma: no cover
+    raise NotImplementedError
+    if __name__ == .__main__.:

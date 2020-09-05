@@ -1,4 +1,4 @@
-import beatmap as bt
+# import beatmap as bt
 
 # """
 # import the data from a .cvs file using the import_data() function
@@ -105,4 +105,4 @@ import beatmap as bt
 # ssa_table, c_table, ssa_std, c_std = \
 #     bt.vis.dataframe_tables(bet_results, mask_results)
 
-bt.core.run_beatmap()
+# bt.core.run_beatmap()

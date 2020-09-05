@@ -7,7 +7,8 @@ from collections import namedtuple
 
 
 def bet(iso_df, a_o, info, *args):
-    """Performs BET analysis on isotherm data for all relative pressure ranges.
+    """
+    Performs BET analysis on isotherm data for all relative pressure ranges.
 
     This function performs BET analysis of any relative pressure range where
     the starting relative pressure is less than the ending relative pressure.
@@ -82,6 +83,7 @@ def bet(iso_df, a_o, info, *args):
 
             -``bet_results.info`` (string) : string of adsorbate-adsorbent info
             by other functions to name files.
+
     """
     ssa_array = np.zeros((len(iso_df), len(iso_df)))
     c_array = np.zeros((len(iso_df), len(iso_df)))
@@ -96,11 +98,10 @@ def bet(iso_df, a_o, info, *args):
     for i in range(len(iso_df)):
         for j in range(len(iso_df)):
             if i > j:
-                a = iso_df.iloc[j:i+1]
+                a = iso_df.iloc[j : i + 1]
                 X = a.relp
                 y = a.bet
-                m, b, r_value, p_value, std_err =\
-                    sp.stats.linregress(X, y)
+                m, b, r_value, p_value, std_err = sp.stats.linregress(X, y)
                 slope[i, j] = m
                 intercept[i, j] = b
                 r[i, j] = r_value
@@ -108,10 +109,10 @@ def bet(iso_df, a_o, info, *args):
                 nm = 0
                 bet_c = 0
                 if b != 0:
-                    c = m/b + 1  # avoiding divide by zero issues
+                    c = m / b + 1  # avoiding divide by zero issues
                     nm = 1 / (b * c)
                     bet_c = (1 / (nm * c)) + (c - 1) * iso_df.relp / (nm * c)
-                spec_sa = nm * 6.022*10**23 * a_o * 10**-20
+                spec_sa = nm * 6.022 * 10 ** 23 * a_o * 10 ** -20
                 ssa_array[i, j] = spec_sa
                 c_array[i, j] = c
                 nm_array[i, j] = nm
@@ -120,21 +121,32 @@ def bet(iso_df, a_o, info, *args):
                 if i - j == 1:
                     err_array[i, j] = 0
                 else:
-                    err_array[i, j] = 100 * sum(errors[j:i + 1]) / (i + 1 - j)
+                    err_array[i, j] = 100 * sum(errors[j : i + 1]) / (i + 1 - j)
                 # error is normalized for the interval of relative pressures
                 # used to compute C, so, min and max error corresponds to the
                 # best and worst fit over the interval used in BET analysis,
                 # not the entire isotherm
-                results = namedtuple('results', 'intercept iso_df nm slope ssa\
-                                     c err r num_pts info')
-                bet_results = results(np.nan_to_num(intercept), iso_df,
-                                      nm_array, slope, ssa_array, c_array,
-                                      err_array, r, number_pts, info)
+                results = namedtuple(
+                    "results", "intercept iso_df nm slope ssa c err r num_pts info",
+                )
+                bet_results = results(
+                    np.nan_to_num(intercept),
+                    iso_df,
+                    nm_array,
+                    slope,
+                    ssa_array,
+                    c_array,
+                    err_array,
+                    r,
+                    number_pts,
+                    info,
+                )
     return bet_results
 
 
 def single_point_bet(df, a_o):
-    """Performs single point BET analysis on an isotherm data set for all
+    """
+    Performs single point BET analysis on an isotherm data set for all
     relative pressure ranges. Can be used to check for agreement between BET
     and single point BET.
 
@@ -176,10 +188,10 @@ def single_point_bet(df, a_o):
                 n = np.ma.median(n_range)
                 relp = np.ma.median(relp_range)
 
-                nm_array[i, j] = n * (1-relp)
-                ssa_array[i, j] = n * 6.022 * 10**23 * a_o * 10**-20
+                nm_array[i, j] = n * (1 - relp)
+                ssa_array[i, j] = n * 6.022 * 10 ** 23 * a_o * 10 ** -20
 
-    singlept_results = namedtuple('singlept_results', ('ssa', 'nm'))
+    singlept_results = namedtuple("singlept_results", ("ssa", "nm"))
     singlept_results.ssa = ssa_array
     singlept_results.nm = nm_array
 
@@ -187,7 +199,8 @@ def single_point_bet(df, a_o):
 
 
 def check_1(intercept):
-    """Checks that y intercept of the BET plot's linear regression is positive.
+    """
+    Checks that y intercept of the BET plot's linear regression is positive.
 
     Parameters
     ----------
@@ -203,16 +216,17 @@ def check_1(intercept):
 
     """
 
-    check1 = (intercept[:, :] > 0)
+    check1 = intercept[:, :] > 0
 
     if np.any(check1) is False:
-        print('All relative pressure ranges fail check 1.')
+        print("All relative pressure ranges fail check 1.")
 
     return check1
 
 
 def check_2(df):
-    """Checks that n(p-po) aka check2 is increasing.
+    """
+    Checks that n(p-po) aka check2 is increasing.
 
     This is a necessary condition for linearity of the BET dataset.
 
@@ -229,22 +243,23 @@ def check_2(df):
         ranges that fail this check.
 
     """
-    df['check2'] = df.n * (1 - df.relp)
+    df["check2"] = df.n * (1 - df.relp)
     check2 = np.ones((len(df), len(df)))
-    minus1 = np.concatenate(([0], df.check2[: -1]))
-    test = (df.check2 - minus1 >= 0)
+    minus1 = np.concatenate(([0], df.check2[:-1]))
+    test = df.check2 - minus1 >= 0
     test = np.tile(test, (len(df), 1))
     check2 = check2 * test
     check2 = check2.T
 
     if np.any(check2) is False:
-        print('All relative pressure ranges fail check 2.')
+        print("All relative pressure ranges fail check 2.")
 
     return check2
 
 
 def check_3(df, nm):
-    """Checks that nm, amount adsorbed in the monolayer, is in the range of
+    """
+    Checks that nm, amount adsorbed in the monolayer, is in the range of
     data points used in BET analysis.
 
     Parameters
@@ -274,13 +289,14 @@ def check_3(df, nm):
                 check3[i, j] = 1
 
     if np.any(check3) is False:
-        print('All relative pressure ranges fail check 3.')
+        print("All relative pressure ranges fail check 3.")
 
     return check3
 
 
 def check_4(df, nm, slope, intercept):
-    """Checks that relative pressure is consistent.
+    """
+    Checks that relative pressure is consistent.
 
     The relative pressure corresponding to nm is found from linear
     interpolation of the experiemental data.
@@ -325,9 +341,11 @@ def check_4(df, nm, slope, intercept):
                 # find relp corresponding to nm
                 relpm = util.lin_interp(df, nm[i, j])
                 # BET eq solved for relp is a quadratic, coeff = [a, b, c]
-                coeff = [-1 * slope[i, j] * nm[i, j], slope[i, j]
-                         * nm[i, j] - 1 - intercept[i, j] * nm[i, j],
-                         intercept[i, j] * nm[i, j]]
+                coeff = [
+                    -1 * slope[i, j] * nm[i, j],
+                    slope[i, j] * nm[i, j] - 1 - intercept[i, j] * nm[i, j],
+                    intercept[i, j] * nm[i, j],
+                ]
                 # find roots
                 # (relp value where nm occurs on theoretical isotherm)
                 roots = np.roots(coeff)  # note: some roots are imaginary
@@ -339,18 +357,18 @@ def check_4(df, nm, slope, intercept):
                 diff_2 = abs((relp_m_2 - relpm) / relpm)
                 diff = min(diff_1, diff_2)
 
-                if diff < .1:
+                if diff < 0.1:
                     check4[i, j] = 1
 
     if np.any(check4) is False:
-        print('All relative pressure ranges fail check 4.')
+        print("All relative pressure ranges fail check 4.")
 
     return check4
 
 
 def check_5(df, points=5):
-    """Checks that relative pressure ranges contain a minium number of data
-        points.
+    """
+    Checks that relative pressure ranges contain a minium number of data points.
 
     Parameters
     ----------
@@ -377,15 +395,26 @@ def check_5(df, points=5):
                 check5[i, j] = 0
 
     if np.any(check5) is False:
-        print('All relative pressure ranges fail check 5.')
+        print("All relative pressure ranges fail check 5.")
 
     return check5
 
 
-def rouq_mask(intercept, iso_df, nm, slope, *args, check1=True, check2=True,
-              check3=True, check4=True, check5=True, points=5):
-    """Calls all check functions and combines their masks
-    into one "rouqerol mask".
+def rouq_mask(
+    intercept,
+    iso_df,
+    nm,
+    slope,
+    *args,
+    check1=True,
+    check2=True,
+    check3=True,
+    check4=True,
+    check5=True,
+    points=5
+):
+    """
+    Calls all check functions and combines their masks into one "rouqerol mask".
 
     Rather than pass individual parameters, this function can accept
     *bet_results (where bet_results is a named tuple output by the bet
@@ -499,8 +528,9 @@ def rouq_mask(intercept, iso_df, nm, slope, *args, check1=True, check2=True,
     return mask_results
 
 
-def ssa_answer(bet_results, mask_results, criterion='error'):
-    """ Prints a single specific surface area answer from the valid relative
+def ssa_answer(bet_results, mask_results, criterion="error"):
+    """
+    Prints a single specific surface area answer from the valid relative
     pressure range with either the lowest error or most number of points.
 
     Parameters
@@ -523,43 +553,70 @@ def ssa_answer(bet_results, mask_results, criterion='error'):
 
     mask = mask_results.mask
 
-    if mask.all() == True:
-        raise ValueError("No valid relative pressure ranges. Specific surface"
-                         " area not calculated.")
+    if mask.all():
+        raise ValueError(
+            "No valid relative pressure ranges. Specific surface"
+            " area not calculated."
+        )
 
     ssa = np.ma.array(bet_results.ssa, mask=mask)
 
-    if criterion == 'error':
-        err = np.ma.array(bet_results.err, mask=mask)
-        errormax, error_max_idx, errormin, error_min_idx = util.max_min(err)
-        ssa_ans = ssa[int(error_min_idx[0]), int(error_min_idx[1])]
-        print('The specific surface area value, based on %s is %.2f m2/g.' %
-              (criterion, ssa_ans))
-        return ssa_ans
-
-    elif criterion == 'points':
+    if criterion == "points":
         pts = np.ma.array(bet_results.num_pts, mask=mask)
         max_pts = np.max(pts)
         ssa_ans_array = np.ma.masked_where(pts < max_pts, ssa)
         try:
             ssa_ans = float(ssa_ans_array.compressed())
         except ValueError:
-            print("Error, so single specific surface area answer. Multiple"
-                  "relative pressure ranges with the maximum number of points.")
+            raise Exception(
+                "Error, so single specific surface area answer. Multiple"
+                + "relative pressure ranges with the maximum number of points."
+            )
             return 0
-        print('The specific surface area value, based on %s is %.2f m2/g.' %
-              (criterion, ssa_ans))
+        print(
+            "The specific surface area value, based on %s is %.2f m2/g."
+            % (criterion, ssa_ans)
+        )
         return ssa_ans
 
+    if criterion == "error":
+        err = np.ma.array(bet_results.err, mask=mask)
+        errormax, error_max_idx, errormin, error_min_idx = util.max_min(err)
+        ssa_ans = ssa[int(error_min_idx[0]), int(error_min_idx[1])]
+        print(
+            "The specific surface area value, based on %s is %.2f m2/g."
+            % (criterion, ssa_ans)
+        )
+        return ssa_ans
+
+    if criterion == "max":
+        return np.max(ssa)
+
+    if criterion == "min":
+        return np.min(ssa)
+
     else:
-        raise ValueError('Invalid criterion, must be points or error.')
+        raise ValueError("Invalid criterion, must be points, error, min, or max.")
 
 
-def run_beatmap(file=None, info=None, a_o=None, check1=True, check2=True,
-                check3=True, check4=True, check5=True, points=5,
-                save_figures=True, export_data=False, ssa_criterion='error',
-                ssa_gradient='Greens', err_gradient='Greys'):
-    """A single function that executes all necessary BEaTmap algorithims.
+def run_beatmap(
+    file=None,
+    info=None,
+    a_o=None,
+    check1=True,
+    check2=True,
+    check3=True,
+    check4=True,
+    check5=True,
+    points=5,
+    save_figures=True,
+    export_data=False,
+    ssa_criterion="error",
+    ssa_gradient="Greens",
+    err_gradient="Greys",
+):
+    """
+    A single function that executes all necessary BEaTmap algorithims.
 
     This function is built to be as user friendly as possible. The file
     name/path of the isotherm data, information about the isotherm, and the
@@ -639,21 +696,27 @@ def run_beatmap(file=None, info=None, a_o=None, check1=True, check2=True,
 
     Returns
     -------
+
     """
     if file is None:
         file = input("Enter file name/path: ")
+
     if info is None:
-        info = input("Enter adsorbate-adsorbent information (this will be"
-                     " incorporated into file names): ")
+        info = input(
+            "Enter adsorbate-adsorbent information (this will be"
+            " incorporated into file names): "
+        )
+
     if a_o is None:
-        a_o = input("Enter cross sectional area of adsorbate in"
-                    " square Angstrom: ")
+        a_o = input("Enter cross sectional area of adsorbate in square Angstrom: ")
         try:
             a_o = float(a_o)
         except ValueError:
-            print('The ao provided is not numeric.')
-            a_o = input("Try again, enter the cross sectional area of"
-                        "adsorbate in square Angstrom: ")
+            print("The ao provided is not numeric.")
+            a_o = input(
+                "Try again, enter the cross sectional area of"
+                " adsorbate in square Angstrom: "
+            )
             a_o = float(a_o)
 
     # run_beatmap_import_data imports isotherm data from a .csv file and returns
@@ -665,22 +728,29 @@ def run_beatmap(file=None, info=None, a_o=None, check1=True, check2=True,
     # bet_results uses isotherm_data, applies BET analysis and returns the results
     # in the bet_results namedtuple
 
-    bet_results = bet(isotherm_data.iso_df, isotherm_data.a_o,
-                      isotherm_data.info)
+    bet_results = bet(isotherm_data.iso_df, isotherm_data.a_o, isotherm_data.info)
 
     # mask_results uses isotherm_data and bet_results, applies the roquerol
     # criteria specified by the user, and returns the results in the
     # mask_results named tuple
 
-    mask_results = rouq_mask(bet_results.intercept, bet_results.iso_df,
-                             bet_results.nm, bet_results.slope,
-                             check1=True, check2=True, check3=True,
-                             check4=True, check5=True, points=5)
+    mask_results = rouq_mask(
+        bet_results.intercept,
+        bet_results.iso_df,
+        bet_results.nm,
+        bet_results.slope,
+        check1=True,
+        check2=True,
+        check3=True,
+        check4=True,
+        check5=True,
+        points=5,
+    )
 
-    # mask_results are used to highlight the valid bet_results in the following
-    # functions
+    # mask_results are used to highlight the valid bet_results in the
+    # following functions
 
-    ssa_ans = ssa_answer(bet_results, mask_results, ssa_criterion)
+    # ssa_ans = ssa_answer(bet_results, mask_results, ssa_criterion)
 
     figs.ssa_heatmap(bet_results, mask_results, save_figures)
     figs.err_heatmap(bet_results, mask_results, save_figures)
@@ -692,13 +762,27 @@ def run_beatmap(file=None, info=None, a_o=None, check1=True, check2=True,
         io.export_raw_data(isotherm_data)
         io.export_processed_data(bet_results, points)
 
-    combo_results = namedtuple("results", "ssa c nm err intercept slope r mask"
-                               " check1 check2 check3 check4 check5")
-    results = combo_results(bet_results.ssa, bet_results.c,
-                            bet_results.nm, bet_results.err,
-                            bet_results.intercept, bet_results.slope,
-                            bet_results.r, mask_results.mask,
-                            mask_results.check1, mask_results.check2,
-                            mask_results.check3, mask_results.check4,
-                            mask_results.check5)
+    combo_results = namedtuple(
+        "results",
+        "ssa c nm err intercept slope r mask"
+        " check1 check2 check3 check4 check5 num_pts",
+    )
+
+    results = combo_results(
+        bet_results.ssa,
+        bet_results.c,
+        bet_results.nm,
+        bet_results.err,
+        bet_results.intercept,
+        bet_results.slope,
+        bet_results.r,
+        mask_results.mask,
+        mask_results.check1,
+        mask_results.check2,
+        mask_results.check3,
+        mask_results.check4,
+        mask_results.check5,
+        bet_results.num_pts,
+    )
+
     return results

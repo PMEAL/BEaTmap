@@ -1,10 +1,14 @@
 import streamlit as st
-from streamlit.ReportThread import get_report_ctx
 from streamlit.hashing import _CodeHasher
-from streamlit.server.Server import Server
 
-
-__all__ = ["_get_state", "_SessionState"]
+try:
+    # Before Streamlit 0.65
+    from streamlit.ReportThread import get_report_ctx
+    from streamlit.server.Server import Server
+except ModuleNotFoundError:
+    # After Streamlit 0.65
+    from streamlit.report_thread import get_report_ctx
+    from streamlit.server.server import Server
 
 
 def main():
@@ -37,9 +41,15 @@ def page_settings(state):
     options = ["Hello", "World", "Goodbye"]
     state.input = st.text_input("Set input value.", state.input or "")
     state.slider = st.slider("Set slider value.", 1, 10, state.slider)
-    state.radio = st.radio("Set radio value.", options, options.index(state.radio) if state.radio else 0)
+    state.radio = st.radio(
+        "Set radio value.", options, options.index(state.radio) if state.radio else 0
+    )
     state.checkbox = st.checkbox("Set checkbox value.", state.checkbox)
-    state.selectbox = st.selectbox("Select value.", options, options.index(state.selectbox) if state.selectbox else 0)
+    state.selectbox = st.selectbox(
+        "Select value.",
+        options,
+        options.index(state.selectbox) if state.selectbox else 0,
+    )
     state.multiselect = st.multiselect("Select value(s).", options, state.multiselect)
 
     # Dynamic state assignments
@@ -64,7 +74,6 @@ def display_state_values(state):
 
 
 class _SessionState:
-
     def __init__(self, session, hash_funcs):
         """Initialize SessionState instance."""
         self.__dict__["_state"] = {
@@ -104,21 +113,20 @@ class _SessionState:
 
     def sync(self):
         """
-        Rerun the app with all state values up to date from the beginning to
-        fix rollbacks.
-
-        Notes
-        -----
-        Ensure to rerun only once to avoid infinite loops
-        caused by a constantly changing state value at each run.
-
-        Example: state.value += 1
+        Rerun the app with all state values up to date from the beginning
+        to fix rollbacks.
         """
+        # Ensure to rerun only once to avoid infinite loops
+        # caused by a constantly changing state value at each run.
+        #
+        # Example: state.value += 1
         if self._state["is_rerun"]:
             self._state["is_rerun"] = False
 
         elif self._state["hash"] is not None:
-            if self._state["hash"] != self._state["hasher"].to_bytes(self._state["data"], None):
+            if self._state["hash"] != self._state["hasher"].to_bytes(
+                self._state["data"], None
+            ):
                 self._state["is_rerun"] = True
                 self._state["session"].request_rerun()
 
@@ -146,4 +154,3 @@ def _get_state(hash_funcs=None):
 
 if __name__ == "__main__":
     main()
-

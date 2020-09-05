@@ -1,0 +1,8 @@
+wheel
+codecov
+coverage
+pytest
+pytest-cache
+pytest-cov
+pytest-codestyle
+pytest-pycodestyle

@@ -71,7 +71,7 @@ def lin_interp(df, val):
         The relp corresponding to some n, between two (n, relp) points.
 
     """
-    hindex = len(df[df['n'] <= val])
+    hindex = len(df[df["n"] <= val])
     if hindex == len(df):
         hindex = hindex - 1
     lindex = hindex - 1
@@ -79,10 +79,11 @@ def lin_interp(df, val):
         lindex = 0
         m = 0
     else:
-        m = ((df.loc[hindex, 'relp'] - df.loc[lindex, 'relp']) /
-             (df.loc[hindex, 'n'] - df.loc[lindex, 'n']))
+        m = (df.loc[hindex, "relp"] - df.loc[lindex, "relp"]) / (
+            df.loc[hindex, "n"] - df.loc[lindex, "n"]
+        )
 
-    b = df.loc[hindex, 'relp'] - df.loc[hindex, 'n'] * m
+    b = df.loc[hindex, "relp"] - df.loc[hindex, "n"] * m
 
     interp_val = m * val + b
     return interp_val
