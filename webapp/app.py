@@ -101,7 +101,7 @@ def page_beatmap(state):
         points=state.points,
     )
 
-    if state.mask_results.mask.all() == True:
+    if state.mask_results.mask.all():
         st.error(
             "No valid relative pressure ranges. Adjust settings to proceede with analysis."
         )
@@ -129,7 +129,7 @@ def page_supplimental(state):
         st.error("You need to upload isotherm data first!")
         return
 
-    if state.mask_results.mask.all() == True:
+    if state.mask_results.mask.all():
         st.error(
             "No valid relative pressure ranges. Adjust settings to proceede with analysis."
         )
