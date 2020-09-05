@@ -9,6 +9,7 @@ omit =
     tests/**
     **/__init__.py
     beatmap/__version__.py
+    webapp/**
     example.py
     setup.py
 
