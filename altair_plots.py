@@ -40,8 +40,9 @@ def plot_isotherm_data(isotherm_data):
         .configure_mark(opacity=0.7)
         .configure_axis(
             labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True
-        )
-        .properties(title="Experimental isotherm data", height=500, width=500)
+        ).configure_point(
+            size=100
+        ).properties(title="Experimental isotherm data", height=500, width=500)
         .configure_title(fontSize=figure_title_size)
         .interactive()
     )
@@ -178,7 +179,7 @@ def plot_err_heatmap(bet_results, mask_results):
 
 
 def plot_bet(bet_results, mask_results, ssa_answer):
-
+    r""""""
     mask = mask_results.mask
 
     df = bet_results.iso_df
@@ -215,8 +216,7 @@ def plot_bet(bet_results, mask_results, ssa_answer):
         .encode(
             y=alt.Y("1/(n(P/Po-1))", axis=alt.Axis(grid=False)),
             x=alt.X("P/Po", axis=alt.Axis(format=".2", grid=False)),
-        )
-        .properties(title="BET plot", height=500, width=500)
+        ).properties(title="BET plot", height=500, width=500)
     )
 
     line = (
@@ -224,7 +224,11 @@ def plot_bet(bet_results, mask_results, ssa_answer):
         .configure_axis(
             labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True
         )
-        .configure_title(fontSize=figure_title_size)
+        .configure_title(
+            fontSize=figure_title_size
+        ).configure_point(
+            size=100
+        )
     )
 
     data_source = pd.DataFrame(
@@ -257,7 +261,6 @@ Experimental Data"
 
 def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
     r"""Plot BET experimental isotherm data"""
-
     mask = mask_results.mask
 
     df = bet_results.iso_df
@@ -342,7 +345,7 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
 
 
 def plot_bet_combo(bet_results, mask_results):
-
+    r""""""
     mask = mask_results.mask
 
     df = bet_results.iso_df

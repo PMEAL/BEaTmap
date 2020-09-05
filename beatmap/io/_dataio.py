@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 import scipy as sp
 from beatmap import core as bet
-from beatmap import utils as util
 from collections import namedtuple
 
 
@@ -62,11 +61,13 @@ def import_data(file=None, info=None, a_o=None):
 
     if file is None:
         file = input("Enter file name/path: ")
+
     if info is None:
         info = input(
             "Enter adsorbate-adsorbent information (this will be"
             " incorporated into file names): "
         )
+
     if a_o is None:
         a_o = input("Enter cross sectional area of adsorbate in" " square Angstrom: ")
         a_o = float(a_o)
@@ -76,16 +77,14 @@ def import_data(file=None, info=None, a_o=None):
         " %.2f sq. Angstrom.' % (a_o)"
     )
 
-    # df1 = pd.read_csv(file, header='infer')
-    # df2 = pd.read_csv(file, header=None)
-    # sim = (df1.dtypes.values == df2.dtypes.values).mean()
-    # if sim < .95:
-    #     header_check = 'infer'
-    # else:
-    #     header_check = None
-
-    # data = pd.read_csv(file, header=header_check)
-    data = pd.read_csv(file)
+    data = pd.read_csv(file, header='infer')
+    try:
+        header = data.columns
+        temp = pd.DataFrame([header.astype(float)], columns=["relp", "n"])
+        data = data.rename(columns={header[0]: "relp", header[1]: "n"})
+        data = pd.concat([temp, data], ignore_index=True)
+    except TypeError:
+        pass
 
     labels = list(data)
     data.rename(columns={labels[0]: "relp", labels[1]: "n"}, inplace=True)
@@ -178,16 +177,16 @@ def import_list_data(relp, n, file=None, info=None, a_o=None):
         - ``isotherm_data.a_o`` (float) : adsorbate cross sectional area.
         - ``isotherm_data.info`` (string) : string of adsorbate-adsorbent info.
         - ``isotherm_data.file`` (string) : file name or path.
+
     """
     if file == None:
         file = input("Enter name for dataset:")
+
     if info == None:
         info = input("Enter name of adsorbate used:")
+
     if a_o == None:
-        a_o_input = input(
-            "Enter cross sectional area of adsorbate in \
-square Angstrom:"
-        )
+        a_o_input = input("Enter cross sectional area of adsorbate in square Angstrom:")
         try:
             a_o = float(a_o_input)
         except ValueError:
@@ -197,9 +196,7 @@ square Angstrom:"
         raise ValueError("a_o must be int or float.")
 
     print(
-        "\nAdsorbate used has an adsorbed cross sectional area of \
-%.2f sq. Angstrom."
-        % (a_o)
+        f"\nAdsorbate has an adsorbed cross sectional area of {a_o:.2f} sq. Angstrom."
     )
 
     # importing data and creating 'bet' and 'check2' data points
@@ -364,4 +361,3 @@ def export_processed_data(bet_results, points=5):
     export_file_name = bet_results.info + "_processed_data_export.csv"
     processed_data.to_csv(export_file_name, index=None, header=True)
     print("Processed data saved as: %s" % (export_file_name))
-    return

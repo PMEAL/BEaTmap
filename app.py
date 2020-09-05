@@ -6,7 +6,7 @@ import scipy as sp
 import streamlit as st
 from matplotlib import rcParams
 from stateful import _get_state
-from altair_plots import *
+import altair_plots as plots
 
 
 st.set_option("deprecation.showfileUploaderEncoding", False)
@@ -62,7 +62,7 @@ def page_upload(state):
         state.isotherm_data = fetch_isotherm_data(state.uploaded_file, state.a_o)
         state.bet_results = fetch_bet_results(state.isotherm_data)
         # Plot isotherm data
-        plot_isotherm_data(state.isotherm_data)
+        plots.plot_isotherm_data(state.isotherm_data)
 
 
 def page_beatmap(state):
@@ -107,7 +107,7 @@ Adjust settings to proceede with analysis."
     # st.markdown(r"BET Specific Surface Area \[$\frac{m^2}{g}$\]")
     st.markdown(r"## Specific surface area heatmap")
     st.markdown(texts.ssa_instruction)
-    plot_ssa_heatmap(state.bet_results, state.mask_results)
+    plots.plot_ssa_heatmap(state.bet_results, state.mask_results)
 
 
 def page_supplimental(state):
@@ -156,7 +156,7 @@ Adjust settings to proceede with analysis."
 
     st.markdown(r"## BET plot")
     st.markdown(texts.bet_plot_instruction)
-    bet_linreg_table = plot_bet(state.bet_results, state.mask_results, ssa_answer)
+    bet_linreg_table = plots.plot_bet(state.bet_results, state.mask_results, ssa_answer)
     bet_linreg_table.set_index(" ", inplace=True)
     st.write(bet_linreg_table)
     ssa_table, c_table, ssa_ssd, c_std = bt.vis.dataframe_tables(
@@ -175,15 +175,15 @@ Adjust settings to proceede with analysis."
     st.write(c_table)
     st.markdown("## Isotherm combination plot")
     st.markdown(texts.iso_combo_instruction)
-    plot_isotherm_combo(state.bet_results, state.mask_results, ssa_answer)
+    plots.plot_isotherm_combo(state.bet_results, state.mask_results, ssa_answer)
     st.markdown("## BET minimum and maxium error plot")
     st.markdown(texts.bet_combo_instruction)
-    linreg_table = plot_bet_combo(state.bet_results, state.mask_results)
+    linreg_table = plots.plot_bet_combo(state.bet_results, state.mask_results)
     linreg_table.set_index(" ", inplace=True)
     st.write(linreg_table)
     st.markdown("## Error heatmap")
     st.markdown(texts.err_instruction)
-    plot_err_heatmap(state.bet_results, state.mask_results)
+    plots.plot_err_heatmap(state.bet_results, state.mask_results)
 
 
 def page_about(state):
@@ -207,7 +207,7 @@ def fetch_isotherm_data(uploaded_file, a_o):
     return isotherm_data
 
 
-@st.cache(allow_output_mutation=False)
+@st.cache(allow_output_mutation=True)
 def fetch_bet_results(isotherm_data):
     r"""Analyzes isotherm data and returns results as a named tuple"""
     bet_results = bt.core.bet(

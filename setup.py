@@ -1,32 +1,32 @@
 import os
 import sys
 from distutils.util import convert_path
-
-sys.path.append(os.getcwd())
-
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
+sys.path.append(os.getcwd())
 
-main_ = {}
+
+main = {}
 ver_path = convert_path("beatmap/__init__.py")
 with open(ver_path) as f:
     for line in f:
         if line.startswith("__version__"):
-            exec(line, main_)
+            exec(line, main)
 
 setup(
     name="beatmap",
     description="A tool for determining the valid P/P0 range in BET isotherms",
     zip_safe=False,
     long_description_content_type="text/x-rst",
-    version=main_["__version__"],
+    version=main["__version__"],
     classifiers=[
-        "Development Status :: 2 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
         "Topic :: Scientific/Engineering",
+        "Topic :: Scientific/Engineering :: Chemistry",
         "Topic :: Scientific/Engineering :: Physics",
     ],
     packages=["beatmap",],
