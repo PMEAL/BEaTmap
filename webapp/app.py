@@ -1,11 +1,12 @@
 import texts
 import beatmap as bt
 import streamlit as st
+
 st.beta_set_page_config(
     page_title="BEaTmap",
     page_icon=None,
-    layout='centered',
-    initial_sidebar_state='auto'
+    layout="centered",
+    initial_sidebar_state="auto",
 )
 from matplotlib import rcParams
 from stateful import _get_state
@@ -158,9 +159,7 @@ def page_supplimental(state):
     ssa_answer = bt.core.ssa_answer(
         state.bet_results, state.mask_results, state.criterion_str
     )
-    st.success(
-        f"The specific surface area value is **{ssa_answer:.2f}** $m^2/g$"
-    )
+    st.success(f"The specific surface area value is **{ssa_answer:.2f}** $m^2/g$")
 
     st.markdown(r"## BET plot")
     st.markdown(texts.bet_plot_instruction)

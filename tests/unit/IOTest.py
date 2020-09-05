@@ -1,10 +1,9 @@
-import os
 import unittest
 import pandas as pd
 import beatmap as bt
 from pathlib import Path
 
-fixtures_path = Path(os.getcwd(), "fixtures")
+fixtures_path = Path(Path(__file__).parent.absolute(), "fixtures")
 
 
 class TestIO(unittest.TestCase):
