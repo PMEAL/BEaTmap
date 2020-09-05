@@ -179,13 +179,13 @@ def import_list_data(relp, n, file=None, info=None, a_o=None):
         - ``isotherm_data.file`` (string) : file name or path.
 
     """
-    if file == None:
+    if file:
         file = input("Enter name for dataset:")
 
-    if info == None:
+    if info:
         info = input("Enter name of adsorbate used:")
 
-    if a_o == None:
+    if a_o:
         a_o_input = input("Enter cross sectional area of adsorbate in square Angstrom:")
         try:
             a_o = float(a_o_input)

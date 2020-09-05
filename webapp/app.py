@@ -103,7 +103,8 @@ def page_beatmap(state):
 
     if state.mask_results.mask.all():
         st.error(
-            "No valid relative pressure ranges. Adjust settings to proceede with analysis."
+            "No valid relative pressure ranges. Adjust settings to proceed with"
+            + " analysis."
         )
         return
 
@@ -131,7 +132,8 @@ def page_supplimental(state):
 
     if state.mask_results.mask.all():
         st.error(
-            "No valid relative pressure ranges. Adjust settings to proceede with analysis."
+            "No valid relative pressure ranges. Adjust settings to proceede with"
+            + " analysis."
         )
         return
 

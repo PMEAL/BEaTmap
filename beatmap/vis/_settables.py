@@ -32,7 +32,7 @@ def ascii_tables(bet_results, mask_results):
     """
 
     mask = mask_results.mask
-    if mask.all() == True:
+    if mask.all():
         print("No valid relative pressure ranges. ASCII tables not created.")
         return
 
@@ -191,7 +191,7 @@ def dataframe_tables(bet_results, mask_results):
 
     mask = mask_results.mask
 
-    if mask.all() == True:
+    if mask.all():
         print("No valid relative pressure ranges. Tables not created.")
 
         ssa_dict = {

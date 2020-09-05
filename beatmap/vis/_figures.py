@@ -80,7 +80,7 @@ def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="Greens"):
 
     mask = mask_results.mask
 
-    if mask.all() == True:
+    if mask.all():
         print(
             "No valid relative pressure ranges. Specific surface area"
             " heatmap not created."
@@ -94,7 +94,7 @@ def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="Greens"):
 
     # finding max and min sa to normalize heatmap colours
     ssamax, ssa_max_idx, ssamin, ssa_min_idx = util.max_min(ssa)
-    hm_labels = round(df.relp * 100, 1)
+    # hm_labels = round(df.relp * 100, 1)
     fig, ax = plt.subplots(figsize=(7, 7))
     # sns.heatmap(ssa, vmin=ssamin, vmax=ssamax, square=True, cmap=gradient,
     #             mask=(ssa == 0), xticklabels=hm_labels, yticklabels=hm_labels,
@@ -166,7 +166,7 @@ def err_heatmap(bet_results, mask_results, save_file=True, gradient="Greys"):
     """
     mask = mask_results.mask
 
-    if mask.all() == True:
+    if mask.all():
         print("No valid relative pressure ranges. Error heat map not created.")
         return
 
@@ -236,7 +236,7 @@ def bet_combo_plot(bet_results, mask_results, save_file=True):
 
     mask = mask_results.mask
 
-    if mask.all() == True:
+    if mask.all():
         print("No valid relative pressure ranges. BET combo plot not created.")
         return
 
@@ -356,7 +356,7 @@ def iso_combo_plot(bet_results, mask_results, save_file=True):
 
     mask = mask_results.mask
 
-    if mask.all() == True:
+    if mask.all():
         print(
             "No valid relative pressure ranges. BET isotherm \
 combo plot not created."
