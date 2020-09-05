@@ -1,8 +1,5 @@
 import texts
 import beatmap as bt
-import pandas as pd
-import numpy as np
-import scipy as sp
 import streamlit as st
 st.beta_set_page_config(
     page_title="BEaTmap",
@@ -105,8 +102,7 @@ def page_beatmap(state):
 
     if state.mask_results.mask.all() == True:
         st.error(
-            "No valid relative pressure ranges. \
-Adjust settings to proceede with analysis."
+            "No valid relative pressure ranges. Adjust settings to proceede with analysis."
         )
         return
 
@@ -115,10 +111,18 @@ Adjust settings to proceede with analysis."
     st.markdown(texts.ssa_instruction)
     plots.plot_ssa_heatmap(state.bet_results, state.mask_results)
 
+    # to know if bet has been performed
+    state.bet_analysis = True
+
 
 def page_supplimental(state):
     r"""Supplimental Analysis"""
     st.markdown("# :chart_with_upwards_trend: Supplimental Analysis")
+
+    # Bypass calculations if no analysis is found
+    if not state.bet_analysis:
+        st.error("You need to run BET Analysis first!")
+        return
     # Bypass calculations if no data is found
     if not state.bet_results:
         st.error("You need to upload isotherm data first!")
@@ -126,8 +130,7 @@ def page_supplimental(state):
 
     if state.mask_results.mask.all() == True:
         st.error(
-            "No valid relative pressure ranges. \
-Adjust settings to proceede with analysis."
+            "No valid relative pressure ranges. Adjust settings to proceede with analysis."
         )
         return
 
@@ -156,8 +159,7 @@ Adjust settings to proceede with analysis."
         state.bet_results, state.mask_results, state.criterion_str
     )
     st.success(
-        f"The specific surface area value is \
-**{ssa_answer:.2f}** $m^2/g$"
+        f"The specific surface area value is **{ssa_answer:.2f}** $m^2/g$"
     )
 
     st.markdown(r"## BET plot")
@@ -172,8 +174,7 @@ Adjust settings to proceede with analysis."
     c_table.set_index(" ", inplace=True)
     st.markdown("## Specific surface area")
     st.success(
-        f"Standard deviation of specific surface area: \
-**{ssa_ssd:.3f}** $m^2/g$"
+        f"Standard deviation of specific surface area: **{ssa_ssd:.3f}** $m^2/g$"
     )
     st.write(ssa_table)
     st.markdown("## BET constant (C)")
