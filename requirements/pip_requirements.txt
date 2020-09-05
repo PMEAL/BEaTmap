@@ -3,4 +3,3 @@ scipy
 pandas
 matplotlib
 prettytable
-altair
