@@ -28,13 +28,13 @@ core
 
 """
 
-from ._bet import bet
-from ._bet import single_point_bet
-from ._bet import check_1
-from ._bet import check_2
-from ._bet import check_3
-from ._bet import check_4
-from ._bet import check_5
-from ._bet import rouq_mask
-from ._bet import ssa_answer
-from ._bet import run_beatmap
+from .bet import bet
+from .bet import single_point_bet
+from .bet import check_1
+from .bet import check_2
+from .bet import check_3
+from .bet import check_4
+from .bet import check_5
+from .bet import rouq_mask
+from .bet import ssa_answer
+from .bet import run_beatmap

@@ -25,10 +25,10 @@ vis
 
 """
 
-from ._figures import experimental_data_plot
-from ._figures import ssa_heatmap
-from ._figures import err_heatmap
-from ._figures import bet_combo_plot
-from ._figures import iso_combo_plot
-from ._settables import ascii_tables
-from ._settables import dataframe_tables
+from .figures import experimental_data_plot
+from .figures import ssa_heatmap
+from .figures import err_heatmap
+from .figures import bet_combo_plot
+from .figures import iso_combo_plot
+from .settables import ascii_tables
+from .settables import dataframe_tables
