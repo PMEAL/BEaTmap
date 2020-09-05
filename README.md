@@ -1,7 +1,7 @@
 [![image](https://github.com/PMEAL/beatmap/workflows/Ubuntu/badge.svg)](https://github.com/PMEAL/beatmap/actions)
 [![image](https://github.com/PMEAL/beatmap/workflows/macOS/badge.svg)](https://github.com/PMEAL/beatmap/actions)
 [![image](https://github.com/PMEAL/beatmap/workflows/Windows/badge.svg)](https://github.com/PMEAL/beatmap/actions)<br/>
-[![image](https://codecov.io/gh/PMEAL/beatmap/branch/master/graph/badge.svg)](https://codecov.io/gh/PMEAL/beatmap)
+[![codecov](https://codecov.io/gh/PMEAL/beatmap/branch/master/graph/badge.svg?token=3ZBPKC3QXW)](https://codecov.io/gh/PMEAL/beatmap)
 [![image](https://img.shields.io/badge/ReadTheDocs-GO-blue.svg)](http://beatmap.readthedocs.io/en/master/)
 [![image](https://img.shields.io/pypi/v/beatmap.svg)](https://pypi.python.org/pypi/beatmap/)
 [![image](https://img.shields.io/badge/DOI-10.21105/joss.01296-blue.svg)](https://doi.org/10.21105/joss.01296)
