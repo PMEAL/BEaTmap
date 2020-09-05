@@ -127,8 +127,7 @@ def bet(iso_df, a_o, info, *args):
                 # best and worst fit over the interval used in BET analysis,
                 # not the entire isotherm
                 results = namedtuple(
-                    "results",
-                    "intercept iso_df nm slope ssa c err r num_pts info",
+                    "results", "intercept iso_df nm slope ssa c err r num_pts info",
                 )
                 bet_results = results(
                     np.nan_to_num(intercept),

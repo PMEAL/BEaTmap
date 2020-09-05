@@ -10,7 +10,11 @@ fixtures_path = Path(os.getcwd(), "fixtures")
 class TestIO(unittest.TestCase):
     def setup_class(self):
         # setting up test cases for import_data
-        self.ok_test = {"file": Path(fixtures_path, "test_ok.csv"), "info": "test ok file", "a_o": 11.11}
+        self.ok_test = {
+            "file": Path(fixtures_path, "test_ok.csv"),
+            "info": "test ok file",
+            "a_o": 11.11,
+        }
 
         # setting up empty file test
         self.empty_test = {
@@ -34,7 +38,11 @@ class TestIO(unittest.TestCase):
         }
 
         # setting up n equals zero test
-        self.n_zero_test = {"file": Path(fixtures_path, "test_n0.csv"), "info": "test n0 file", "a_o": 11.11}
+        self.n_zero_test = {
+            "file": Path(fixtures_path, "test_n0.csv"),
+            "info": "test n0 file",
+            "a_o": 11.11,
+        }
 
         # setting up file with strings test
         self.strings_test = {

@@ -77,7 +77,7 @@ def import_data(file=None, info=None, a_o=None):
         " %.2f sq. Angstrom.' % (a_o)"
     )
 
-    data = pd.read_csv(file, header='infer')
+    data = pd.read_csv(file, header="infer")
     try:
         header = data.columns
         temp = pd.DataFrame([header.astype(float)], columns=["relp", "n"])
