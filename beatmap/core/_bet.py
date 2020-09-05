@@ -553,7 +553,7 @@ def ssa_answer(bet_results, mask_results, criterion="error"):
 
     mask = mask_results.mask
 
-    if mask.all() == True:
+    if mask.all():
         raise ValueError(
             "No valid relative pressure ranges. Specific surface"
             " area not calculated."

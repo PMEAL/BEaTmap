@@ -7,3 +7,4 @@ pytest-codestyle
 pytest-pycodestyle
 streamlit==0.66
 altair
+wheel
