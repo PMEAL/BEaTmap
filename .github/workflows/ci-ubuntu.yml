@@ -28,8 +28,8 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        pip install -r requirements/pip_requirements.txt
         pip install -r requirements/test_requirements.txt
+        pip install -r requirements/pip_requirements.txt
         pip install -e .
 
     - name: Running tests

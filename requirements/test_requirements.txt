@@ -1,3 +1,4 @@
+wheel
 codecov
 coverage
 pytest
@@ -5,6 +6,3 @@ pytest-cache
 pytest-cov
 pytest-codestyle
 pytest-pycodestyle
-streamlit==0.66
-altair
-wheel
