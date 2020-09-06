@@ -1,5 +1,6 @@
 import numpy as np
 import scipy as sp
+import logging
 from beatmap import io as io
 from beatmap import utils as util
 from beatmap import vis as figs
@@ -219,7 +220,7 @@ def check_1(intercept):
     check1 = intercept[:, :] > 0
 
     if np.any(check1) is False:
-        print("All relative pressure ranges fail check 1.")
+        logging.warning("All relative pressure ranges fail check 1.")
 
     return check1
 
@@ -252,7 +253,7 @@ def check_2(df):
     check2 = check2.T
 
     if np.any(check2) is False:
-        print("All relative pressure ranges fail check 2.")
+        logging.warning("All relative pressure ranges fail check 2.")
 
     return check2
 
@@ -289,7 +290,7 @@ def check_3(df, nm):
                 check3[i, j] = 1
 
     if np.any(check3) is False:
-        print("All relative pressure ranges fail check 3.")
+        logging.warning("All relative pressure ranges fail check 3.")
 
     return check3
 
@@ -361,7 +362,7 @@ def check_4(df, nm, slope, intercept):
                     check4[i, j] = 1
 
     if np.any(check4) is False:
-        print("All relative pressure ranges fail check 4.")
+        logging.warning("All relative pressure ranges fail check 4.")
 
     return check4
 
@@ -395,7 +396,7 @@ def check_5(df, points=5):
                 check5[i, j] = 0
 
     if np.any(check5) is False:
-        print("All relative pressure ranges fail check 5.")
+        logging.warning("All relative pressure ranges fail check 5.")
 
     return check5
 
@@ -573,7 +574,7 @@ def ssa_answer(bet_results, mask_results, criterion="error"):
                 + "relative pressure ranges with the maximum number of points."
             )
             return 0
-        print(
+        logging.info(
             "The specific surface area value, based on %s is %.2f m2/g."
             % (criterion, ssa_ans)
         )
@@ -583,17 +584,27 @@ def ssa_answer(bet_results, mask_results, criterion="error"):
         err = np.ma.array(bet_results.err, mask=mask)
         errormax, error_max_idx, errormin, error_min_idx = util.max_min(err)
         ssa_ans = ssa[int(error_min_idx[0]), int(error_min_idx[1])]
-        print(
+        logging.info(
             "The specific surface area value, based on %s is %.2f m2/g."
             % (criterion, ssa_ans)
         )
         return ssa_ans
 
     if criterion == "max":
-        return np.max(ssa)
+        ssa_ans = np.max(ssa)
+        logging.info(
+            "The specific surface area value, based on %s is %.2f m2/g."
+            % (criterion, ssa_ans)
+        )
+        return ssa_ans
 
     if criterion == "min":
-        return np.min(ssa)
+        ssa_ans = np.min(ssa)
+        logging.info(
+            "The specific surface area value, based on %s is %.2f m2/g."
+            % (criterion, ssa_ans)
+        )
+        return ssa_ans
 
     else:
         raise ValueError("Invalid criterion, must be points, error, min, or max.")
@@ -698,26 +709,6 @@ def run_beatmap(
     -------
 
     """
-    if file is None:
-        file = input("Enter file name/path: ")
-
-    if info is None:
-        info = input(
-            "Enter adsorbate-adsorbent information (this will be"
-            " incorporated into file names): "
-        )
-
-    if a_o is None:
-        a_o = input("Enter cross sectional area of adsorbate in square Angstrom: ")
-        try:
-            a_o = float(a_o)
-        except ValueError:
-            print("The ao provided is not numeric.")
-            a_o = input(
-                "Try again, enter the cross sectional area of"
-                " adsorbate in square Angstrom: "
-            )
-            a_o = float(a_o)
 
     # run_beatmap_import_data imports isotherm data from a .csv file and returns
     # the results in the isotherm_data namedtuple

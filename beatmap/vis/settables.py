@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import logging
 from prettytable import PrettyTable
 from beatmap import utils as util
 
@@ -33,7 +34,8 @@ def ascii_tables(bet_results, mask_results):
 
     mask = mask_results.mask
     if mask.all():
-        print("No valid relative pressure ranges. ASCII tables not created.")
+        logging.warning("No valid relative pressure ranges. ASCII tables not \
+created.")
         return
 
     df = bet_results.iso_df
@@ -102,9 +104,9 @@ def ascii_tables(bet_results, mask_results):
     )
     table.add_row(["Mean Spec SA", ssa_mean, "n/a", "n/a", "n/a"])
     table.add_row(["Median Spec SA", ssa_median, "n/a", "n/a", "n/a"])
-    print("\n")
-    print(table)
-    print("Standard deviation of specific surface area = %.3f" % (ssa_std))
+    logging.info(table)
+    logging.info("Standard deviation of specific surface area = %.3f" %
+                 (ssa_std))
 
     table2 = PrettyTable()
     table2.field_names = [
@@ -143,10 +145,9 @@ def ascii_tables(bet_results, mask_results):
             err_max,
         ]
     )
-    print("\n")
-    print(table2)
-    print("Standard deviation of BET constant (C) = %.5f" % (c_std))
-    return
+    logging.info(table2)
+    logging.info("Standard deviation of BET constant (C) = %.5f" % (c_std))
+    return table, ssa_std, table2, c_std
 
 
 def dataframe_tables(bet_results, mask_results):
@@ -192,7 +193,7 @@ def dataframe_tables(bet_results, mask_results):
     mask = mask_results.mask
 
     if mask.all():
-        print("No valid relative pressure ranges. Tables not created.")
+        logging.warning("No valid relative pressure ranges. Tables not created.")
 
         ssa_dict = {
             " ": ["Min Spec SA", "Max Spec SA", "Mean Spec SA", "Median Spec SA"],
@@ -212,7 +213,7 @@ def dataframe_tables(bet_results, mask_results):
             "End P/Po": ["n/a", "n/a", "n/a", "n/a", "n/a", "n/a"],
             "Error": ["n/a", "n/a", "n/a", "n/a", "n/a", "n/a"],
         }
-        print(
+        logging.warning(
             "No valid relative pressure ranges. \
 Standard deviations not calculated."
         )
