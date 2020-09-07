@@ -76,7 +76,7 @@ guide](https://github.com/PMEAL/beatmap/blob/master/CONTRIBUTING.md)
 
 # Examples
 
-The following code snippets illustrate blah blah. A set of examples
+The following code snippets illustrate how to import data, perform BET analysis, evaluate Rouquerol criteria, and produce figures in BEaTmap. A set of examples
 is included in this repo, and can be [browsed
 here](https://github.com/PMEAL/beatmap/tree/master/examples).
 
