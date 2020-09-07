@@ -133,6 +133,13 @@ bt.vis.ssa_heatmap(bet_results, mask_results)
 bt.vis.iso_combo_plot(bet_results, mask_results, save_file=True)
 ```
 
+<p align="center">
+	<img src="https://github.com/PMEAL/porespy/readme_ssa_heatmap.png" width="50%"></img>
+</p>
+
+<p align="center">
+	<img src="https://github.com/PMEAL/porespy/readme_isocombo.png" width="50%"></img>
+</p>
 
 ## Exporting .xlsx files of results
 
