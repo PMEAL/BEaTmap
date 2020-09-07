@@ -62,7 +62,7 @@ def import_data(file=None, info=None, a_o=None):
 
     logging.info(
         "\nAdsorbate used has an adsorbed cross sectional area of"
-        " %.2f sq. Angstrom.' % (a_o)"
+        " %.2f sq. Angstrom." % (a_o)
     )
 
     data = pd.read_csv(file, header="infer")

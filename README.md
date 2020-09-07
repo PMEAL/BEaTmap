@@ -26,14 +26,18 @@ that the acronym has is synonymous with surface area.
 The BET theory was derived with several assumptions, and these must be met for
 the predicted surface area to be valid.
 
+Rouquerol et al have put forth criteria to evaluate whether isothermal adsoprtion data meets the assumptions of BET analysis. Applying these criteria to all relative pressure ranges of an isotherm allows one to eliminate relative pressure ranges that do not adhere to BET theory. Visualizing the results of BET analysis as a heatmap where "invalid" relative pressure ranges are masked provides a quick and comprehensive representation of BET results for their isotherm. 
+
+BEaTmap was developed as a conceptulization and vizualization tool for BET analysis utilizing the "Rouquerol criteria".
+
 # Capabilities
 
 BEaTmap consists of the following modules:
 
-  - `core`: blah blah
-  - `io`: blah blah
-  - `utils`: blah blah
-  - `vis`: blah blah
+  - `core`: Functions that perform BET analysis, evaluate Rouquerol critieria, and provide a single specific surface area answer
+  - `io`: Functions for import data from .csv files or lists, and exporting processed data to .xlsx files
+  - `utils`: Various small functions used in other BEaTmap modules.
+  - `vis`: Functions to create heatmaps, BET plots, isotherm plots, tables of BET analysis results, etc
 
 # Installation
 
@@ -76,19 +80,65 @@ The following code snippets illustrate blah blah. A set of examples
 is included in this repo, and can be [browsed
 here](https://github.com/PMEAL/beatmap/tree/master/examples).
 
-## Loading a dataset
+## Using the BEaTmap 'envelope function'
 
-BEaTmap blah blah.
+An "envelope" function, that will import data, perform BET analysis, evaluate the Rouquerol criteria, and produce all figures for the user has been built. The file path, information about the data (later used for naming exported files), and the adsorbate cross sectional area in square Angstrom need to be specified. It allows the user to access much of BEaTmap's functionality in one line.
+
+```python
+import beatmap as bt
+import matplotlib.pylot as plt
+bt.run_beatmap(file='vulcan_chex.csv', info='chex on vulcan', a_o=39)
+```
+
+## Loading a dataset from .csv
+
+The import_data function can be used to import a isotherm data from a .csv file where the first column is relative pressure and the second column is the amount adsorbed.
+
+The function returns a named tuple where the first entry is a dataframe of the imported isotherm, and the 2nd-4th fields are the cross sectional area of the adsorbate, information about the data, and file path, respectively. Indexing of named tuple elements is in order of priority, data used by other function are given priority.
+
 
 ``` python
-import beatmap as bt
-import matplotlib.pyplot as plt
-blah blah
+isotherm_data = bt.io.import_data(file='vulcan_chex.csv', info='chex on vulcan', a_o=39)
 ```
-<p align="center">
-  <img src="https://github.com/PMEAL/porespy/raw/dev/docs/_static/fig1.png" width="50%"></img>
-</p>
 
-## Blah blah
+## Performing BET analysis
 
-blah blah
+BET analysis is performed on every relative pressure range within the isotherm data by the bet function. The function accepts the dataframe of isotherm data, cross sectional area of the adsorbate, and information about the data (information stored in the named tuple created by the import_data function). Rather than pass individual parameters, this function can accept *isotherm_data (where isotherm_data is a named tuple output by a data import function).
+
+The function returns a named tuple containing the results of BET analysis as well as information about the isotherm (raw data, file path, etc). Again, the indexing of named tuple elements is in order of priority, data used by other function are given priority.
+
+```python
+bet_results = bt.core.bet(isotherm_data.iso_df, isotherm_data.a_o, isotherm_data.info)
+```
+
+## Evaluating the Rouquerol criteria
+
+The Rouquerol criteria, used to mask out results of BET analysis for invalid relative pressure ranges are evaluated by the rouq_mask function. Rather than pass individual parameters, this function can accept *bet_results (where bet_results is a named tuple output by the bet function).
+
+The function returns a named tuple containing a numpy mask array, and individual arrays corresponding to the results of each criterion.
+
+
+```python
+mask_results = bt.core.rouq_mask(bet_results.intercept, bet_results.iso_df, bet_results.nm, bet_results.slope)
+```
+
+## Creating a specific surface area heatmap and other figures
+
+The bet_results and mask_results can used to create a heatmap of specific surface area values for each relative pressure range. This visualization concept is the central idea of BEaTmap. The function requires the named tuples produced by the bet function and the rouq_mask function.
+
+Other figures, such as a plot of experimental data and the model isotherm can be created in this manner. See the documentation for a full summary of figures.
+
+```python
+bt.vis.ssa_heatmap(bet_results, mask_results)
+bt.vis.iso_combo_plot(bet_results, mask_results, save_file=True)
+```
+
+
+## Exporting .xlsx files of results
+
+It might be desireable to have a spreadsheet that contains all results of BET analysis and the Rouquerol criteria. This sheet can be created and saved in the parent directory with the export_processed_data function.
+
+```python
+bt.io.export_processed_data(bet_results)
+```
+
