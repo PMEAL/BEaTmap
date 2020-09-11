@@ -28,7 +28,7 @@ def main():
     pages = {
         "Upload Data": page_upload,
         "BEaTmap Analysis": page_beatmap,
-        "Supplimental Analysis": page_supplemental,
+        "Supplemental Analysis": page_supplemental,
         "About BEaTmap": page_about,
     }
 
