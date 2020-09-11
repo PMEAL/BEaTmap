@@ -143,11 +143,11 @@ bt.vis.iso_combo_plot(bet_results, mask_results, save_file=True)
 ```
 
 <p align="center">
-	<img src="https://github.com/PMEAL/beatmap/blob/master/readme_images/readme_ssa_heatmap.png" width="50%"></img>
+	<img src="https://user-images.githubusercontent.com/14086031/92956510-ff7bc680-f434-11ea-862d-8c3bcc7fa5d3.png" width="60%"></img>
 </p>
 
 <p align="center">
-	<img src="https://github.com/PMEAL/beatmap/blob/master/readme_images/readme_isocombo.png" width="50%"></img>
+	<img src="https://user-images.githubusercontent.com/14086031/92956513-ff7bc680-f434-11ea-8c7c-707773f1d7f5.png" width="60%"></img>
 </p>
 
 ## Exporting .xlsx files of results
