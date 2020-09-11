@@ -26,7 +26,7 @@ that the acronym has is synonymous with surface area.
 The BET theory was derived with several assumptions, and these must be met for
 the predicted surface area to be valid.
 
-Rouquerol et al have put forth criteria to evaluate whether isothermal adsoprtion data meets the assumptions of BET analysis. Applying these criteria to all relative pressure ranges of an isotherm allows one to eliminate relative pressure ranges that do not adhere to BET theory. Visualizing the results of BET analysis as a heatmap where "invalid" relative pressure ranges are masked provides a quick and comprehensive representation of BET results for an isotherm. 
+Rouquerol et al have put forth criteria to evaluate whether isothermal adsoprtion data meets the assumptions of BET analysis. Applying these criteria to all relative pressure ranges of an isotherm allows one to eliminate relative pressure ranges that do not adhere to BET theory. Visualizing the results of BET analysis as a heatmap where "invalid" relative pressure ranges are masked provides a quick and comprehensive representation of BET results for an isotherm.
 
 BEaTmap was developed as a conceptulization and vizualization tool for BET analysis utilizing the "Rouquerol criteria".
 
@@ -87,7 +87,9 @@ An "envelope" function, that will import data, perform BET analysis, evaluate th
 ```python
 import beatmap as bt
 import matplotlib.pylot as plt
-bt.run_beatmap(file='vulcan_chex.csv', info='chex on vulcan', a_o=39)
+bt.run_beatmap(file='vulcan_chex.csv',
+               info='chex on vulcan',
+               a_o=39)
 ```
 
 ## Loading a dataset from .csv
@@ -98,7 +100,9 @@ The function returns a named tuple where the first entry is a dataframe of the i
 
 
 ``` python
-isotherm_data = bt.io.import_data(file='vulcan_chex.csv', info='chex on vulcan', a_o=39)
+isotherm_data = bt.io.import_data(file='vulcan_chex.csv',
+                                  info='chex on vulcan',
+                                  a_o=39)
 ```
 
 ## Performing BET analysis
@@ -108,7 +112,9 @@ BET analysis is performed on every relative pressure range within the isotherm d
 The function returns a named tuple containing the results of BET analysis as well as information about the isotherm (raw data, file path, etc). Again, the indexing of named tuple elements is in order of priority, data used by other function are given priority.
 
 ```python
-bet_results = bt.core.bet(isotherm_data.iso_df, isotherm_data.a_o, isotherm_data.info)
+bet_results = bt.core.bet(isotherm_data.iso_df,
+                          isotherm_data.a_o,
+                          isotherm_data.info)
 ```
 
 ## Evaluating the Rouquerol criteria
@@ -119,7 +125,10 @@ The function returns a named tuple containing a numpy mask array, and individual
 
 
 ```python
-mask_results = bt.core.rouq_mask(bet_results.intercept, bet_results.iso_df, bet_results.nm, bet_results.slope)
+mask_results = bt.core.rouq_mask(bet_results.intercept,
+                                 bet_results.iso_df,
+                                 bet_results.nm,
+                                 bet_results.slope)
 ```
 
 ## Creating a specific surface area heatmap and other figures
