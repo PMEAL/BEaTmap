@@ -59,10 +59,9 @@ def import_data(file=None, info=None, a_o=None):
         - ``isotherm_data.info`` (string) : string of adsorbate-adsorbent info.
         - ``isotherm_data.file`` (string) : file name or path.
     """
-
     logging.info(
-        "\nAdsorbate used has an adsorbed cross sectional area of"
-        " %.2f sq. Angstrom." % (a_o)
+        "Adsorbate used has an adsorbed cross sectional area of"
+        f" {a_o:.2f} sq. Angstrom."
     )
 
     data = pd.read_csv(file, header="infer")
@@ -93,12 +92,12 @@ def import_data(file=None, info=None, a_o=None):
     test_sum = sum(x < 0 for x in test)
     if test_sum > 0:
         logging.info(
-            "\nIsotherm data is suspect. moles do not consistantly increase as"
+            "Isotherm data is suspect. moles do not consistantly increase as"
             " relative pressure increases."
         )
     else:
         logging.info(
-            "\nIsotherm data quality appears good. Adsorbed molar amounts are"
+            "Isotherm data quality appears good. Adsorbed molar amounts are"
             " increasing as relative pressure increases."
         )
 
@@ -167,12 +166,11 @@ def import_list_data(relp, n, a_o=None, file=None, info=None):
         - ``isotherm_data.file`` (string) : file name or path.
 
     """
-
-    if type(a_o) == str or type(a_o) == None:
+    if not isinstance(a_o, (int, float)):
         raise ValueError("a_o must be int or float.")
 
     logging.info(
-        f"\nAdsorbate has an adsorbed cross sectional area of {a_o:.2f} sq. Angstrom."
+        f"Adsorbate has an adsorbed cross sectional area of {a_o:.2f} sq. Angstrom."
     )
 
     # importing data and creating 'bet' and 'check2' data points
@@ -187,12 +185,12 @@ def import_list_data(relp, n, a_o=None, file=None, info=None):
     test_sum = sum(x < 0 for x in test)
     if test_sum > 0:
         logging.info(
-            "\nIsotherm data is suspect. Adsorbed moles do not consistantly"
+            "Isotherm data is suspect. Adsorbed moles do not consistantly"
             " increase as relative pressure increases"
         )
     else:
         logging.info(
-            "\nIsotherm data quality appears good. Adsorbed molar amounts"
+            "Isotherm data quality appears good. Adsorbed molar amounts"
             " are increasing as relative pressure increases."
         )
 

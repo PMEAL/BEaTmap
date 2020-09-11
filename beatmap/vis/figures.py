@@ -162,9 +162,8 @@ def err_heatmap(bet_results, mask_results, save_file=True, gradient="Greys"):
 
     if mask.all():
         logging.warning(
-            "No valid relative pressure ranges."
-            " Error heat map not created."
-                        )
+            "No valid relative pressure ranges. Error heat map not created."
+        )
         return
 
     df = bet_results.iso_df
@@ -234,9 +233,8 @@ def bet_combo_plot(bet_results, mask_results, save_file=True):
 
     if mask.all():
         logging.warning(
-            "No valid relative pressure ranges."
-            " BET combo plot not created."
-                        )
+            "No valid relative pressure ranges. BET combo plot not created."
+        )
         return
 
     df = bet_results.iso_df
@@ -357,9 +355,8 @@ def iso_combo_plot(bet_results, mask_results, save_file=True):
 
     if mask.all():
         logging.warning(
-            "No valid relative pressure ranges."
-            " BET isotherm combo plot not created."
-                        )
+            "No valid relative pressure ranges. BET isotherm combo plot not created."
+        )
         return
 
     df = bet_results.iso_df
