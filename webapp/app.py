@@ -28,7 +28,7 @@ def main():
     pages = {
         "Upload Data": page_upload,
         "BEaTmap Analysis": page_beatmap,
-        "Supplimental Analysis": page_supplimental,
+        "Supplimental Analysis": page_supplemental,
         "About BEaTmap": page_about,
     }
 
@@ -117,9 +117,9 @@ def page_beatmap(state):
     state.bet_analysis = True
 
 
-def page_supplimental(state):
-    r"""Supplimental Analysis"""
-    st.markdown("# :chart_with_upwards_trend: Supplimental Analysis")
+def page_supplemental(state):
+    r"""Supplemental Analysis"""
+    st.markdown("# :chart_with_upwards_trend: Supplemental Analysis")
 
     # Bypass calculations if no analysis is found
     if not state.bet_analysis:

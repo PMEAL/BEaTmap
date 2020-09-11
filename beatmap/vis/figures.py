@@ -46,7 +46,7 @@ def experimental_data_plot(isotherm_data, save_file=False):
             "Experimental data plot saved as: experimentaldata_%s.png"
             % (isotherm_data.info)
         )
-    return fig, ax
+    return
 
 
 def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="Greens"):
@@ -125,7 +125,7 @@ def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="Greens"):
             "Specific surface area heatmap saved as: ssa_heatmap_%s.png"
             % (bet_results.info)
         )
-    return fig, ax
+    return
 
 
 def err_heatmap(bet_results, mask_results, save_file=True, gradient="Greys"):
@@ -205,11 +205,10 @@ def err_heatmap(bet_results, mask_results, save_file=True, gradient="Greys"):
 
 
 def bet_combo_plot(bet_results, mask_results, save_file=True):
-    """Creates two BET plots, for the minimum and maxium error data sets.
+    """Creates a BET plots for the minimum and maxium error data sets.
 
     Only datapoints in the minimum and maximum error data sets are plotted.
-    Equation for best fit line and corresponding R value are annotated on plots
-    Image is 2 by 1, two BET plots arranged horizontally in one image.
+    Equation for best fit line and corresponding R value are annotated on plot.
 
     Parameters
     ----------
@@ -332,7 +331,7 @@ def bet_combo_plot(bet_results, mask_results, save_file=True):
 def iso_combo_plot(bet_results, mask_results, save_file=True):
     """Creates an image displaying the relative pressure range with minimum
     error and the BET isotherm on the same plot. The point where n/nm = 1 is
-    is the point where the BET monolayer loading is achieved.
+    is the point where the BET monolayer loading occurs.
 
     Parameters
     ----------

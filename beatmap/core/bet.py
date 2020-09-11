@@ -531,8 +531,9 @@ def rouq_mask(
 
 def ssa_answer(bet_results, mask_results, criterion="error"):
     """
-    Prints a single specific surface area answer from the valid relative
-    pressure range with either the lowest error or most number of points.
+    Logs a single specific surface area answer from the valid relative
+    pressure range with the lowest error, most number of points, maximum
+    specific surface area, or minimum specific surface area.
 
     Parameters
     ----------
@@ -545,10 +546,12 @@ def ssa_answer(bet_results, mask_results, criterion="error"):
 
     criterion : string
         Used to specify the criterion for a final specific surface area answer,
-        either 'error' or 'points'. Defaults to 'error'.
+        either 'error', 'points', 'max', or 'min. Defaults to 'error'.
 
     Returns
     -------
+    ssa_ans : float
+        Specific surface answer corresponding to user defined criteria.
 
     """
 
@@ -714,7 +717,7 @@ def run_beatmap(
     # the results in the isotherm_data namedtuple
     isotherm_data = io.import_data(file, info, a_o)
 
-    figs.experimental_data_plot(isotherm_data, save_file=True)
+    figs.experimental_data_plot(isotherm_data, save_file=save_figures)
 
     # bet_results uses isotherm_data, applies BET analysis and returns the results
     # in the bet_results namedtuple
@@ -730,12 +733,12 @@ def run_beatmap(
         bet_results.iso_df,
         bet_results.nm,
         bet_results.slope,
-        check1=True,
-        check2=True,
-        check3=True,
-        check4=True,
-        check5=True,
-        points=5,
+        check1=check1,
+        check2=check2,
+        check3=check3,
+        check4=check4,
+        check5=check5,
+        points=points,
     )
 
     # mask_results are used to highlight the valid bet_results in the

@@ -141,7 +141,7 @@ def import_data(file=None, info=None, a_o=None):
     return isotherm_data
 
 
-def import_list_data(relp, n, file=None, info=None, a_o=None):
+def import_list_data(relp, n, a_o=None, file=None, info=None):
     """Imports isothermal adsoprtion data.
 
     User provides two lists, one of relative pressures and the other of amount
@@ -168,7 +168,7 @@ def import_list_data(relp, n, file=None, info=None, a_o=None):
 
     """
 
-    if type(a_o) == str:
+    if type(a_o) == str or type(a_o) == None:
         raise ValueError("a_o must be int or float.")
 
     logging.info(
@@ -179,7 +179,6 @@ def import_list_data(relp, n, file=None, info=None, a_o=None):
     dict_from_lists = {"relp": relp, "n": n}
     data = pd.DataFrame(dict_from_lists)
     data["bet"] = (1 / data.n) * (data.relp / (1 - data.relp))
-    data["check2"] = data.n * (1 - data.relp)
 
     # checking data quality
     test = np.zeros(len(data))

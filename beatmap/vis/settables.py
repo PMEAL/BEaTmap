@@ -29,6 +29,19 @@ def ascii_tables(bet_results, mask_results):
 
     Returns
     -------
+    table : prettytable
+         Summary of BET results, highlighting the high, low, and
+         average values of specific surface area. ASCII formatted table.
+
+    table2 : prettytable
+         Summary of BET results, highlighting the high, low, and
+         average values of the BET constant. ASCII formatted table.
+
+    ssa_std : float
+         Atandard deviation of valid specific surface area values.
+
+    c_std : float
+         Standard deviation of valid BET constant values.
 
     """
 
@@ -147,7 +160,7 @@ created.")
     )
     logging.info(table2)
     logging.info("Standard deviation of BET constant (C) = %.5f" % (c_std))
-    return table, ssa_std, table2, c_std
+    return table, table2, ssa_std, c_std
 
 
 def dataframe_tables(bet_results, mask_results):

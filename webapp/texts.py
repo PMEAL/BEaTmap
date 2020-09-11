@@ -1,7 +1,7 @@
 intro = r"""
 Brunauer–Emmett–Teller (BET) theory describes the physical adsorption of a
 gas or vapour onto a solid surface. It can be thought of as an extension of
-the Langmuir adsorption isotherm to multilayer adsoption, where each layer
+the Langmuir adsorption isotherm to multilayer adsorption, where each layer
 of adsorbed molecules is described by the Langmuir equation [1]. BET theory is
 commonly used to determine the specific surface area of porous materials [2].
 A linear form the BET equation is shown below:
@@ -69,7 +69,7 @@ experimental results with modeling work.
 developed as a conceptualization and visualization tool illustrating the
 the portions of isothermal adsorption data that adhere to BET theory. The
 selection criteria of **BEaTmap** reflect the criteria proposed by Rouquerol et
-al, and a 5th parameter, the minimum number of datapoints considered in BET
+al, and a 5th parameter, the minimum number of data points considered in BET
 analysis, has been included.
 
 The graphical representation of how BET theory applies to an isotherm,
@@ -90,7 +90,7 @@ gram_.
 assumptions and calculation criterion. The criteria are reflected in the
 specific surface area heatmap.
 5. For additional tables and figures click over to the
- **Supplimental Analysis** page in the **Sidebar**.
+ **Supplemental Analysis** page in the **Sidebar**.
 """
 
 intro_sidebar = r"""
@@ -99,14 +99,14 @@ scientific (web)app for performing BET analysis on isotherm adsorption data.
 """
 
 checks = [
-    r"""𝑛(𝑃𝑜−𝑃) must increase as relative pressure inceases.""",
+    r"""𝑛(𝑃𝑜−𝑃) must increase as relative pressure increases.""",
     r"""Force y-intercept of BET equation to be positive (i.e. positive BET
     constant, C)""",
     r"""The monolayer adsorbed amount, 𝑛𝑚, must fall within the range of
     adsorbed amounts of the relative pressure interval.""",
     r"""Set 𝑛 equal to 𝑛𝑚 in the BET equation and solve for relative pressure.
-    This realtive pressure is then compared to the experimental relative
-    pressure corresopnding to monolayer completion and must agree within 10%.""",
+    This relative pressure is then compared to the experimental relative
+    pressure corresponding to monolayer completion and must agree within 10%.""",
     r"""Set a minimum number of data points required for a relative pressure
     range to be considered valid.""",
 ]
@@ -125,13 +125,13 @@ molecule.
 
 ssa_instruction = r"""
 The specific surface area values that result from BET analysis can be
-visulaized as a heatmap, where every cell represents a relative pressure range.
+visualized as a heatmap, where every cell represents a relative pressure range.
 The gradient of each cell corresponds to the specific surface area of that
 relative pressure range.
 """
 
 err_instruction = r"""
-The error values that result from BET analysis can be visulaized
+The error values that result from BET analysis can be visualized
 as a heatmap, where every cell represents a relative pressure range. The
 gradient of each cell corresponds to the average error between an experimental
 data point and the BET isotherm for that relative pressure range.
