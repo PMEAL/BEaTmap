@@ -8,6 +8,7 @@ st.beta_set_page_config(
     layout="centered",
     initial_sidebar_state="auto",
 )
+
 from matplotlib import rcParams
 from stateful import _get_state
 import altair_plots as plots
@@ -38,9 +39,7 @@ def main():
 
     # Display the selected page with the session state
     pages[page](state)
-
-    # Mandatory to avoid rollbacks w/ widgets
-    # must be called at the end the app
+    # Mandatory to avoid rollbacks w/ widgets must be called at the end the app
     state.sync()
 
 
