@@ -1,4 +1,4 @@
-import texts
+from static import texts
 import beatmap as bt
 import streamlit as st
 
@@ -10,8 +10,8 @@ st.beta_set_page_config(
 )
 
 from matplotlib import rcParams
-from stateful import _get_state
-import altair_plots as plots
+from static.stateful import _get_state
+from static import altair_plots as plots
 
 
 st.set_option("deprecation.showfileUploaderEncoding", False)
