@@ -1,0 +1,8 @@
+numpy
+scipy
+pandas
+matplotlib
+prettytable
+seaborn
+altair
+streamlit==0.66
