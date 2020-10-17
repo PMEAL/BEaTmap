@@ -1,3 +1,5 @@
+import sys
+sys.path.append("../")
 import texts
 import beatmap as bt
 import streamlit as st
