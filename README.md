@@ -8,13 +8,6 @@
 
 -----
 
-**Cite as:**
-
-> *Gostick J, Khan ZA, Tranter TG, Kok MDR, Agnaou M, Sadeghi MA, Jervis
-> R.* **PoreSpy: A Python Toolkit for Quantitative Analysis of Porous Media
-> Images.** Journal of Open Source Software, 2019.
-> [doi:10.21105/joss.01296](https://doi.org/10.21105/joss.01296)
-
 # What is BEaTmap?
 
 Obtaining surface area of a porous sample from the interpretation of gas
