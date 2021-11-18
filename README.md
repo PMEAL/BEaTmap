@@ -4,7 +4,6 @@
 [![codecov](https://codecov.io/gh/PMEAL/beatmap/branch/master/graph/badge.svg?token=3ZBPKC3QXW)](https://codecov.io/gh/PMEAL/beatmap)
 [![image](https://img.shields.io/badge/ReadTheDocs-GO-blue.svg)](http://beatmap.readthedocs.io/en/master/)
 [![image](https://img.shields.io/pypi/v/beatmap.svg)](https://pypi.python.org/pypi/beatmap/)
-[![image](https://img.shields.io/badge/DOI-10.21105/joss.01296-blue.svg)](https://doi.org/10.21105/joss.01296)
 
 -----
 
