@@ -1,3 +1,4 @@
+from re import I
 import numpy as np
 import pandas as pd
 import scipy as sp
@@ -59,12 +60,14 @@ def import_data(file=None, info=None, a_o=None):
         - ``isotherm_data.info`` (string) : string of adsorbate-adsorbent info.
         - ``isotherm_data.file`` (string) : file name or path.
     """
-    logging.info(
-        "Adsorbate used has an adsorbed cross sectional area of"
-        f" {a_o:.2f} sq. Angstrom."
-    )
+    msg = f"Adsorbate used has an adsorbed cross sectional area of {a_o:.2f} sq. Angstrom."
+    logging.info(msg)
 
-    data = pd.read_csv(file, header="infer")
+    if not isinstance(file, pd.DataFrame):  # workaround for streamlit app cache to work
+        data = pd.read_csv(file, header="infer")
+    else:
+        data = file
+
     try:
         header = data.columns
         temp = pd.DataFrame([header.astype(float)], columns=["relp", "n"])
@@ -91,15 +94,11 @@ def import_data(file=None, info=None, a_o=None):
     test = data.n - minus1
     test_sum = sum(x < 0 for x in test)
     if test_sum > 0:
-        logging.info(
-            "Isotherm data is suspect. moles do not consistantly increase as"
-            " relative pressure increases."
-        )
+        logging.info("Isotherm data is suspect. moles do not consistantly"
+                     " increase as relative pressure increases.")
     else:
-        logging.info(
-            "Isotherm data quality appears good. Adsorbed molar amounts are"
-            " increasing as relative pressure increases."
-        )
+        logging.info("Isotherm data quality appears good. Adsorbed molar"
+                     " amounts are increasing as relative pressure increases.")
 
     # checking isotherm type
     x = data.relp.values

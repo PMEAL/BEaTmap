@@ -34,11 +34,9 @@ def bet(iso_df, a_o, info, *args):
     ----------
     iso_df: dataframe
         Isotherm data, output by a data import function.
-
     a_o : float
         Cross sectional area of adsorbate, in square Angstrom, output by a
         data import function.
-
     info : string
         Adsorbate-adsorbent information, output by a data import
         function.
@@ -267,7 +265,6 @@ def check_3(df, nm):
     ----------
     df : dataframe
         Dataframe of imported experimental isothermal adsorption data.
-
     nm : array
         2D array of BET specific amount of adsorbate in the monolayer, the
         coordinates of the array corresponding to relative pressures, units
@@ -312,16 +309,13 @@ def check_4(df, nm, slope, intercept):
     ----------
     df : dataframe
         Dataframe of imported experimental isothermal adsorption data.
-
     nm : array
         2D array of BET specific amount of adsorbate in the monolayer,
         the coordinates of the array corresponding to relative pressures,
         units [moles / gram].
-
     slope : array
         2D array of slope values resulting from linear regression applied to
         relevant experimental data.
-
     intercept : array
         2D array of y-intercept values resulting from linear regression applied
         to relevant experimental data.
@@ -425,36 +419,27 @@ def rouq_mask(
     ----------
     intercept : array
         2D array of intercept values, used in check1.
-
     iso_df : dataframe
         Dataframe of isotherm data, used in check2.
-
     nm : array
         2D array of amount in the monolayer values, used in check3 and check4.
-
     slope : array
         2D array of slope values, used in check4
-
     check1 : boolean
         True means the will be evalued, False means the check will not be
         evaluated.
-
     check2 : boolean
         True means the will be evalued, False means the check will not be
         evaluated.
-
     check3 : boolean
         True means the will be evalued, False means the check will not be
         evaluated.
-
     check4 : boolean
         True means the will be evalued, False means the check will not be
         evaluated.
-
     check5 : boolean
         True means the will be evalued, False means the check will not be
         evaluated.
-
     points : int
         The minimum number of experimental data points for a relative pressure
         interval to be considered valid.
@@ -468,7 +453,6 @@ def rouq_mask(
 
         -``rouq_mask.mask`` (MaskedArray) : object where invalid BET results
         are masked.
-
         -``rouq_mask.check1 (array) : array of 1s and 0s where 0 corresponds
         failing check1.
         -``rouq_mask.check2 (array) : array of 1s and 0s where 0 corresponds
@@ -539,12 +523,10 @@ def ssa_answer(bet_results, mask_results, criterion="error"):
     ----------
     bet_results : named tuple
         ``bet_results.ssa`` contains the array of specific surface values.
-
     rouq_mask : named tuple
         ``rouq_mask.mask`` contains the mask used to remove invaid specific
         surface area values from consideration.
-
-    criterion : string
+    criterion : str
         Used to specify the criterion for a final specific surface area answer,
         either 'error', 'points', 'max', or 'min. Defaults to 'error'.
 
@@ -650,66 +632,54 @@ def run_beatmap(
 
     Parameters
     ----------
-    file : string
+    file : str
         File name (if file is in parent directory) or file path.
-
-    info : string
+    info : str
         Adsorbate-adsorbent information.
-
     a_o : float
         Cross sectional area of adsorbate, in square Angstrom.
-
-    check1 : boolean
+    check1 : bool
         If check1 is True any relative pressure ranges with a negative y
         intercept are considered invalid.
-
-    check2 : boolean
+    check2 : bool
         If check2 is True any relative pressure ranges where n(p-po) is
         decreasing are considered invalid.
-
-    check3 : boolean
+    check3 : bool
         If check3 is True any relative pressure ranges where the monolayer
         amount falls outside of the relative pressure range are considered
         invalid.
-
-    check4 : boolean
+    check4 : bool
         If check4 is True any relative pressure range where there is
         disagreement of more than 10% between the actual relative pressure
         where monolayer coverage occurs and the relative pressure where
         monolayer coverage occurs on the theoretical isotherm are considered
         invalid.
-
-    check5 : boolean
+    check5 : bool
         If check5 is True relative pressure ranges that contain fewer points
         than specified by the user are considered invalid.
-
-    points : interger
+    points : int
         The minimum number of points for a valid relative pressure range.
-
-    save_figures : boolean
+    save_figures : bool
         If save_figures is True any figures created by this function will be
         saved as .png files in the parent directory.
-
-    export_data : boolean
+    export_data : bool
         If export data is True .csv files of the isotherm data and the BEaTmap
         results will be created and saved in the parent directory.
-
-    ssa_criterion : string
+    ssa_criterion : str
         Used to set which criterion is used to provide a single specific
         surface area value. 'error' will output the valid ssa answer with the
         lowest error, 'points' will output the ssa answer with the most
         datapoints.
-
-    ssa_gradient : string
+    ssa_gradient : str
         Color gradient for heatmap, must be a vaild color gradient name
         in the seaborn package.
-
-    err_gradient : string
+    err_gradient : str
         Color gradient for heatmap, must be a vaild color gradient name
         in the seaborn package, default is grey.
 
     Returns
     -------
+    None
 
     """
 

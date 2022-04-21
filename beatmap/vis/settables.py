@@ -47,8 +47,8 @@ def ascii_tables(bet_results, mask_results):
 
     mask = mask_results.mask
     if mask.all():
-        logging.warning("No valid relative pressure ranges. ASCII tables not \
-created.")
+        msg = "No valid relative pressure ranges. ASCII tables not created."
+        logging.warning(msg)
         return
 
     df = bet_results.iso_df
@@ -226,10 +226,8 @@ def dataframe_tables(bet_results, mask_results):
             "End P/Po": ["n/a", "n/a", "n/a", "n/a", "n/a", "n/a"],
             "Error": ["n/a", "n/a", "n/a", "n/a", "n/a", "n/a"],
         }
-        logging.warning(
-            "No valid relative pressure ranges. \
-Standard deviations not calculated."
-        )
+        msg = "No valid relative pressure ranges. Standard deviations not calculated."
+        logging.warning(msg)
         c_table = pd.DataFrame(data=c_dict)
         ssa_sdev = 0
         c_sdev = 0

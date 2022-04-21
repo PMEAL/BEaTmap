@@ -285,13 +285,13 @@ def bet_combo_plot(bet_results, mask_results, save_file=True):
     ax1.plot(
         df.relp[min_start : min_stop + 1],
         df.bet[min_start : min_stop + 1],
-        label="Min Error Experimental Data",
+        label="min error (exp. data)",
         c="grey",
         marker="o",
         linewidth=0,
         fillstyle="none",
     )
-    ax1.plot(min_linex, min_liney, color="black", label="Min Error Linear Regression")
+    ax1.plot(min_linex, min_liney, color="black", label="min error (linear regression)")
     ax1.plot(
         df.relp[max_start : max_stop + 1],
         df.bet[max_start : max_stop + 1],
@@ -305,12 +305,12 @@ def bet_combo_plot(bet_results, mask_results, save_file=True):
         max_liney,
         color="black",
         linestyle="--",
-        label="Max Error Linear Regression",
+        label="max error (linear regression)",
     )
     ax1.legend(loc="upper left", framealpha=1)
     ax1.annotate(
-        "Min Error Linear Regression: \nm = %.3f \nb = %.3f \nR = \
-%.3f \n\nMax Error Linear Regression: \nm = %.3f \nb = %.3f \
+        "min error (linear regression): \nm = %.3f \nb = %.3f \nR = \
+%.3f \n\nmax error (linear regression): \nm = %.3f \nb = %.3f \
 \nR = %.3f"
         % (slope, intercept, r_val, slope_max, intercept_max, r_value_max),
         bbox=dict(boxstyle="round", fc="white", ec="gray", alpha=1),
