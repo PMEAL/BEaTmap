@@ -140,7 +140,7 @@ class TestIO(unittest.TestCase):
             bt.io.import_data(**self.missing_file_test)
 
         # test xlsx data file
-        with self.assertRaises(pd.errors.ParserError):
+        with self.assertRaises(UnicodeDecodeError):
             bt.io.import_data(**self.xlsx_file_test)
 
         # test a_o is a string
