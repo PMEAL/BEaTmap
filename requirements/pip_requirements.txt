@@ -5,4 +5,4 @@ matplotlib
 prettytable
 seaborn
 altair
-streamlit==0.66
+streamlit
