@@ -17,16 +17,14 @@ several assumptions, some more reasonable than others, and some are impossible
 to fulfill.
 
 ### BET theory assumptions
-* The surface is homogeneous (energy of adsorption at all surface sites is
-the same).
+* The surface is homogeneous (energy of adsorption at all surface sites is the same).
 * Molecules only interact with molecules in adjacent layers.
 * There is no limitation on the thickness of the monolayer.
 * The energy of adsorption for the first layer, E1, is higher than the energy
-of adsorption for all other layers. Energy of adsorption in forming the
-multilayer is equal to the energy of condensation, EL.
+    of adsorption for all other layers. Energy of adsorption in forming the
+    multilayer is equal to the energy of condensation, EL.
 * Interactions between adsorbed molecules in the same layer are neglected.
-* The second and further layers begin forming before the monolayer is
-completed.
+* The second and further layers begin forming before the monolayer is completed.
 
 An understanding of, or at least a regard for, the assumptions of BET theory is
 necessary to produce a specific surface area answer that is as accurate and
@@ -47,15 +45,15 @@ in the same range of relative pressures from which it was produced.
 
 ### BET theory checks
 * The BET constant must be positive (y-intercept of the BET plot’s line of best
-fit must be positive).
+    fit must be positive).
 * The term n(P-Po) must increase as P/Po increases [2].
 
 ### Consistency checks
 * The calculated monolayer adsorbed amount, nm, must fall in the relative
-pressure range used in BET analysis.
+    pressure range used in BET analysis.
 * After setting n = nm and C to the value of C found in BET analysis and
-solving the BET equation for P/Po, the P/Po calculated should agree with the
-P/Po corresponding to nm within 10%.
+    solving the BET equation for P/Po, the P/Po calculated should agree with the
+    P/Po corresponding to nm within 10%.
 
 Despite the work of Rouquerol et al there is no accepted set of best practices
 for performing and reporting BET analysis. Some researchers select linear
@@ -81,16 +79,19 @@ tools.
 getting_started = r"""
 To analyze your adsorption data using BEaTmap, here's how the workflow works:
 
-1. Save your data in a `csv` file, with the **first column** being **relative
-pressure** values and the **second** being the **adsorbed amount** in _mol per
-gram_.
+1. Save your data in a `csv` file, with the **first column** being
+    **relative pressure** values and the **second** being the
+    **adsorbed amount** in _mol per gram_.
+
 2. Upload your data on this page and provide the cross sectional area of the
- adsorbate in _square Angstrom per molecule_.
+    adsorbate in _square Angstrom per molecule_.
+
 3. From the **Sidebar**, click on **BEaTmap Analysis**. Select the underlying
-assumptions and calculation criterion. The criteria are reflected in the
-specific surface area heatmap.
-5. For additional tables and figures click over to the
- **Supplemental Analysis** page in the **Sidebar**.
+    assumptions and calculation criterion. The criteria are reflected in the
+    specific surface area heatmap.
+
+4. For additional tables and figures click over to the
+    **Supplemental Analysis** page in the **Sidebar**.
 """
 
 intro_sidebar = r"""
@@ -158,13 +159,13 @@ where n/nm = 1.
 references = r"""
 
 1. Brunauer, S. et al, **BET Equation.** _Adsorption of Gases in
-Multimolecular Layers. Journal of the American Chemical Society (1938):
-309–319._
+    Multimolecular Layers. Journal of the American Chemical Society (1938):
+    309–319._
 
 2. S. J. Gregg und K. S. W. Sing: **Adsorption, Surface Area and Porosity**
-2nd ed. _Academic Press, London, New York 1982_.
+    2nd ed. _Academic Press, London, New York 1982_.
 
 3. Rouquerol, J., P. Llewellyn, and F. Rouquerol. **Is the BET equation
-applicable to microporous adsorbents.** _Stud. Surf. Sci. Catal 160.07 (2007):
-49-56._
+    applicable to microporous adsorbents.** _Stud. Surf. Sci. Catal 160.07 (2007):
+    49-56._
 """

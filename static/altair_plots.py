@@ -235,8 +235,7 @@ def plot_bet(bet_results, mask_results, ssa_answer):
             "1/(n(P/Po-1))": np.round(df.bet[start : stop + 1], 2),
             " ": len(df.bet[start : stop + 1])
             * [
-                "Min. Error \
-Experimental Data"
+                "min error (exp. data)"
             ],
         }
     )
@@ -281,7 +280,7 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
     ppo_expnnm_min_used = df.relp[stop : start + 1]
 
     model_source = pd.DataFrame(
-        {"P/Po": ppo, "n/nm": synth, " ": len(synth) * ["Model Isotherm"]}
+        {"P/Po": ppo, "n/nm": synth, " ": len(synth) * ["model isotherm"]}
     )
     model = (
         alt.Chart(model_source)
@@ -298,7 +297,7 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
         {
             "P/Po": bet_results.iso_df.relp,
             "n/nm": np.round(expnnm, 2),
-            " ": len(expnnm) * ["Experimental Data"],
+            " ": len(expnnm) * ["experimental data"],
         }
     )
     experimental = (
@@ -317,7 +316,7 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
         {
             "P/Po": ppo_expnnm_min_used,
             "n/nm": expnnm_min_used,
-            " ": len(expnnm_min_used) * ["Min. Error Experimental Data"],
+            " ": len(expnnm_min_used) * ["min error (exp. data)"],
         }
     )
     experimental_used = (
@@ -403,8 +402,7 @@ def plot_bet_combo(bet_results, mask_results):
             "1/(n(P/Po-1))": np.round(df.bet[min_start : min_stop + 1], 2),
             " ": len(df.bet[min_start : min_stop + 1])
             * [
-                "Min. Error \
-Experimental Data"
+                "min error (exp. data)"
             ],
         }
     )
@@ -438,8 +436,7 @@ Experimental Data"
             "1/(n(P/Po-1))": np.round(df.bet[max_start : max_stop + 1], 2),
             " ": len(df.bet[max_start : max_stop + 1])
             * [
-                "Max. Error \
-Experimental Data"
+                "max error (exp. data)"
             ],
         }
     )

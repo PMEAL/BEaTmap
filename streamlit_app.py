@@ -1,31 +1,25 @@
-from static import texts
 import beatmap as bt
+from matplotlib import rcParams
+import pandas as pd
 import streamlit as st
 
-st.beta_set_page_config(
-    page_title="BEaTmap",
-    page_icon=None,
-    layout="centered",
-    initial_sidebar_state="auto",
-)
-
-from matplotlib import rcParams
-from static.stateful import _get_state
+from static import texts
 from static import altair_plots as plots
 
 
+state = st.session_state
+st.set_page_config(
+    page_title="BEaTmap",
+    page_icon=None,
+    layout="centered",
+    initial_sidebar_state="auto"
+)
 st.set_option("deprecation.showfileUploaderEncoding", False)
 rcParams["axes.formatter.limits"] = 0, 0
-rcParams["font.sans-serif"] = [
-    "Lucida Sans Unicode",
-    "Lucida Grande",
-    "DejaVu Sans",
-    "Tahoma",
-]
+rcParams["font.sans-serif"] = ["Lucida Sans Unicode", "Lucida Grande", "DejaVu Sans", "Tahoma"]
 
 
 def main():
-    state = _get_state()
     pages = {
         "Upload Data": page_upload,
         "BEaTmap Analysis": page_beatmap,
@@ -38,12 +32,10 @@ def main():
     page = st.sidebar.radio("Select your page", tuple(pages.keys()))
 
     # Display the selected page with the session state
-    pages[page](state)
-    # Mandatory to avoid rollbacks w/ widgets must be called at the end the app
-    state.sync()
+    pages[page]()
 
 
-def page_upload(state):
+def page_upload():
     r"""Upload Isotherm Data"""
 
     st.markdown("# :duck: Getting started")
@@ -51,42 +43,50 @@ def page_upload(state):
 
     st.markdown("## Upload Isotherm Data")
     st.markdown(texts.upload_instruction)
-    state.uploaded_file = st.file_uploader(label="Upload a CSV file", type="csv")
-    upload_success = st.empty()
+    file = st.file_uploader(label="Upload a CSV file", type="csv")
+
+    if file:
+        state.df = pd.read_csv(file)
+
     st.markdown("### Adsorbate area")
     st.markdown(texts.area_instruction)
-    state.a_o = st.number_input(
-        label="Enter adsorbate cross-sectional area (Angstrom per molecule)",
-        value=state.a_o or 16.2,
-    )
-    if state.uploaded_file and state.a_o:
-        upload_success.success("File uploaded!")
+
+    if "a_o" not in state:
+        state.a_o = 16
+
+    label = "Enter adsorbate cross-sectional area (Angstrom per molecule)"
+    st.number_input(label=label, key="a_o")
+
+    if ("df" in state) and ("a_o" in state):
         # Fetch and analyze the uploaded data
-        state.isotherm_data = fetch_isotherm_data(state.uploaded_file, state.a_o)
+        state.isotherm_data = fetch_isotherm_data(file=state.df, a_o=state.a_o)
         state.bet_results = fetch_bet_results(state.isotherm_data)
         # Plot isotherm data
         plots.plot_isotherm_data(state.isotherm_data)
 
 
-def page_beatmap(state):
+def page_beatmap():
     st.markdown("# :maple_leaf: BEaTmap Analysis")
+
+    # Bypass calculations if no data is found
+    if "bet_results" not in state:
+        st.error("You need to upload isotherm data first!")
+        return
+
     st.markdown("## BET model assumptions")
-    try:
+    if "checks" in state:
         state.check_values = [value for value in state.checks]
-    except TypeError:
+    else:
         state.check_values = [True] * 5
     state.checks = [
         st.checkbox(label=texts.checks[i], value=state.check_values[i])
         for i in range(5)
     ]
-    state.points = st.slider(
-        label="Minimum number of points", min_value=2, max_value=27, value=state.points
-    )
+    label = "Minimum number of points"
+    if "min_num_points" not in state:
+        state.min_num_points = 5
+    st.slider(label=label, min_value=2, max_value=27, key="min_num_points")
 
-    # Bypass calculations if no data is found
-    if not state.bet_results:
-        st.error("You need to upload isotherm data first!")
-        return
     state.mask_results = bt.core.rouq_mask(
         intercept=state.bet_results.intercept,
         iso_df=state.bet_results.iso_df,
@@ -97,14 +97,12 @@ def page_beatmap(state):
         check3=state.checks[2],
         check4=state.checks[3],
         check5=state.checks[4],
-        points=state.points,
+        points=state.min_num_points,
     )
 
     if state.mask_results.mask.all():
-        st.error(
-            "No valid relative pressure ranges. Adjust settings to proceed with"
-            + " analysis."
-        )
+        msg =  "No valid relative pressure ranges. Adjust settings to proceed with analysis."
+        st.error(msg)
         return
 
     # st.markdown(r"BET Specific Surface Area \[$\frac{m^2}{g}$\]")
@@ -116,49 +114,43 @@ def page_beatmap(state):
     state.bet_analysis = True
 
 
-def page_supplemental(state):
+def page_supplemental():
     r"""Supplemental Analysis"""
     st.markdown("# :chart_with_upwards_trend: Supplemental Analysis")
 
     # Bypass calculations if no analysis is found
-    if not state.bet_analysis:
+    if "bet_analysis" not in state:
         st.error("You need to run BET Analysis first!")
         return
     # Bypass calculations if no data is found
-    if not state.bet_results:
+    if "bet_results" not in state:
         st.error("You need to upload isotherm data first!")
         return
-
-    if state.mask_results.mask.all():
-        st.error(
-            "No valid relative pressure ranges. Adjust settings to proceede with"
-            + " analysis."
-        )
+    # Bypass calculations is pressure range not valid
+    if ("mask_results" in state) and (state.mask_results.mask.all()):
+        msg = "No valid relative pressure ranges. Adjust settings to proceede with analysis."
+        st.error(msg)
         return
 
     st.markdown("## BET calculation criteria")
-    options = [
-        "Minimum error",
-        "Maximum data points",
-        "Minimum Specific Surface Area",
-        "Maximum Specific Surface Area",
-    ]
-    state.criterion = st.radio(
-        label="Select the BET calculation criteria:",
-        options=options,
-        index=options.index(state.criterion) if state.criterion else 0,
-    )
-    if state.criterion == "Minimum error":
-        state.criterion_str = "error"
-    if state.criterion == "Maximum data points":
-        state.criterion_str = "points"
-    if state.criterion == "Minimum Specific Surface Area":
-        state.criterion_str = "min"
-    if state.criterion == "Maximum Specific Surface Area":
-        state.criterion_str = "max"
+
+    if "criterion" not in state:
+        state.criterion = "Minimum error"
+
+    options = {
+        "Minimum error": "error",
+        "Maximum data points": "points",
+        "Minimum specific surface area" : "min",
+        "Maximum specific surface area": "max"
+    }
+
+    label = "Select the BET calculation criteria:"
+    st.radio(label=label, options=options.keys(), key="criterion")
 
     ssa_answer = bt.core.ssa_answer(
-        state.bet_results, state.mask_results, state.criterion_str
+        bet_results  = state.bet_results,
+        mask_results = state.mask_results,
+        criterion    = options[state.criterion]
     )
     st.success(f"The specific surface area value is **{ssa_answer:.2f}** $m^2/g$")
 
@@ -166,34 +158,36 @@ def page_supplemental(state):
     st.markdown(texts.bet_plot_instruction)
     bet_linreg_table = plots.plot_bet(state.bet_results, state.mask_results, ssa_answer)
     bet_linreg_table.set_index(" ", inplace=True)
-    st.write(bet_linreg_table)
-    ssa_table, c_table, ssa_ssd, c_std = bt.vis.dataframe_tables(
-        state.bet_results, state.mask_results
-    )
+    st.table(bet_linreg_table)
+    ssa_table, c_table, ssa_ssd, c_std = bt.vis.dataframe_tables(state.bet_results,
+                                                                 state.mask_results)
     ssa_table.set_index(" ", inplace=True)
     c_table.set_index(" ", inplace=True)
+
     st.markdown("## Specific surface area")
-    st.success(
-        f"Standard deviation of specific surface area: **{ssa_ssd:.3f}** $m^2/g$"
-    )
-    st.write(ssa_table)
+    st.success(f"Standard deviation of specific surface area: **{ssa_ssd:.3f}** $m^2/g$")
+    st.table(ssa_table.astype("string"))
+
     st.markdown("## BET constant (C)")
     st.success(f"Standard deviation of BET constant (C): **{c_std:.3f}**")
-    st.write(c_table)
+    st.table(c_table.astype("string"))
+
     st.markdown("## Isotherm combination plot")
     st.markdown(texts.iso_combo_instruction)
     plots.plot_isotherm_combo(state.bet_results, state.mask_results, ssa_answer)
+
     st.markdown("## BET minimum and maxium error plot")
     st.markdown(texts.bet_combo_instruction)
     linreg_table = plots.plot_bet_combo(state.bet_results, state.mask_results)
     linreg_table.set_index(" ", inplace=True)
-    st.write(linreg_table)
+    st.table(linreg_table.astype("string"))
+
     st.markdown("## Error heatmap")
     st.markdown(texts.err_instruction)
     plots.plot_err_heatmap(state.bet_results, state.mask_results)
 
 
-def page_about(state):
+def page_about():
     r"""BEaTmap quick summary"""
     st.markdown("# :maple_leaf: About BEaTmap")
     st.markdown(texts.intro)
@@ -201,25 +195,25 @@ def page_about(state):
     st.markdown(texts.references)
 
 
-def page_references(state):
+def page_references():
     r"""References used in BEaTmap"""
     st.markdown("# :books: References")
     st.markdown(texts.references)
 
 
 @st.cache(allow_output_mutation=True)
-def fetch_isotherm_data(uploaded_file, a_o):
+def fetch_isotherm_data(file, a_o):
     r"""Extracts and returns isotherm data given a .csv file (or buffer)"""
-    isotherm_data = bt.io.import_data(uploaded_file, info="test", a_o=a_o)
+    isotherm_data = bt.io.import_data(file=file, info="test", a_o=a_o)
     return isotherm_data
 
 
 @st.cache(allow_output_mutation=True)
 def fetch_bet_results(isotherm_data):
     r"""Analyzes isotherm data and returns results as a named tuple"""
-    bet_results = bt.core.bet(
-        isotherm_data.iso_df, isotherm_data.a_o, isotherm_data.info
-    )
+    bet_results = bt.core.bet(isotherm_data.iso_df,
+                              isotherm_data.a_o,
+                              isotherm_data.info)
     return bet_results
 
 

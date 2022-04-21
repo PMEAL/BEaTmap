@@ -140,8 +140,8 @@ def page_supplemental(state):
     options = [
         "Minimum error",
         "Maximum data points",
-        "Minimum Specific Surface Area",
-        "Maximum Specific Surface Area",
+        "Minimum specific surface area",
+        "Maximum specific surface area",
     ]
     state.criterion = st.radio(
         label="Select the BET calculation criteria:",
@@ -152,9 +152,9 @@ def page_supplemental(state):
         state.criterion_str = "error"
     if state.criterion == "Maximum data points":
         state.criterion_str = "points"
-    if state.criterion == "Minimum Specific Surface Area":
+    if state.criterion == "Minimum specific surface area":
         state.criterion_str = "min"
-    if state.criterion == "Maximum Specific Surface Area":
+    if state.criterion == "Maximum specific surface area":
         state.criterion_str = "max"
 
     ssa_answer = bt.core.ssa_answer(
