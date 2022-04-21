@@ -1,13 +1,9 @@
-[![image](https://github.com/PMEAL/beatmap/workflows/Ubuntu/badge.svg)](https://github.com/PMEAL/beatmap/actions)
-[![image](https://github.com/PMEAL/beatmap/workflows/macOS/badge.svg)](https://github.com/PMEAL/beatmap/actions)
-[![image](https://github.com/PMEAL/beatmap/workflows/Windows/badge.svg)](https://github.com/PMEAL/beatmap/actions)<br/>
-[![codecov](https://codecov.io/gh/PMEAL/beatmap/branch/master/graph/badge.svg?token=3ZBPKC3QXW)](https://codecov.io/gh/PMEAL/beatmap)
-[![image](https://img.shields.io/badge/ReadTheDocs-GO-blue.svg)](http://beatmap.readthedocs.io/en/master/)
-[![image](https://img.shields.io/pypi/v/beatmap.svg)](https://pypi.python.org/pypi/beatmap/)
-
------
 
 # What is BEaTmap?
+
+[![image](https://github.com/PMEAL/beatmap/workflows/Tests/badge.svg)](https://github.com/PMEAL/beatmap/actions)
+[![codecov](https://codecov.io/gh/PMEAL/beatmap/branch/main/graph/badge.svg?token=3ZBPKC3QXW)](https://codecov.io/gh/PMEAL/beatmap)
+[![image](https://img.shields.io/pypi/v/beatmap.svg)](https://pypi.python.org/pypi/beatmap/)
 
 Obtaining surface area of a porous sample from the interpretation of gas
 adsorption isotherms is very widely done using the theory developed by Brunauer,
@@ -35,9 +31,9 @@ BEaTmap consists of the following modules:
 BEaTmap depends heavily on the Scipy Stack. The best way to get a fully
 functional environment is the [Anaconda
 distribution](https://www.anaconda.com/download/). Be sure to get the
-**Python 3.6+ version**.
+**Python 3.8+ version**.
 
-Once you've installed *Conda*, you can then install BEaTmap. It is
+Once you've installed `conda`, you can then install BEaTmap. It is
 available on the [Python Package
 Index](https://pypi.org/project/beatmap/) and can be installed by typing
 the following at the *conda* prompt:
@@ -46,7 +42,7 @@ the following at the *conda* prompt:
 
 On Windows, you should have a shortcut to the "anaconda prompt" in the
 Anaconda program group in the start menu. This will open a Windows
-command console with access to the Python features added by *Conda*,
+command console with access to the Python features added by `conda`,
 such as installing things via `pip`.
 
 On Mac or Linux, you need to open a normal terminal window, then type
@@ -58,12 +54,12 @@ the root environment which is the default.
 If you think you may be interested in contributing to BEaTmap and wish
 to both *use* and *edit* the source code, then you should clone the
 [repository](https://github.com/PMEAL/beatmap) to your local machine,
-and install it using the following PIP command:
+and install it using the following `pip` command:
 
-    pip install -e "C:\path\to\the\local\files\"
+    pip install -e "PATH_TO_BEATMAP_ROOT_FOLDER"
 
 For information about contributing, refer to the [contributors
-guide](https://github.com/PMEAL/beatmap/blob/master/CONTRIBUTING.md)
+guide](https://github.com/PMEAL/beatmap/blob/master/CONTRIBUTING.md).
 
 # Examples
 
