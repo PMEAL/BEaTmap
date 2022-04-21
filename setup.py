@@ -2,12 +2,10 @@ import os
 import sys
 from distutils.util import convert_path
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
-sys.path.append(os.getcwd())
+from setuptools import setup, find_packages
 
+
+sys.path.append(os.getcwd())
 
 main = {}
 ver_path = convert_path("beatmap/__init__.py")
@@ -30,7 +28,7 @@ setup(
         "Topic :: Scientific/Engineering :: Chemistry",
         "Topic :: Scientific/Engineering :: Physics",
     ],
-    packages=["beatmap",],
+    packages=find_packages("."),
     install_requires=[
         "numpy",
         "scipy",
