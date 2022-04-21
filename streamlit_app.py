@@ -16,7 +16,12 @@ st.set_page_config(
 )
 st.set_option("deprecation.showfileUploaderEncoding", False)
 rcParams["axes.formatter.limits"] = 0, 0
-rcParams["font.sans-serif"] = ["Lucida Sans Unicode", "Lucida Grande", "DejaVu Sans", "Tahoma"]
+rcParams["font.sans-serif"] = [
+    "Lucida Sans Unicode",
+    "Lucida Grande",
+    "DejaVu Sans",
+    "Tahoma"
+]
 
 
 def main():
@@ -101,7 +106,7 @@ def page_beatmap():
     )
 
     if state.mask_results.mask.all():
-        msg =  "No valid relative pressure ranges. Adjust settings to proceed with analysis."
+        msg = "Relative pressure ranges not valid. Adjust settings to proceed."
         st.error(msg)
         return
 
@@ -128,7 +133,7 @@ def page_supplemental():
         return
     # Bypass calculations is pressure range not valid
     if ("mask_results" in state) and (state.mask_results.mask.all()):
-        msg = "No valid relative pressure ranges. Adjust settings to proceede with analysis."
+        msg = "Relative pressure ranges not valid. Adjust settings to proceed."
         st.error(msg)
         return
 
@@ -148,9 +153,9 @@ def page_supplemental():
     st.radio(label=label, options=options.keys(), key="criterion")
 
     ssa_answer = bt.core.ssa_answer(
-        bet_results  = state.bet_results,
-        mask_results = state.mask_results,
-        criterion    = options[state.criterion]
+        state.bet_results,
+        state.mask_results,
+        options[state.criterion]
     )
     st.success(f"The specific surface area value is **{ssa_answer:.2f}** $m^2/g$")
 

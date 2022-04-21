@@ -60,7 +60,7 @@ def import_data(file=None, info=None, a_o=None):
         - ``isotherm_data.info`` (string) : string of adsorbate-adsorbent info.
         - ``isotherm_data.file`` (string) : file name or path.
     """
-    msg = f"Adsorbate used has an adsorbed cross sectional area of {a_o:.2f} sq. Angstrom."
+    msg = f"Adsorbate has an adsorbed cross sectional area of {a_o:.2f} sq. Angstrom."
     logging.info(msg)
 
     if not isinstance(file, pd.DataFrame):  # workaround for streamlit app cache to work
