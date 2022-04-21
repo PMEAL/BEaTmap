@@ -2,6 +2,13 @@ import numpy as np
 import pandas as pd
 
 
+__all__ = [
+    "index_of_value",
+    "max_min",
+    "lin_interp",
+]
+
+
 def index_of_value(array, value):
     """ Finds the index of a value in an array most similar to value passed.
 

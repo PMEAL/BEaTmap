@@ -7,6 +7,15 @@ from beatmap import utils as util
 import matplotlib.ticker as ticker
 
 
+__all__ = [
+    "experimental_data_plot",
+    "ssa_heatmap",
+    "err_heatmap",
+    "bet_combo_plot",
+    "iso_combo_plot",
+]
+
+
 def experimental_data_plot(isotherm_data, save_file=False):
     """Creates a scatter plot of experimental data.
 

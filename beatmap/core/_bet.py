@@ -7,6 +7,20 @@ from beatmap import vis as figs
 from collections import namedtuple
 
 
+__all__ = [
+    "bet",
+    "single_point_bet",
+    "check_1",
+    "check_2",
+    "check_3",
+    "check_4",
+    "check_5",
+    "rouq_mask",
+    "ssa_answer",
+    "run_beatmap",
+]
+
+
 def bet(iso_df, a_o, info, *args):
     """
     Performs BET analysis on isotherm data for all relative pressure ranges.

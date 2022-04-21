@@ -5,6 +5,9 @@ from prettytable import PrettyTable
 from beatmap import utils as util
 
 
+__all__ = ["ascii_tables", "dataframe_tables"]
+
+
 def ascii_tables(bet_results, mask_results):
     """Creates and prints ASCII formatted tables of BET results.
 
