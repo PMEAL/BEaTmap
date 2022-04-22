@@ -41,61 +41,51 @@ def bet(iso_df, a_o, info, *args):
     other function are given priority.
 
     Rather than pass individual parameters, this function can accept
-    *isotherm_data (where isotherm_data is a named tuple output by
+    ``isotherm_data`` (where ``isotherm_data`` is a named tuple output by
     a data import function).
 
     Parameters
     ----------
-    iso_df: dataframe
+    iso_df: DataFrame
         Isotherm data, output by a data import function.
     a_o : float
         Cross sectional area of adsorbate, in square Angstrom, output by a
         data import function.
-    info : string
-        Adsorbate-adsorbent information, output by a data import
-        function.
+    info : str
+        Adsorbate-adsorbent information, output by a data import function.
 
     Returns
     -------
     bet_results : namedtuple
-        Contains the results of BET analysis.
-        Tuple elements are, in order of index:
+        Contains the results of BET analysis. Tuple elements are:
 
-            - ``bet_results.intercept`` (array) : 2D array of intercept values
-            for the BET plot trendline. Indicies correspond to first and last
-            datapoint used in the analysis.
-
-            - ``bet_results.iso_df`` (dataframe) : Experimental isotherm data.
-
-            - ``bet_results.nm`` (array) : 2D array of monolayer adsorbed
-            amounts, in mol/g, indicies correspond to first and last datapoint
-            used in the analysis.
-
-            - ``bet_results.slope`` (array) : 2D array of slope values for the
-            BET plot trendline. Indicies correspond to first and last datapoint
-            used in the analysis.
-
-            - ``bet_results.ssa`` (array) : 2D array of specific surface area
-            values, in m^2/g, indicies correspond to first and last datapoint
-            used in the analysis.
-
-            - ``bet_results.c`` (array) : 2D array of BET constants values,
-            indicies correspond to first and last datapoint used in the
-            analysis.
-
-            - ``bet_results.err`` (array) : 2D array of average error between
-            a datapoint and the theoretical BET isotherm. Indicies correspond
-            to first and last datapoint used in the analysis.
-
-            - ``bet_results.r`` (array) : 2D array of r values for the BET plot
-            trendline. Indicies correspond to first and last datapoint used in
-            the analysis.
-
-            - ``bet_results.num_pts`` (array) : 2D array of the number of
-            experimental data points per relative pressure range.
-
-            -``bet_results.info`` (string) : string of adsorbate-adsorbent info
-            by other functions to name files.
+        - ``bet_results.intercept`` (ndarray) : 2D array of intercept
+          values for the BET plot trendline. Indicies correspond to
+          first and last datapoint used in the analysis.
+        - ``bet_results.iso_df`` (DataFrame) : Experimental isotherm data.
+        - ``bet_results.nm`` (ndarray) : 2D array of monolayer adsorbed
+          amounts, in mol/g, indicies correspond to first and last
+          datapoint used in the analysis.
+        - ``bet_results.slope`` (ndarray) : 2D array of slope values
+          for the BET plot trendline. Indicies correspond to first and
+          last datapoint used in the analysis.
+        - ``bet_results.ssa`` (ndarray) : 2D array of specific surface
+          area values, in m^2/g, indicies correspond to first and last
+          datapoint used in the analysis.
+        - ``bet_results.c`` (ndarray) : 2D array of BET constants
+          values, indicies correspond to first and last datapoint used
+          in the analysis.
+        - ``bet_results.err`` (ndarray) : 2D array of average error
+          between a datapoint and the theoretical BET isotherm.
+          Indicies correspond to first and last datapoint used in the
+          analysis.
+        - ``bet_results.r`` (ndarray) : 2D array of r values for the
+          BET plot trendline. Indicies correspond to first and last
+          datapoint used in the analysis.
+        - ``bet_results.num_pts`` (ndarray) : 2D array of the number of
+          experimental data points per relative pressure range.
+        - ``bet_results.info`` (str) : string of adsorbate-adsorbent
+          info by other functions to name files.
 
     """
     ssa_array = np.zeros((len(iso_df), len(iso_df)))
@@ -139,21 +129,18 @@ def bet(iso_df, a_o, info, *args):
                 # used to compute C, so, min and max error corresponds to the
                 # best and worst fit over the interval used in BET analysis,
                 # not the entire isotherm
-                results = namedtuple(
-                    "results", "intercept iso_df nm slope ssa c err r num_pts info",
-                )
-                bet_results = results(
-                    np.nan_to_num(intercept),
-                    iso_df,
-                    nm_array,
-                    slope,
-                    ssa_array,
-                    c_array,
-                    err_array,
-                    r,
-                    number_pts,
-                    info,
-                )
+                tuple_fields = "intercept iso_df nm slope ssa c err r num_pts info"
+                results = namedtuple("results", tuple_fields)
+                bet_results = results(np.nan_to_num(intercept),
+                                      iso_df,
+                                      nm_array,
+                                      slope,
+                                      ssa_array,
+                                      c_array,
+                                      err_array,
+                                      r,
+                                      number_pts,
+                                      info)
     return bet_results
 
 
@@ -180,13 +167,12 @@ def single_point_bet(df, a_o):
     singlept_results : namedtuple
         Contains the results of single point BET analysis. Relevant fields are:
 
-            - ``singlept_results.ssa`` (array) : 2D array of specific surface
-            area values, in m^2/g, indicies correspond to first and last
-            datapoint used in the analysis.
-
-            - ``singlept_results.nm`` (array) : 2D array of monolayer adsorbed
-            amounts, in mol/g, indicies correspond to first and last datapoint
-            used in the analysis.
+        - ``singlept_results.ssa`` (array) : 2D array of specific surface
+          area values, in m^2/g, indicies correspond to first and last
+          datapoint used in the analysis.
+        - ``singlept_results.nm`` (array) : 2D array of monolayer adsorbed
+          amounts, in mol/g, indicies correspond to first and last datapoint
+          used in the analysis.
 
     """
 
@@ -409,19 +395,17 @@ def check_5(df, points=5):
     return check5
 
 
-def rouq_mask(
-    intercept,
-    iso_df,
-    nm,
-    slope,
-    *args,
-    check1=True,
-    check2=True,
-    check3=True,
-    check4=True,
-    check5=True,
-    points=5
-):
+def rouq_mask(intercept,
+              iso_df,
+              nm,
+              slope,
+              *args,
+              check1=True,
+              check2=True,
+              check3=True,
+              check4=True,
+              check5=True,
+              points=5):
     """
     Calls all check functions and combines their masks into one "rouqerol mask".
 
@@ -431,27 +415,27 @@ def rouq_mask(
 
     Parameters
     ----------
-    intercept : array
+    intercept : ndarray
         2D array of intercept values, used in check1.
-    iso_df : dataframe
+    iso_df : DataFrame
         Dataframe of isotherm data, used in check2.
-    nm : array
+    nm : ndarray
         2D array of amount in the monolayer values, used in check3 and check4.
-    slope : array
+    slope : ndarray
         2D array of slope values, used in check4
-    check1 : boolean
+    check1 : bool
         True means the will be evalued, False means the check will not be
         evaluated.
-    check2 : boolean
+    check2 : bool
         True means the will be evalued, False means the check will not be
         evaluated.
-    check3 : boolean
+    check3 : bool
         True means the will be evalued, False means the check will not be
         evaluated.
-    check4 : boolean
+    check4 : bool
         True means the will be evalued, False means the check will not be
         evaluated.
-    check5 : boolean
+    check5 : bool
         True means the will be evalued, False means the check will not be
         evaluated.
     points : int
@@ -462,21 +446,20 @@ def rouq_mask(
     -------
     rouq_mask : namedtuple
         Contains arrays for the result of each check and a masked array that is
-        the result of all selected checks.
-        Fields of the named tuple are:
+        the result of all selected checks. Fields of the named tuple are:
 
-        -``rouq_mask.mask`` (MaskedArray) : object where invalid BET results
-        are masked.
-        -``rouq_mask.check1 (array) : array of 1s and 0s where 0 corresponds
-        failing check1.
-        -``rouq_mask.check2 (array) : array of 1s and 0s where 0 corresponds
-        failing check2.
-        -``rouq_mask.check3 (array) : array of 1s and 0s where 0 corresponds
-        failing check3.
-        -``rouq_mask.check4 (array) : array of 1s and 0s where 0 corresponds
-        failing check4.
-        -``rouq_mask.check5 (array) : array of 1s and 0s where 0 corresponds
-        failing check5.
+        - ``rouq_mask.mask`` (MaskedArray) : object where invalid BET results
+          are masked.
+        - ``rouq_mask.check1`` (ndarray) : array of 1s and 0s where 0 corresponds
+          failing check1.
+        - ``rouq_mask.check2`` (ndarray) : array of 1s and 0s where 0 corresponds
+          failing check2.
+        - ``rouq_mask.check3`` (ndarray) : array of 1s and 0s where 0 corresponds
+          failing check3.
+        - ``rouq_mask.check4`` (ndarray) : array of 1s and 0s where 0 corresponds
+          failing check4.
+        - ``rouq_mask.check5`` (ndarray) : array of 1s and 0s where 0 corresponds
+          failing check5.
 
     """
 
@@ -554,10 +537,8 @@ def ssa_answer(bet_results, mask_results, criterion="error"):
     mask = mask_results.mask
 
     if mask.all():
-        raise ValueError(
-            "No valid relative pressure ranges. Specific surface"
-            " area not calculated."
-        )
+        msg = "No valid relative pressure ranges. Specific surface area not calculated."
+        raise ValueError(msg)
 
     ssa = np.ma.array(bet_results.ssa, mask=mask)
 
@@ -609,22 +590,20 @@ def ssa_answer(bet_results, mask_results, criterion="error"):
         raise ValueError("Invalid criterion, must be points, error, min, or max.")
 
 
-def run_beatmap(
-    file=None,
-    info=None,
-    a_o=None,
-    check1=True,
-    check2=True,
-    check3=True,
-    check4=True,
-    check5=True,
-    points=5,
-    save_figures=True,
-    export_data=False,
-    ssa_criterion="error",
-    ssa_gradient="Greens",
-    err_gradient="Greys",
-):
+def run_beatmap(file=None,
+                info=None,
+                a_o=None,
+                check1=True,
+                check2=True,
+                check3=True,
+                check4=True,
+                check5=True,
+                points=5,
+                save_figures=True,
+                export_data=False,
+                ssa_criterion="error",
+                ssa_gradient="Greens",
+                err_gradient="Greys"):
     """
     A single function that executes all necessary BEaTmap algorithims.
 
@@ -712,18 +691,16 @@ def run_beatmap(
     # criteria specified by the user, and returns the results in the
     # mask_results named tuple
 
-    mask_results = rouq_mask(
-        bet_results.intercept,
-        bet_results.iso_df,
-        bet_results.nm,
-        bet_results.slope,
-        check1=check1,
-        check2=check2,
-        check3=check3,
-        check4=check4,
-        check5=check5,
-        points=points,
-    )
+    mask_results = rouq_mask(bet_results.intercept,
+                             bet_results.iso_df,
+                             bet_results.nm,
+                             bet_results.slope,
+                             check1=check1,
+                             check2=check2,
+                             check3=check3,
+                             check4=check4,
+                             check5=check5,
+                             points=points)
 
     # mask_results are used to highlight the valid bet_results in the
     # following functions
@@ -740,27 +717,22 @@ def run_beatmap(
         io.export_raw_data(isotherm_data)
         io.export_processed_data(bet_results, points)
 
-    combo_results = namedtuple(
-        "results",
-        "ssa c nm err intercept slope r mask"
-        " check1 check2 check3 check4 check5 num_pts",
-    )
+    fields = "ssa c nm err intercept slope r mask check1 check2 check3 check4 check5 num_pts"
+    combo_results = namedtuple("results", fields)
 
-    results = combo_results(
-        bet_results.ssa,
-        bet_results.c,
-        bet_results.nm,
-        bet_results.err,
-        bet_results.intercept,
-        bet_results.slope,
-        bet_results.r,
-        mask_results.mask,
-        mask_results.check1,
-        mask_results.check2,
-        mask_results.check3,
-        mask_results.check4,
-        mask_results.check5,
-        bet_results.num_pts,
-    )
+    results = combo_results(bet_results.ssa,
+                            bet_results.c,
+                            bet_results.nm,
+                            bet_results.err,
+                            bet_results.intercept,
+                            bet_results.slope,
+                            bet_results.r,
+                            mask_results.mask,
+                            mask_results.check1,
+                            mask_results.check2,
+                            mask_results.check3,
+                            mask_results.check4,
+                            mask_results.check5,
+                            bet_results.num_pts)
 
     return results
