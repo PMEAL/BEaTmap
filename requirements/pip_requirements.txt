@@ -1,8 +1,10 @@
-numpy
-scipy
-pandas
-matplotlib
-prettytable
-seaborn
 altair
+furo
+matplotlib
+numpy
+numpydoc
+pandas
+prettytable
+scipy
+seaborn
 streamlit
