@@ -1,6 +1,10 @@
+furo
 matplotlib
+myst-parser
 numpy
+numpydoc
 pandas
 prettytable
 scipy
 seaborn
+sphinx
