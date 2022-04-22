@@ -18,7 +18,7 @@ setup(
     name="beatmap",
     description="A tool for determining the valid P/P0 range in BET isotherms",
     zip_safe=False,
-    long_description_content_type="text/x-rst",
+    long_description_content_type='text/markdown',
     version=main["__version__"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
