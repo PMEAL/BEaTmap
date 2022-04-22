@@ -1,6 +1,7 @@
 altair
 furo
 matplotlib
+myst-parser
 numpy
 numpydoc
 pandas
