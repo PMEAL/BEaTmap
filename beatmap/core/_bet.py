@@ -10,11 +10,11 @@ from collections import namedtuple
 __all__ = [
     "bet",
     "single_point_bet",
-    "check_1",
-    "check_2",
-    "check_3",
-    "check_4",
-    "check_5",
+    "check_y_intercept_positive",
+    "check_pressure_increasing",
+    "check_absorbed_amount",
+    "check_pressure_consistency",
+    "check_enough_datapoints",
     "rouq_mask",
     "ssa_answer",
     "run_beatmap",
@@ -154,23 +154,21 @@ def single_point_bet(df, a_o):
     ----------
     bet_results : namedtuple
         Contains all information required for BET analysis. Results of BET
-        analysis are also stored in this named tuple.
-        Relevant fields for single point BET anaylsis are:
+        analysis are also stored in this named tuple. Relevant fields are:
 
-        - ``bet_results.raw_data`` (dataframe) : experimental isotherm data.
-
+        - ``bet_results.raw_data`` (DataFrame) : experimental isotherm data.
         - ``bet_results.a_o`` (flaot) : the cross sectional area of the
-        adsorbate molecule, in square angstrom.
+          adsorbate molecule, in square angstrom.
 
     Returns
     -------
     singlept_results : namedtuple
         Contains the results of single point BET analysis. Relevant fields are:
 
-        - ``singlept_results.ssa`` (array) : 2D array of specific surface
+        - ``singlept_results.ssa`` (ndarray) : 2D array of specific surface
           area values, in m^2/g, indicies correspond to first and last
           datapoint used in the analysis.
-        - ``singlept_results.nm`` (array) : 2D array of monolayer adsorbed
+        - ``singlept_results.nm`` (ndarray) : 2D array of monolayer adsorbed
           amounts, in mol/g, indicies correspond to first and last datapoint
           used in the analysis.
 
@@ -197,24 +195,23 @@ def single_point_bet(df, a_o):
     return singlept_results
 
 
-def check_1(intercept):
+def check_y_intercept_positive(intercept):
     """
     Checks that y intercept of the BET plot's linear regression is positive.
 
     Parameters
     ----------
-    intercept : array
+    intercept : ndarray
         2D array of y-intercept values.
 
     Returns
     -------
-    check1 : array
+    ndarray
         Array of 1s and 0s where 0 corresponds to relative pressure ranges
         where the y-intercept is negative or zero, ie ranges that fail this
         check.
 
     """
-
     check1 = intercept[:, :] > 0
 
     if np.any(check1) is False:
@@ -223,7 +220,7 @@ def check_1(intercept):
     return check1
 
 
-def check_2(df):
+def check_pressure_increasing(df):
     """
     Checks that n(p-po) aka check2 is increasing.
 
@@ -236,7 +233,7 @@ def check_2(df):
 
     Returns
     -------
-    check2 : array
+    ndarray
         Array of 1s and 0s where 0 corresponds to relative pressure ranges
         where n(p-po) isn't consistently increasing with relative pressure, ie
         ranges that fail this check.
@@ -256,7 +253,7 @@ def check_2(df):
     return check2
 
 
-def check_3(df, nm):
+def check_absorbed_amount(df, nm):
     """
     Checks that nm, amount adsorbed in the monolayer, is in the range of
     data points used in BET analysis.
@@ -272,7 +269,7 @@ def check_3(df, nm):
 
     Returns
     -------
-    check3 : array
+    ndarray
         Array of 1s and 0s where 0 corresponds to relative pressure ranges nm
         is not included in the range of experimental n values, ie ranges that
         fail this check.
@@ -292,7 +289,7 @@ def check_3(df, nm):
     return check3
 
 
-def check_4(df, nm, slope, intercept):
+def check_pressure_consistency(df, nm, slope, intercept):
     """
     Checks that relative pressure is consistent.
 
@@ -322,7 +319,7 @@ def check_4(df, nm, slope, intercept):
 
     Returns
     -------
-    check4 : array
+    ndarray
         Array of 1s and 0s where 0 corresponds to relative pressure values that
         do not agree within 10%, ie ranges that fail this check.
 
@@ -361,7 +358,7 @@ def check_4(df, nm, slope, intercept):
     return check4
 
 
-def check_5(df, points=5):
+def check_enough_datapoints(df, points=5):
     """
     Checks that relative pressure ranges contain a minium number of data points.
 
@@ -376,12 +373,11 @@ def check_5(df, points=5):
 
     Returns
     -------
-    check5 : array
+    ndarray
         Array of 1s and 0s where 0 corresponds to ranges of experimental data
         that contain less than the minimum number of points.
 
     """
-
     check5 = np.ones((len(df), len(df)))
 
     for i in range(len(df)):
@@ -395,22 +391,18 @@ def check_5(df, points=5):
     return check5
 
 
-def rouq_mask(intercept,
-              iso_df,
-              nm,
-              slope,
-              *args,
-              check1=True,
-              check2=True,
-              check3=True,
-              check4=True,
-              check5=True,
+def rouq_mask(intercept, iso_df, nm, slope, *args,
+              enforce_y_intercept_positive=True,
+              enforce_pressure_increasing=True,
+              enforce_absorbed_amount=True,
+              enforce_relative_pressure=True,
+              enforce_enough_datapoints=True,
               points=5):
     """
     Calls all check functions and combines their masks into one "rouqerol mask".
 
     Rather than pass individual parameters, this function can accept
-    *bet_results (where bet_results is a named tuple output by the bet
+    ``bet_results`` (where ``bet_results`` is a named tuple output by the bet
     function).
 
     Parameters
@@ -423,21 +415,16 @@ def rouq_mask(intercept,
         2D array of amount in the monolayer values, used in check3 and check4.
     slope : ndarray
         2D array of slope values, used in check4
-    check1 : bool
-        True means the will be evalued, False means the check will not be
-        evaluated.
-    check2 : bool
-        True means the will be evalued, False means the check will not be
-        evaluated.
-    check3 : bool
-        True means the will be evalued, False means the check will not be
-        evaluated.
-    check4 : bool
-        True means the will be evalued, False means the check will not be
-        evaluated.
-    check5 : bool
-        True means the will be evalued, False means the check will not be
-        evaluated.
+    enforce_y_intercept_positive : bool
+        If True, this check will be evaluated, otherwise skipped.
+    enforce_pressure_increasing : bool
+        If True, this check will be evaluated, otherwise skipped.
+    enforce_absorbed_amount_valid : bool
+        If True, this check will be evaluated, otherwise skipped.
+    enforce_relative_pressure_valid : bool
+        If True, this check will be evaluated, otherwise skipped.
+    enforce_enough_datapoints : bool
+        If True, this check will be evaluated, otherwise skipped.
     points : int
         The minimum number of experimental data points for a relative pressure
         interval to be considered valid.
@@ -469,28 +456,28 @@ def rouq_mask(intercept,
             if j >= i:
                 mask[i, j] = 0
 
-    if check1 is True:
-        check1 = check_1(intercept)
+    if enforce_y_intercept_positive is True:
+        check1 = check_y_intercept_positive(intercept)
     else:
         check1 = np.ones((len(iso_df), len(iso_df)))
 
-    if check2 is True:
-        check2 = check_2(iso_df)
+    if enforce_pressure_increasing is True:
+        check2 = check_pressure_increasing(iso_df)
     else:
         check2 = np.ones((len(iso_df), len(iso_df)))
 
-    if check3 is True:
-        check3 = check_3(iso_df, nm)
+    if enforce_absorbed_amount is True:
+        check3 = check_absorbed_amount(iso_df, nm)
     else:
         check3 = np.ones((len(iso_df), len(iso_df)))
 
-    if check4 is True:
-        check4 = check_4(iso_df, nm, slope, intercept)
+    if enforce_relative_pressure is True:
+        check4 = check_pressure_consistency(iso_df, nm, slope, intercept)
     else:
         check4 = np.ones((len(iso_df), len(iso_df)))
 
-    if check5 is True:
-        check5 = check_5(iso_df, points)
+    if enforce_enough_datapoints is True:
+        check5 = check_enough_datapoints(iso_df, points)
     else:
         check5 = np.ones((len(iso_df), len(iso_df)))
 
@@ -500,7 +487,7 @@ def rouq_mask(intercept,
     mask = np.multiply(check4, mask)
     mask = np.multiply(check5, mask)
 
-    mask.astype(bool)  # converting mask to boolean
+    mask = mask.astype(bool)  # converting mask to boolean
     # inverting mask so that 0 = valid, 1 = invalid, to work well with numpy masks
     invertedmask = np.logical_not(mask)
 
@@ -695,11 +682,11 @@ def run_beatmap(file=None,
                              bet_results.iso_df,
                              bet_results.nm,
                              bet_results.slope,
-                             check1=check1,
-                             check2=check2,
-                             check3=check3,
-                             check4=check4,
-                             check5=check5,
+                             enforce_y_intercept_positive=check1,
+                             enforce_pressure_increasing=check2,
+                             enforce_absorbed_amount=check3,
+                             enforce_relative_pressure=check4,
+                             enforce_enough_datapoints=check5,
                              points=points)
 
     # mask_results are used to highlight the valid bet_results in the
@@ -717,7 +704,9 @@ def run_beatmap(file=None,
         io.export_raw_data(isotherm_data)
         io.export_processed_data(bet_results, points)
 
-    fields = "ssa c nm err intercept slope r mask check1 check2 check3 check4 check5 num_pts"
+    fields = (
+        "ssa c nm err intercept slope r mask check1 check2 check3 check4 check5 num_pts"
+    )
     combo_results = namedtuple("results", fields)
 
     results = combo_results(bet_results.ssa,

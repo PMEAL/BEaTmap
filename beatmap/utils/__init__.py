@@ -1,6 +1,6 @@
 """
 Utils
-=====
+-----
 
 ``utils`` is a module!
 

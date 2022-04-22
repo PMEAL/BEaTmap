@@ -116,19 +116,20 @@ class TestCore(unittest.TestCase):
         self.ok_bet_results = bt.core.bet(self.ok_iso_df, 11.11, "test ok file")
 
     def test_check_1(self):
-        temp = bt.core.check_1(self.ok_bet_results.intercept)
+        temp = bt.core.check_y_intercept_positive(self.ok_bet_results.intercept)
         assert np.all(temp == self.ok_check_1_result)
 
     def test_check_2(self):
-        temp = bt.core.check_2(self.ok_bet_results.iso_df)
+        temp = bt.core.check_pressure_increasing(self.ok_bet_results.iso_df)
         assert np.all(temp == self.ok_check_2_result)
 
     def test_check_3(self):
-        temp = bt.core.check_3(self.ok_bet_results.iso_df, self.ok_bet_results.nm)
+        temp = bt.core.check_absorbed_amount(self.ok_bet_results.iso_df,
+                                                   self.ok_bet_results.nm)
         assert np.all(temp == self.ok_check_3_result)
 
     def test_check_4(self):
-        temp = bt.core.check_4(
+        temp = bt.core.check_pressure_consistency(
             self.ok_bet_results.iso_df,
             self.ok_bet_results.nm,
             self.ok_bet_results.slope,
@@ -137,11 +138,11 @@ class TestCore(unittest.TestCase):
         assert np.all(temp == self.ok_check_4_result)
 
     def test_check_5(self):
-        temp = bt.core.check_5(self.ok_bet_results.iso_df)
+        temp = bt.core.check_enough_datapoints(self.ok_bet_results.iso_df)
         assert np.all(temp == self.ok_check_5_result)
 
         with self.assertRaises(TypeError):
-            bt.core.check_5(self.ok_bet_results.iso_df, "five")
+            bt.core.check_enough_datapoints(self.ok_bet_results.iso_df, "five")
 
     def test_bet(self):
         temp = bt.core.bet(self.ok_iso_df, 11.11, "test ok file")

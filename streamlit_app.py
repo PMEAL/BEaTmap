@@ -97,11 +97,11 @@ def page_beatmap():
         iso_df=state.bet_results.iso_df,
         nm=state.bet_results.nm,
         slope=state.bet_results.slope,
-        check1=state.checks[0],
-        check2=state.checks[1],
-        check3=state.checks[2],
-        check4=state.checks[3],
-        check5=state.checks[4],
+        enforce_y_intercept_positive=state.checks[0],
+        enforce_pressure_increasing=state.checks[1],
+        enforce_absorbed_amount=state.checks[2],
+        enforce_relative_pressure=state.checks[3],
+        enforce_enough_datapoints=state.checks[4],
         points=state.min_num_points,
     )
 

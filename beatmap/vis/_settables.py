@@ -14,35 +14,31 @@ def ascii_tables(bet_results, mask_results):
     Parameters
     ----------
     bet_results : namedtuple
-        Contains elements that result from BET analysis.
-        Relevant fields are:
+        Contains elements that result from BET analysis. Relevant fields are:
 
-        - ``bet_results.iso_df`` (dataframe) : experimental isotherm data.
-        - ``bet_results.ssa`` (array) : specific surface areas for all relp
-        ranges.
-        - ``bet_results.c`` (array) : BET constants for all relp ranges.
-        - ``bet_results.err`` (array) : error values for all relp ranges.
+        - ``bet_results.iso_df`` (DataFrame) : experimental isotherm data.
+        - ``bet_results.ssa`` (ndarray) : specific surface areas for all
+          relp ranges.
+        - ``bet_results.c`` (ndarray) : BET constants for all relp ranges.
+        - ``bet_results.err`` (ndarray) : error values for all relp ranges.
 
     mask_results : namedtuple
-        Contains the results of applying the Rouquerol criteria to BET results.
-        Relevant fields are:
+        Contains the results of applying the Rouquerol criteria to BET
+        results. Relevant fields are:
 
         - ``mask_results.mask`` (MaskedArray) : object where invalid BET
-        results are masked.
+          results are masked.
 
     Returns
     -------
     table : prettytable
          Summary of BET results, highlighting the high, low, and
          average values of specific surface area. ASCII formatted table.
-
     table2 : prettytable
          Summary of BET results, highlighting the high, low, and
          average values of the BET constant. ASCII formatted table.
-
     ssa_std : float
          Atandard deviation of valid specific surface area values.
-
     c_std : float
          Standard deviation of valid BET constant values.
 
@@ -172,35 +168,31 @@ def dataframe_tables(bet_results, mask_results):
    Parameters
     ----------
     bet_results : namedtuple
-        Contains elements that result from BET analysis.
-        Relevant fields are:
+        Contains elements that result from BET analysis. Relevant fields are:
 
-        - ``bet_results.iso_df`` (dataframe) : experimental isotherm data.
-        - ``bet_results.ssa`` (array) : specific surface areas for all relp
-        ranges.
-        - ``bet_results.c`` (array) : BET constants for all relp ranges.
-        - ``bet_results.err`` (array) : error values for all relp ranges.
+        - ``bet_results.iso_df`` (DataFrame) : experimental isotherm data.
+        - ``bet_results.ssa`` (ndarray) : specific surface areas for all
+          relp ranges.
+        - ``bet_results.c`` (ndarray) : BET constants for all relp ranges.
+        - ``bet_results.err`` (ndarray) : error values for all relp ranges.
 
     mask_results : namedtuple
-        Contains the results of applying the Rouquerol criteria to BET results.
-        Relevant fields are:
+        Contains the results of applying the Rouquerol criteria to BET
+        results. Relevant fields are:
 
         - ``mask_results.mask`` (MaskedArray) : object where invalid BET
-        results are masked.
+          results are masked.
 
     Returns
     -------
-    ssa_table : dataframe
+    ssa_table : DataFrame
          Summary of BET results, highlighting the high, low, and
          average values of specific surface area.
-
-    c_table : dataframe
+    c_table : DataFrame
          Summary of BET results, highlighting the high, low, and
          average values of the BET constant.
-
     ssa_std : float
          Atandard deviation of valid specific surface area values.
-
     c_std : float
          Standard deviation of valid BET constant values.
 

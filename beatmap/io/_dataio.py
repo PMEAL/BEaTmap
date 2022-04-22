@@ -20,21 +20,16 @@ def check_header(file, th=0.9):
 
     Parameters
     ----------
-    file : string
+    file : str
         File name or filepath.
-
     th : float
         Threshold value that must be met to determine file has no headers.
 
     Returns
     -------
-    'infer' : string
+    str or None
         If threshold not met the file is determined to have headers and 'infer'
         is returned to pass to header parameter in pandas.read_csv().
-
-    None : NoneType
-        If threshold not met the file is determined to not have headers and
-        'infer' is returned to pass to header parameter in pandas.read_csv().
 
     """
 
@@ -56,17 +51,23 @@ def import_data(file=None, info=None, a_o=None):
 
     Parameters
     ----------
+    file : str or buffer
+        Path to the csv file that contains BET data
+    info : str
+        Short description of data, will be used as identifier
+    a_o : float
+        Cross sectional area of the adsorbate molecule, in square angstrom.
 
     Returns
     -------
     isotherm_data : namedtuple
-        Contains all information required for BET analysis.
-        Relevant fields are:
+        Contains all information required for BET analysis. Relevant fields are:
 
-        - ``isotherm_data.iso_data`` (dataframe) : imported isotherm data.
+        - ``isotherm_data.iso_data`` (DataFrame) : imported isotherm data.
         - ``isotherm_data.a_o`` (float) : adsorbate cross sectional area.
-        - ``isotherm_data.info`` (string) : string of adsorbate-adsorbent info.
-        - ``isotherm_data.file`` (string) : file name or path.
+        - ``isotherm_data.info`` (str) : string of adsorbate-adsorbent info.
+        - ``isotherm_data.file`` (str) : file name or path.
+
     """
     msg = f"Adsorbate has an adsorbed cross sectional area of {a_o:.2f} sq. Angstrom."
     logging.info(msg)
@@ -157,20 +158,18 @@ def import_list_data(relp, n, a_o=None, file=None, info=None):
     ----------
     relp : list
         Experimental isotherm relative pressure values.
-
     n : list
         Experimental amount adsorbed values, mols per gram.
 
     Returns
     -------
     isotherm_data : namedtuple
-        Contains all information required for BET analysis.
-        Relevant fields are:
+        Contains all information required for BET analysis. Relevant fields are:
 
-        - ``isotherm_data.iso_data`` (dataframe) : imported isotherm data.
+        - ``isotherm_data.iso_data`` (DataFrame) : imported isotherm data.
         - ``isotherm_data.a_o`` (float) : adsorbate cross sectional area.
-        - ``isotherm_data.info`` (string) : string of adsorbate-adsorbent info.
-        - ``isotherm_data.file`` (string) : file name or path.
+        - ``isotherm_data.info`` (str) : string of adsorbate-adsorbent info.
+        - ``isotherm_data.file`` (str) : file name or path.
 
     """
     if not isinstance(a_o, (int, float)):
@@ -249,15 +248,15 @@ def export_raw_data(isotherm_data):
     ----------
 
     isotherm_data : namedtuple
-        Contains all information required for BET analysis.
-        Relevant fields are:
+        Contains all information required for BET analysis. Relevant fields are:
 
-        - ``isotherm_data.iso_df`` (dataframe) : of the raw isotherm data
-        written to a .csv
-        - ``bet_results.info`` (string) : adsorbate-adsorbent information used
+        - ``isotherm_data.iso_df`` (DataFrame) : of the raw isotherm data
+          written to a .csv
+        - ``bet_results.info`` (str) : adsorbate-adsorbent information used
 
     Returns
     -------
+    None
 
     """
 
@@ -286,6 +285,7 @@ def export_processed_data(bet_results, points=5):
 
     Returns
     -------
+    None
 
     """
 
@@ -298,11 +298,14 @@ def export_processed_data(bet_results, points=5):
 
     begin_relp = np.transpose(end_relp)
 
-    mask1 = bet.check_1(bet_results.intercept)
-    mask2 = bet.check_2(df)
-    mask3 = bet.check_3(df, bet_results.nm)
-    mask4 = bet.check_4(df, bet_results.nm, bet_results.slope, bet_results.intercept)
-    mask5 = bet.check_5(df, points)
+    mask1 = bet.check_y_intercept_positive(bet_results.intercept)
+    mask2 = bet.check_pressure_increasing(df)
+    mask3 = bet.check_absorbed_amount(df, bet_results.nm)
+    mask4 = bet.check_pressure_consistency(df,
+                                              bet_results.nm,
+                                              bet_results.slope,
+                                              bet_results.intercept)
+    mask5 = bet.check_enough_datapoints(df, points)
 
     processed_data = np.column_stack((begin_relp.flatten(), end_relp.flatten()))
     processed_data = np.column_stack((processed_data, bet_results.ssa.flatten()))
