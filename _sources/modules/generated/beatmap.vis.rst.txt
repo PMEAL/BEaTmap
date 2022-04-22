@@ -1,0 +1,43 @@
+﻿:noindex:
+
+.. raw:: html
+
+   <p hidden>This is a module</p>
+
+Vis
+===
+
+.. automodule:: beatmap.vis
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      ascii_tables
+      bet_combo_plot
+      dataframe_tables
+      err_heatmap
+      experimental_data_plot
+      iso_combo_plot
+      ssa_heatmap
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   

@@ -1,0 +1,6 @@
+err\_heatmap
+============
+
+.. currentmodule:: beatmap.vis
+
+.. autofunction:: err_heatmap

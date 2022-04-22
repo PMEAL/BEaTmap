@@ -1,0 +1,6 @@
+export\_processed\_data
+=======================
+
+.. currentmodule:: beatmap.io
+
+.. autofunction:: export_processed_data

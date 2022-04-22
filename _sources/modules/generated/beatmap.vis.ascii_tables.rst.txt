@@ -1,0 +1,6 @@
+ascii\_tables
+=============
+
+.. currentmodule:: beatmap.vis
+
+.. autofunction:: ascii_tables

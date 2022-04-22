@@ -1,0 +1,6 @@
+run\_beatmap
+============
+
+.. currentmodule:: beatmap.core
+
+.. autofunction:: run_beatmap

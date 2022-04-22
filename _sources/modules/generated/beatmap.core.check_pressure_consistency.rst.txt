@@ -1,0 +1,6 @@
+check\_pressure\_consistency
+============================
+
+.. currentmodule:: beatmap.core
+
+.. autofunction:: check_pressure_consistency

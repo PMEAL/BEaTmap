@@ -1,0 +1,46 @@
+﻿:noindex:
+
+.. raw:: html
+
+   <p hidden>This is a module</p>
+
+Core
+====
+
+.. automodule:: beatmap.core
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      bet
+      check_absorbed_amount
+      check_enough_datapoints
+      check_pressure_consistency
+      check_pressure_increasing
+      check_y_intercept_positive
+      rouq_mask
+      run_beatmap
+      single_point_bet
+      ssa_answer
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   

@@ -1,0 +1,6 @@
+check\_y\_intercept\_positive
+=============================
+
+.. currentmodule:: beatmap.core
+
+.. autofunction:: check_y_intercept_positive

@@ -1,0 +1,6 @@
+index\_of\_value
+================
+
+.. currentmodule:: beatmap.utils
+
+.. autofunction:: index_of_value

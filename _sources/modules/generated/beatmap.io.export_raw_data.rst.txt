@@ -1,0 +1,6 @@
+export\_raw\_data
+=================
+
+.. currentmodule:: beatmap.io
+
+.. autofunction:: export_raw_data

@@ -1,0 +1,6 @@
+max\_min
+========
+
+.. currentmodule:: beatmap.utils
+
+.. autofunction:: max_min

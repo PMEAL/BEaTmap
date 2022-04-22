@@ -1,0 +1,39 @@
+﻿:noindex:
+
+.. raw:: html
+
+   <p hidden>This is a module</p>
+
+Utils
+=====
+
+.. automodule:: beatmap.utils
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      index_of_value
+      lin_interp
+      max_min
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   

@@ -1,0 +1,6 @@
+iso\_combo\_plot
+================
+
+.. currentmodule:: beatmap.vis
+
+.. autofunction:: iso_combo_plot

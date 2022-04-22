@@ -1,0 +1,6 @@
+import\_data
+============
+
+.. currentmodule:: beatmap.io
+
+.. autofunction:: import_data

@@ -1,0 +1,6 @@
+check\_pressure\_increasing
+===========================
+
+.. currentmodule:: beatmap.core
+
+.. autofunction:: check_pressure_increasing

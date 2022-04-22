@@ -1,0 +1,6 @@
+check\_enough\_datapoints
+=========================
+
+.. currentmodule:: beatmap.core
+
+.. autofunction:: check_enough_datapoints

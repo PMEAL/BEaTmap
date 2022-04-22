@@ -1,0 +1,6 @@
+bet\_combo\_plot
+================
+
+.. currentmodule:: beatmap.vis
+
+.. autofunction:: bet_combo_plot

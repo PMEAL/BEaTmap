@@ -1,0 +1,6 @@
+dataframe\_tables
+=================
+
+.. currentmodule:: beatmap.vis
+
+.. autofunction:: dataframe_tables

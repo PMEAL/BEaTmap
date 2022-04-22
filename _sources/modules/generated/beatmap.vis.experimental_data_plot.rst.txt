@@ -1,0 +1,6 @@
+experimental\_data\_plot
+========================
+
+.. currentmodule:: beatmap.vis
+
+.. autofunction:: experimental_data_plot

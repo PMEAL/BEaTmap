@@ -1,0 +1,6 @@
+check\_absorbed\_amount
+=======================
+
+.. currentmodule:: beatmap.core
+
+.. autofunction:: check_absorbed_amount

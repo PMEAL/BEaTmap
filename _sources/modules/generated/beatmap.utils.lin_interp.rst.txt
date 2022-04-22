@@ -1,0 +1,6 @@
+lin\_interp
+===========
+
+.. currentmodule:: beatmap.utils
+
+.. autofunction:: lin_interp

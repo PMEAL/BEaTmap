@@ -1,0 +1,6 @@
+rouq\_mask
+==========
+
+.. currentmodule:: beatmap.core
+
+.. autofunction:: rouq_mask

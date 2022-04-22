@@ -1,0 +1,6 @@
+bet
+===
+
+.. currentmodule:: beatmap.core
+
+.. autofunction:: bet

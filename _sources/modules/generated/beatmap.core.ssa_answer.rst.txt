@@ -1,0 +1,6 @@
+ssa\_answer
+===========
+
+.. currentmodule:: beatmap.core
+
+.. autofunction:: ssa_answer

@@ -1,0 +1,6 @@
+single\_point\_bet
+==================
+
+.. currentmodule:: beatmap.core
+
+.. autofunction:: single_point_bet

@@ -1,0 +1,6 @@
+ssa\_heatmap
+============
+
+.. currentmodule:: beatmap.vis
+
+.. autofunction:: ssa_heatmap
