@@ -17,4 +17,4 @@ from . import core
 
 from .core import run_beatmap
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
