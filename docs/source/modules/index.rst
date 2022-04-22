@@ -1,4 +1,4 @@
-.. _user_guide:
+.. _modules_index:
 
 #############################
 Module and Function Reference
