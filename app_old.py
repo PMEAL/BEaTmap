@@ -1,11 +1,10 @@
-import beatmap as bt
-from matplotlib import rcParams
 import pandas as pd
 import streamlit as st
+from matplotlib import rcParams
 
-from static import texts
+import beatmap as bt
 from static import altair_plots as plots
-
+from static import texts
 
 state = st.session_state
 st.set_page_config(
@@ -49,6 +48,10 @@ def page_upload():
     st.markdown("## Upload Isotherm Data")
     st.markdown(texts.upload_instruction)
     file = st.file_uploader(label="Upload a CSV file", type="csv")
+
+    # add a button to load "examples/vulcan_chex.csv" file when clicked
+    if st.button("Load sample data"):
+        state.df = pd.read_csv("./examples/vulcan_chex.csv")
 
     if file:
         state.df = pd.read_csv(file)
