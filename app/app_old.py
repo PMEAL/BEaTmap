@@ -1,10 +1,10 @@
 import pandas as pd
 import streamlit as st
 from matplotlib import rcParams
+from static import altair_plots as plots
+from static import texts
 
 import beatmap as bt
-from app.static import altair_plots as plots
-from app.static import texts
 
 state = st.session_state
 st.set_page_config(
