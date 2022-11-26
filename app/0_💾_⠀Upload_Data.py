@@ -59,7 +59,7 @@ def fetch_bet_results(isotherm_data):
 # add a button to load "examples/vulcan_chex.csv" file when clicked
 st.write("Or, load an example file (adsorption of cyclohexane on Vulcan carbon powder):")
 if st.button("Load sample data"):
-    state.df = pd.read_csv("./vulcan_chex.csv")
+    state.df = pd.read_csv("./static/vulcan_chex.csv")
     state.a_o = 39
     st.success("Sample data loaded!")
 
