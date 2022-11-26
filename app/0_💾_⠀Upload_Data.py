@@ -61,6 +61,7 @@ def fetch_bet_results(isotherm_data):
 st.write("Or, load an example file (adsorption of cyclohexane on Vulcan carbon powder):")
 if st.button("Load sample data"):
     state.df = pd.DataFrame(data)
+    state.a_o = 39
     st.success("Sample data loaded!")
 
 if file:
