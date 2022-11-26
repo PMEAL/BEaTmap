@@ -1,3 +1,9 @@
+import pathlib
+import sys
+
+path = pathlib.Path().resolve().parent
+sys.path.insert(0, str(path))
+
 import pandas as pd
 import streamlit as st
 from matplotlib import rcParams
@@ -53,7 +59,7 @@ def fetch_bet_results(isotherm_data):
 # add a button to load "examples/vulcan_chex.csv" file when clicked
 st.write("Or, load an example file (adsorption of cyclohexane on Vulcan carbon powder):")
 if st.button("Load sample data"):
-    state.df = pd.read_csv("./examples/vulcan_chex.csv")
+    state.df = pd.read_csv("../examples/vulcan_chex.csv")
     state.a_o = 39
     st.success("Sample data loaded!")
 
