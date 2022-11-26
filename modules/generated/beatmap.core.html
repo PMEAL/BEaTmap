@@ -1,14 +1,14 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="bet" href="beatmap.core.bet.html" /><link rel="prev" title="Module and Function Reference" href="../index.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
         <title>Core - BEaTmap 0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     
@@ -214,7 +214,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -228,28 +230,26 @@
           </label>
         </div>
         <article role="main">
-          <p hidden="">This is a module</p><section id="module-beatmap.core">
-<span id="core"></span><h1>Core<a class="headerlink" href="#module-beatmap.core" title="Permalink to this headline">#</a></h1>
+          <p hidden>This is a module</p><section id="module-beatmap.core">
+<span id="core"></span><h1>Core<a class="headerlink" href="#module-beatmap.core" title="Permalink to this heading">#</a></h1>
 <section id="id1">
-<h2>Core<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+<h2>Core<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">core</span></code> is a module!</p>
+</section>
 <p class="rubric">Functions</p>
-<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%"/>
-<col style="width: 90%"/>
-</colgroup>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.core.bet.html#beatmap.core.bet" title="beatmap.core.bet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bet</span></code></a>(iso_df, a_o, info, *args)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.core.bet.html#beatmap.core.bet" title="beatmap.core.bet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bet</span></code></a>(iso_df, a_o, info, *args)</p></td>
 <td><p>Performs BET analysis on isotherm data for all relative pressure ranges.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="beatmap.core.check_absorbed_amount.html#beatmap.core.check_absorbed_amount" title="beatmap.core.check_absorbed_amount"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_absorbed_amount</span></code></a>(df, nm)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="beatmap.core.check_absorbed_amount.html#beatmap.core.check_absorbed_amount" title="beatmap.core.check_absorbed_amount"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_absorbed_amount</span></code></a>(df, nm)</p></td>
 <td><p>Checks that nm, amount adsorbed in the monolayer, is in the range of data points used in BET analysis.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.core.check_enough_datapoints.html#beatmap.core.check_enough_datapoints" title="beatmap.core.check_enough_datapoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_enough_datapoints</span></code></a>(df[, points])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.core.check_enough_datapoints.html#beatmap.core.check_enough_datapoints" title="beatmap.core.check_enough_datapoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_enough_datapoints</span></code></a>(df[, points])</p></td>
 <td><p>Checks that relative pressure ranges contain a minium number of data points.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="beatmap.core.check_pressure_consistency.html#beatmap.core.check_pressure_consistency" title="beatmap.core.check_pressure_consistency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_pressure_consistency</span></code></a>(df, nm, slope, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="beatmap.core.check_pressure_consistency.html#beatmap.core.check_pressure_consistency" title="beatmap.core.check_pressure_consistency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_pressure_consistency</span></code></a>(df, nm, slope, ...)</p></td>
 <td><p>Checks that relative pressure is consistent.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="beatmap.core.check_pressure_increasing.html#beatmap.core.check_pressure_increasing" title="beatmap.core.check_pressure_increasing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_pressure_increasing</span></code></a>(df)</p></td>
@@ -258,21 +258,21 @@
 <tr class="row-even"><td><p><a class="reference internal" href="beatmap.core.check_y_intercept_positive.html#beatmap.core.check_y_intercept_positive" title="beatmap.core.check_y_intercept_positive"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_y_intercept_positive</span></code></a>(intercept)</p></td>
 <td><p>Checks that y intercept of the BET plot's linear regression is positive.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.core.rouq_mask.html#beatmap.core.rouq_mask" title="beatmap.core.rouq_mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rouq_mask</span></code></a>(intercept, iso_df, nm, slope, *args)</p></td>
-<td><p>Calls all check functions and combines their masks into one "rouqerol mask".</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.core.rouq_mask.html#beatmap.core.rouq_mask" title="beatmap.core.rouq_mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rouq_mask</span></code></a>(intercept, iso_df, nm, slope, *args)</p></td>
+<td><p>Calls all check functions and combines their masks into one &quot;rouqerol mask&quot;.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="beatmap.core.run_beatmap.html#beatmap.core.run_beatmap" title="beatmap.core.run_beatmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_beatmap</span></code></a>([file, info, a_o, check1, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="beatmap.core.run_beatmap.html#beatmap.core.run_beatmap" title="beatmap.core.run_beatmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_beatmap</span></code></a>([file, info, a_o, check1, ...])</p></td>
 <td><p>A single function that executes all necessary BEaTmap algorithims.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.core.single_point_bet.html#beatmap.core.single_point_bet" title="beatmap.core.single_point_bet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_point_bet</span></code></a>(df, a_o)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.core.single_point_bet.html#beatmap.core.single_point_bet" title="beatmap.core.single_point_bet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_point_bet</span></code></a>(df, a_o)</p></td>
 <td><p>Performs single point BET analysis on an isotherm data set for all relative pressure ranges.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="beatmap.core.ssa_answer.html#beatmap.core.ssa_answer" title="beatmap.core.ssa_answer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssa_answer</span></code></a>(bet_results, mask_results[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="beatmap.core.ssa_answer.html#beatmap.core.ssa_answer" title="beatmap.core.ssa_answer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssa_answer</span></code></a>(bet_results, mask_results[, ...])</p></td>
 <td><p>Logs a single specific surface area answer from the valid relative pressure range with the lowest error, most number of points, maximum specific surface area, or minimum specific surface area.</p></td>
 </tr>
 </tbody>
-</table></div>
-</section>
+</table>
+</div>
 </section>
 
         </article>
@@ -287,10 +287,10 @@
                 </div>
                 <div class="title">bet</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="../index.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -326,7 +326,7 @@
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -348,7 +348,9 @@
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     </body>
 </html>

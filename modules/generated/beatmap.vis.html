@@ -1,14 +1,14 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="ascii_tables" href="beatmap.vis.ascii_tables.html" /><link rel="prev" title="max_min" href="beatmap.utils.max_min.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
         <title>Vis - BEaTmap 0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     
@@ -214,7 +214,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -228,42 +230,40 @@
           </label>
         </div>
         <article role="main">
-          <p hidden="">This is a module</p><section id="module-beatmap.vis">
-<span id="vis"></span><h1>Vis<a class="headerlink" href="#module-beatmap.vis" title="Permalink to this headline">#</a></h1>
+          <p hidden>This is a module</p><section id="module-beatmap.vis">
+<span id="vis"></span><h1>Vis<a class="headerlink" href="#module-beatmap.vis" title="Permalink to this heading">#</a></h1>
 <section id="id1">
-<h2>Vis<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+<h2>Vis<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">vis</span></code> is a module!</p>
+</section>
 <p class="rubric">Functions</p>
-<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%"/>
-<col style="width: 90%"/>
-</colgroup>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.vis.ascii_tables.html#beatmap.vis.ascii_tables" title="beatmap.vis.ascii_tables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ascii_tables</span></code></a>(bet_results, mask_results)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.vis.ascii_tables.html#beatmap.vis.ascii_tables" title="beatmap.vis.ascii_tables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ascii_tables</span></code></a>(bet_results, mask_results)</p></td>
 <td><p>Creates and prints ASCII formatted tables of BET results.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="beatmap.vis.bet_combo_plot.html#beatmap.vis.bet_combo_plot" title="beatmap.vis.bet_combo_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bet_combo_plot</span></code></a>(bet_results, mask_results[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="beatmap.vis.bet_combo_plot.html#beatmap.vis.bet_combo_plot" title="beatmap.vis.bet_combo_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bet_combo_plot</span></code></a>(bet_results, mask_results[, ...])</p></td>
 <td><p>Creates a BET plots for the minimum and maxium error data sets.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.vis.dataframe_tables.html#beatmap.vis.dataframe_tables" title="beatmap.vis.dataframe_tables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataframe_tables</span></code></a>(bet_results, mask_results)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.vis.dataframe_tables.html#beatmap.vis.dataframe_tables" title="beatmap.vis.dataframe_tables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataframe_tables</span></code></a>(bet_results, mask_results)</p></td>
 <td><p>Creates and populates pandas dataframes summarizing BET results.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="beatmap.vis.err_heatmap.html#beatmap.vis.err_heatmap" title="beatmap.vis.err_heatmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">err_heatmap</span></code></a>(bet_results, mask_results[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="beatmap.vis.err_heatmap.html#beatmap.vis.err_heatmap" title="beatmap.vis.err_heatmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">err_heatmap</span></code></a>(bet_results, mask_results[, ...])</p></td>
 <td><p>Creates a heatmap of error values.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.vis.experimental_data_plot.html#beatmap.vis.experimental_data_plot" title="beatmap.vis.experimental_data_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">experimental_data_plot</span></code></a>(isotherm_data[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.vis.experimental_data_plot.html#beatmap.vis.experimental_data_plot" title="beatmap.vis.experimental_data_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">experimental_data_plot</span></code></a>(isotherm_data[, ...])</p></td>
 <td><p>Creates a scatter plot of experimental data.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="beatmap.vis.iso_combo_plot.html#beatmap.vis.iso_combo_plot" title="beatmap.vis.iso_combo_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iso_combo_plot</span></code></a>(bet_results, mask_results[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="beatmap.vis.iso_combo_plot.html#beatmap.vis.iso_combo_plot" title="beatmap.vis.iso_combo_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iso_combo_plot</span></code></a>(bet_results, mask_results[, ...])</p></td>
 <td><p>Creates an image displaying the relative pressure range with minimum error and the BET isotherm on the same plot.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.vis.ssa_heatmap.html#beatmap.vis.ssa_heatmap" title="beatmap.vis.ssa_heatmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssa_heatmap</span></code></a>(bet_results, mask_results[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="beatmap.vis.ssa_heatmap.html#beatmap.vis.ssa_heatmap" title="beatmap.vis.ssa_heatmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssa_heatmap</span></code></a>(bet_results, mask_results[, ...])</p></td>
 <td><p>Creates a heatmap of specific surface areas.</p></td>
 </tr>
 </tbody>
-</table></div>
-</section>
+</table>
+</div>
 </section>
 
         </article>
@@ -278,10 +278,10 @@
                 </div>
                 <div class="title">ascii_tables</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="beatmap.utils.max_min.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -317,7 +317,7 @@
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -339,7 +339,9 @@
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     </body>
 </html>
