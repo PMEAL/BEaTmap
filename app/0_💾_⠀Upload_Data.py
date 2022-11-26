@@ -9,6 +9,7 @@ import streamlit as st
 from matplotlib import rcParams
 from static import altair_plots as plots
 from static import texts
+from static.sample_data import data
 
 import beatmap as bt
 
@@ -59,8 +60,7 @@ def fetch_bet_results(isotherm_data):
 # add a button to load "examples/vulcan_chex.csv" file when clicked
 st.write("Or, load an example file (adsorption of cyclohexane on Vulcan carbon powder):")
 if st.button("Load sample data"):
-    state.df = pd.read_csv("./vulcan_chex.csv")
-    state.a_o = 39
+    state.df = pd.DataFrame(data)
     st.success("Sample data loaded!")
 
 if file:
@@ -70,7 +70,7 @@ st.markdown("### Adsorbate area")
 st.markdown(texts.area_instruction)
 
 if "a_o" not in state:
-    state.a_o = 16
+    state.a_o = 39
 
 label = "Enter adsorbate cross-sectional area (Angstrom per molecule)"
 st.number_input(label=label, key="a_o", step=0.1, format="%.1f")
