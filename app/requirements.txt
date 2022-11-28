@@ -6,4 +6,5 @@ prettytable
 scipy
 seaborn
 streamlit
+streamlit-extras
 git+https://github.com/PMEAL/beatmap.git

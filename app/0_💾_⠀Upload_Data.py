@@ -10,6 +10,7 @@ from matplotlib import rcParams
 from static import altair_plots as plots
 from static import texts
 from static.sample_data import data
+from streamlit_extras.switch_page_button import switch_page
 
 import beatmap as bt
 
@@ -63,6 +64,9 @@ if st.button("Load sample data"):
     state.df = pd.DataFrame(data, columns=["relp", "n"])
     state.a_o = 39
     st.success("Sample data loaded!")
+
+if st.button("Analyze"):
+    switch_page("⠀beatmap analysis")
 
 if file:
     state.df = pd.read_csv(file)
