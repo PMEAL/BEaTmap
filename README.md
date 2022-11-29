@@ -25,6 +25,10 @@ BEaTmap consists of the following modules:
   - `io`: Functions for import data from .csv files or lists, and exporting processed data to .xlsx files
   - `utils`: Various small functions used in other BEaTmap modules
   - `vis`: Functions to create heatmaps, BET plots, isotherm plots, tables of BET analysis results, etc
+  
+# Try It Live
+
+We have created a web-based GUI for BEaTmap using Streamlit.  This app is hosted on the Streamlit servers and is available [here](https://beatmap.streamlit.app).  If the app is not used for a certain period then Streamlit will hibernate it then wake it up on request, so it may take a few moments to load.  The app includes a link to some sample data which you can use to explore the interface. Enjoy.
 
 # Installation
 
