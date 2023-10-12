@@ -1,7 +1,7 @@
 
 # What is BEaTmap?
 
-[![image](https://github.com/PMEAL/beatmap/workflows/Tests/badge.svg)](https://github.com/PMEAL/beatmap/actions)
+[![image](https://github.com/PMEAL/beatmap/actions/workflows/tests.yml/badge.svg)](https://github.com/PMEAL/beatmap/actions)
 [![codecov](https://codecov.io/gh/PMEAL/beatmap/branch/main/graph/badge.svg?token=3ZBPKC3QXW)](https://codecov.io/gh/PMEAL/beatmap)
 [![image](https://img.shields.io/pypi/v/beatmap.svg)](https://pypi.python.org/pypi/beatmap/)
 
