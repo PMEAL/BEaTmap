@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="iso_combo_plot" href="beatmap.vis.iso_combo_plot.html" /><link rel="prev" title="err_heatmap" href="beatmap.vis.err_heatmap.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="get_fixtures_path" href="beatmap.utils.get_fixtures_path.html" /><link rel="prev" title="Utils" href="beatmap.utils.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
-        <title>experimental_data_plot - BEaTmap 0.1 documentation</title>
+        <title>find_package_root - BEaTmap 0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
@@ -178,20 +178,20 @@
 <li class="toctree-l3"><a class="reference internal" href="beatmap.io.import_list_data.html">import_list_data</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="beatmap.utils.html">Utils</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="beatmap.utils.find_package_root.html">find_package_root</a></li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="beatmap.utils.html">Utils</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">find_package_root</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.get_fixtures_path.html">get_fixtures_path</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.index_of_value.html">index_of_value</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.lin_interp.html">lin_interp</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.max_min.html">max_min</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current has-children"><a class="reference internal" href="beatmap.vis.html">Vis</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Vis</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="beatmap.vis.html">Vis</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Vis</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.vis.ascii_tables.html">ascii_tables</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.vis.bet_combo_plot.html">bet_combo_plot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.vis.dataframe_tables.html">dataframe_tables</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.vis.err_heatmap.html">err_heatmap</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">experimental_data_plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="beatmap.vis.experimental_data_plot.html">experimental_data_plot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.vis.iso_combo_plot.html">iso_combo_plot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.vis.ssa_heatmap.html">ssa_heatmap</a></li>
 </ul>
@@ -232,32 +232,12 @@
           </label>
         </div>
         <article role="main">
-          <section id="experimental-data-plot">
-<h1>experimental_data_plot<a class="headerlink" href="#experimental-data-plot" title="Link to this heading">#</a></h1>
+          <section id="find-package-root">
+<h1>find_package_root<a class="headerlink" href="#find-package-root" title="Link to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="beatmap.vis.experimental_data_plot">
-<span class="sig-prename descclassname"><span class="pre">beatmap.vis.</span></span><span class="sig-name descname"><span class="pre">experimental_data_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isotherm_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beatmap.vis.experimental_data_plot" title="Link to this definition">#</a></dt>
-<dd><p>Creates a scatter plot of experimental data.</p>
-<p>Typical isotherm presentation where x-axis is relative pressure,
-y-axis is specific amount adsorbed.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>isotherm_data</strong><span class="classifier">namedtuple</span></dt><dd><p>The isotherm_data.iso_df element is used to
-create a plot of isotherm data.</p>
-</dd>
-<dt><strong>save_file</strong><span class="classifier">boolean</span></dt><dd><p>When save_file=True a .png of the figure is created in the
-working directory.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>None</dt><dd></dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
+<dt class="sig sig-object py" id="beatmap.utils.find_package_root">
+<span class="sig-prename descclassname"><span class="pre">beatmap.utils.</span></span><span class="sig-name descname"><span class="pre">find_package_root</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beatmap.utils.find_package_root" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 </section>
 
@@ -266,23 +246,23 @@ working directory.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="beatmap.vis.iso_combo_plot.html">
+          <a class="next-page" href="beatmap.utils.get_fixtures_path.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">iso_combo_plot</div>
+                <div class="title">get_fixtures_path</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="beatmap.vis.err_heatmap.html">
+          <a class="prev-page" href="beatmap.utils.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">err_heatmap</div>
+                <div class="title">Utils</div>
                 
               </div>
             </a>
@@ -316,8 +296,8 @@ working directory.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">experimental_data_plot</a><ul>
-<li><a class="reference internal" href="#beatmap.vis.experimental_data_plot"><code class="docutils literal notranslate"><span class="pre">experimental_data_plot()</span></code></a></li>
+<li><a class="reference internal" href="#">find_package_root</a><ul>
+<li><a class="reference internal" href="#beatmap.utils.find_package_root"><code class="docutils literal notranslate"><span class="pre">find_package_root()</span></code></a></li>
 </ul>
 </li>
 </ul>

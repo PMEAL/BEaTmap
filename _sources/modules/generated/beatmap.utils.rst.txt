@@ -20,6 +20,8 @@ Utils
    .. autosummary::
       :toctree:
    
+      find_package_root
+      get_fixtures_path
       index_of_value
       lin_interp
       max_min

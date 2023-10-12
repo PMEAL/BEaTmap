@@ -1,0 +1,6 @@
+find\_package\_root
+===================
+
+.. currentmodule:: beatmap.utils
+
+.. autofunction:: find_package_root

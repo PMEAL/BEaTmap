@@ -1,0 +1,6 @@
+get\_fixtures\_path
+===================
+
+.. currentmodule:: beatmap.utils
+
+.. autofunction:: get_fixtures_path
