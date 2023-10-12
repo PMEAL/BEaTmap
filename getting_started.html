@@ -313,8 +313,8 @@ here</a>.</p>
 <section id="manual-bet-analysis">
 <h2>Manual BET analysis<a class="headerlink" href="#manual-bet-analysis" title="Link to this heading">#</a></h2>
 <p>Alternatively, you can use the individual functions in BEaTmap to perform BET analysis and evaluate the Rouquerol criteria. This allows the user to access more of BEaTmap’s functionality, and to customize the analysis.</p>
-<section id="loading-a-dataset-from-csv">
-<h3>Loading a dataset from .csv<a class="headerlink" href="#loading-a-dataset-from-csv" title="Link to this heading">#</a></h3>
+<section id="import-the-dataset">
+<h3>Import the dataset<a class="headerlink" href="#import-the-dataset" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">import_data</span></code> function can be used to import a isotherm data from a .csv file where the first column is relative pressure and the second column is the amount adsorbed.</p>
 <p>The function returns a named tuple where the first entry is a dataframe of the imported isotherm, and the 2nd-4th fields are the cross sectional area of the adsorbate, information about the data, and file path, respectively. Indexing of named tuple elements is in order of priority, data used by other function are given priority.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">isotherm_data</span> <span class="o">=</span> <span class="n">bt</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">import_data</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;examples/vulcan_chex.csv&#39;</span><span class="p">,</span>
@@ -429,7 +429,7 @@ here</a>.</p>
 <li><a class="reference internal" href="#examples">Examples</a></li>
 <li><a class="reference internal" href="#automated-bet-analysis">Automated BET analysis</a></li>
 <li><a class="reference internal" href="#manual-bet-analysis">Manual BET analysis</a><ul>
-<li><a class="reference internal" href="#loading-a-dataset-from-csv">Loading a dataset from .csv</a></li>
+<li><a class="reference internal" href="#import-the-dataset">Import the dataset</a></li>
 <li><a class="reference internal" href="#bet-analysis">BET analysis</a></li>
 <li><a class="reference internal" href="#rouquerol-criteria">Rouquerol criteria</a></li>
 <li><a class="reference internal" href="#supplementary-analysis">Supplementary analysis</a></li>
