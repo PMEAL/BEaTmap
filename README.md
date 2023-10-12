@@ -85,7 +85,7 @@ bt.run_beatmap(file='examples/vulcan_chex.csv',
 ## Manual BET analysis
 
 Alternatively, you can use the individual functions in BEaTmap to perform BET analysis and evaluate the Rouquerol criteria. This allows the user to access more of BEaTmap's functionality, and to customize the analysis.
-### Loading a dataset from .csv
+### Import the dataset
 
 The `import_data` function can be used to import a isotherm data from a .csv file where the first column is relative pressure and the second column is the amount adsorbed.
 
