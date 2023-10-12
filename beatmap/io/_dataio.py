@@ -1,11 +1,12 @@
+import logging
+from collections import namedtuple
 from re import I
+
 import numpy as np
 import pandas as pd
 import scipy as sp
-import logging
-from beatmap import core as bet
-from collections import namedtuple
 
+from beatmap import core as bet
 
 __all__ = [
     "import_data",
@@ -13,6 +14,8 @@ __all__ = [
     "export_processed_data",
     "import_list_data",
 ]
+
+iso_data = namedtuple("iso_data", "iso_df a_o info file")
 
 
 def check_header(file, th=0.9):
@@ -82,7 +85,7 @@ def import_data(file=None, info=None, a_o=None):
         temp = pd.DataFrame([header.astype(float)], columns=["relp", "n"])
         data = data.rename(columns={header[0]: "relp", header[1]: "n"})
         data = pd.concat([temp, data], ignore_index=True)
-    except TypeError:
+    except ValueError:
         pass
 
     labels = list(data)
@@ -142,7 +145,6 @@ def import_data(file=None, info=None, a_o=None):
     else:
         logging.info("Isotherm is type VI.")
 
-    iso_data = namedtuple("iso_data", "iso_df a_o info file")
     isotherm_data = iso_data(data, a_o, info, file)
 
     return isotherm_data
@@ -233,7 +235,6 @@ def import_list_data(relp, n, a_o=None, file=None, info=None):
     else:
         logging.info("Isotherm is type VI.")
 
-    iso_data = namedtuple("iso_data", "iso_df a_o info file")
     isotherm_data = iso_data(data, a_o, info, file)
 
     return isotherm_data

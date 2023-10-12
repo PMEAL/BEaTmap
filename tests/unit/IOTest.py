@@ -1,9 +1,11 @@
 import unittest
-import pandas as pd
-import beatmap as bt
 from pathlib import Path
 
-fixtures_path = Path(Path(__file__).parent.absolute(), "fixtures")
+import pandas as pd
+
+import beatmap as bt
+
+fixtures_path = bt.utils.get_fixtures_path()
 
 
 class TestIO(unittest.TestCase):
@@ -172,5 +174,5 @@ if __name__ == "__main__":
     t.setup_class()
     for item in t.__dir__():
         if item.startswith("test"):
-            print("running test: " + item)
+            print(f"Running test: {item}")
             t.__getattribute__(item)()

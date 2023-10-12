@@ -1,11 +1,12 @@
+import logging
+
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import numpy as np
 import scipy as sp
-import logging
-import matplotlib.pyplot as plt
 import seaborn as sns
-from beatmap import utils as util
-import matplotlib.ticker as ticker
 
+from beatmap import utils as util
 
 __all__ = [
     "experimental_data_plot",
@@ -58,7 +59,7 @@ def experimental_data_plot(isotherm_data, save_file=False):
     return
 
 
-def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="Greens"):
+def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="greens"):
     """Creates a heatmap of specific surface areas.
 
     Shading corresponds to specific surface area, normalized for the minimum
@@ -137,7 +138,7 @@ def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="Greens"):
     return
 
 
-def err_heatmap(bet_results, mask_results, save_file=True, gradient="Greys"):
+def err_heatmap(bet_results, mask_results, save_file=True, gradient="greys"):
     """Creates a heatmap of error values.
 
     Shading corresponds to average error between experimental data and the

@@ -1,11 +1,15 @@
+import importlib
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
-
 
 __all__ = [
     "index_of_value",
     "max_min",
     "lin_interp",
+    "get_fixtures_path",
+    "find_package_root",
 ]
 
 
@@ -94,3 +98,23 @@ def lin_interp(df, val):
 
     interp_val = m * val + b
     return interp_val
+
+
+def get_fixtures_path():
+    """Returns the path to the fixtures directory."""
+    return find_package_root("beatmap").joinpath("tests", "unit", "fixtures")
+
+
+def find_package_root(package_name: str):
+    # Find the spec of the package
+    package_spec = importlib.util.find_spec(package_name)
+
+    # If the package could not be found, return None or raise an error
+    if package_spec is None or package_spec.origin is None:
+        return None  # or you could raise an error
+
+    # The origin is the path to the __init__.py file of the package
+    # We get the parent of that file to get the directory of the package
+    package_dir = Path(package_spec.origin).parent
+
+    return package_dir.parent

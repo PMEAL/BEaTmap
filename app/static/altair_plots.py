@@ -1,10 +1,10 @@
-import scipy as sp
+import altair as alt
 import numpy as np
 import pandas as pd
-import altair as alt
+import scipy as sp
 import streamlit as st
-import beatmap as bt
 
+import beatmap as bt
 
 __all__ = [
     "plot_isotherm_data",
@@ -85,7 +85,7 @@ def plot_ssa_heatmap(bet_results, mask_results):
                 ),
             ),
             color=alt.Color(
-                "SSA:Q", scale=alt.Scale(domain=[dmin, dmax], scheme="Greens")
+                "SSA:Q", scale=alt.Scale(domain=[dmin, dmax], scheme="greens")
             ),
             tooltip=["SSA", "Start relative pressure", "End relative pressure"],
         )
@@ -149,7 +149,7 @@ def plot_err_heatmap(bet_results, mask_results):
                 ),
             ),
             color=alt.Color(
-                "Error:Q", scale=alt.Scale(domain=[dmin, dmax], scheme="Greys")
+                "Error:Q", scale=alt.Scale(domain=[dmin, dmax], scheme="greys")
             ),
             tooltip=["Error", "Start relative pressure", "End relative pressure"],
         )

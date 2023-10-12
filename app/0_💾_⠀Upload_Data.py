@@ -42,14 +42,14 @@ st.markdown(texts.upload_instruction)
 file = st.file_uploader(label="Upload a CSV file", type="csv")
 
 
-@st.cache(allow_output_mutation=True)
+@st.cache_data
 def fetch_isotherm_data(file, a_o):
     r"""Extracts and returns isotherm data given a .csv file (or buffer)"""
     isotherm_data = bt.io.import_data(file=file, info="test", a_o=a_o)
     return isotherm_data
 
 
-@st.cache(allow_output_mutation=True)
+@st.cache_data
 def fetch_bet_results(isotherm_data):
     r"""Analyzes isotherm data and returns results as a named tuple"""
     bet_results = bt.core.bet(isotherm_data.iso_df,

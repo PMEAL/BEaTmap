@@ -77,7 +77,7 @@ def main():
     ssa_table.set_index(" ", inplace=True)
     c_table.set_index(" ", inplace=True)
 
-    st.markdown("## Specific surface area")
+    st.markdown("## Specific surface area (SSA)")
     st.success(f"Standard deviation of specific surface area: **{ssa_ssd:.3f}** $m^2/g$")
     st.table(ssa_table.astype("string"))
 

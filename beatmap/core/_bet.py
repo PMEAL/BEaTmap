@@ -1,11 +1,12 @@
+import logging
+from collections import namedtuple
+
 import numpy as np
 import scipy as sp
-import logging
+
 from beatmap import io as io
 from beatmap import utils as util
 from beatmap import vis as figs
-from collections import namedtuple
-
 
 __all__ = [
     "bet",
@@ -19,6 +20,11 @@ __all__ = [
     "ssa_answer",
     "run_beatmap",
 ]
+
+SinglePtResults = namedtuple("SinglePtResults", "ssa nm")
+ComboResults = namedtuple("ComboResults", "ssa c nm err intercept slope r mask check1 check2 check3 check4 check5 num_pts")
+BETResults = namedtuple("BETResults", "intercept iso_df nm slope ssa c err r num_pts info")
+RouqMask = namedtuple("RouqMask", "mask check1 check2 check3 check4 check5")
 
 
 def bet(iso_df, a_o, info, *args):
@@ -129,19 +135,18 @@ def bet(iso_df, a_o, info, *args):
                 # used to compute C, so, min and max error corresponds to the
                 # best and worst fit over the interval used in BET analysis,
                 # not the entire isotherm
-                tuple_fields = "intercept iso_df nm slope ssa c err r num_pts info"
-                results = namedtuple("results", tuple_fields)
-                bet_results = results(np.nan_to_num(intercept),
-                                      iso_df,
-                                      nm_array,
-                                      slope,
-                                      ssa_array,
-                                      c_array,
-                                      err_array,
-                                      r,
-                                      number_pts,
-                                      info)
-    return bet_results
+
+                results = BETResults(np.nan_to_num(intercept),
+                                     iso_df,
+                                     nm_array,
+                                     slope,
+                                     ssa_array,
+                                     c_array,
+                                     err_array,
+                                     r,
+                                     number_pts,
+                                     info)
+    return results
 
 
 def single_point_bet(df, a_o):
@@ -188,11 +193,7 @@ def single_point_bet(df, a_o):
                 nm_array[i, j] = n * (1 - relp)
                 ssa_array[i, j] = n * 6.022 * 10 ** 23 * a_o * 10 ** -20
 
-    singlept_results = namedtuple("singlept_results", ("ssa", "nm"))
-    singlept_results.ssa = ssa_array
-    singlept_results.nm = nm_array
-
-    return singlept_results
+    return SinglePtResults(ssa_array, nm_array)
 
 
 def check_y_intercept_positive(intercept):
@@ -491,10 +492,7 @@ def rouq_mask(intercept, iso_df, nm, slope, *args,
     # inverting mask so that 0 = valid, 1 = invalid, to work well with numpy masks
     invertedmask = np.logical_not(mask)
 
-    rouq_mask = namedtuple("rouq_mask", "mask check1 check2 check3 check4 check5")
-    mask_results = rouq_mask(invertedmask, check1, check2, check3, check4, check5)
-
-    return mask_results
+    return RouqMask(invertedmask, check1, check2, check3, check4, check5)
 
 
 def ssa_answer(bet_results, mask_results, criterion="error"):
@@ -540,7 +538,6 @@ def ssa_answer(bet_results, mask_results, criterion="error"):
                 "Error, so single specific surface area answer. Multiple"
                 + "relative pressure ranges with the maximum number of points."
             )
-            return 0
         logging.info(
             "The specific surface area value, based on %s is %.2f m2/g."
             % (criterion, ssa_ans)
@@ -589,8 +586,8 @@ def run_beatmap(file=None,
                 save_figures=True,
                 export_data=False,
                 ssa_criterion="error",
-                ssa_gradient="Greens",
-                err_gradient="Greys"):
+                ssa_gradient="greens",
+                err_gradient="greys"):
     """
     A single function that executes all necessary BEaTmap algorithims.
 
@@ -704,24 +701,19 @@ def run_beatmap(file=None,
         io.export_raw_data(isotherm_data)
         io.export_processed_data(bet_results, points)
 
-    fields = (
-        "ssa c nm err intercept slope r mask check1 check2 check3 check4 check5 num_pts"
-    )
-    combo_results = namedtuple("results", fields)
-
-    results = combo_results(bet_results.ssa,
-                            bet_results.c,
-                            bet_results.nm,
-                            bet_results.err,
-                            bet_results.intercept,
-                            bet_results.slope,
-                            bet_results.r,
-                            mask_results.mask,
-                            mask_results.check1,
-                            mask_results.check2,
-                            mask_results.check3,
-                            mask_results.check4,
-                            mask_results.check5,
-                            bet_results.num_pts)
+    results = ComboResults(bet_results.ssa,
+                           bet_results.c,
+                           bet_results.nm,
+                           bet_results.err,
+                           bet_results.intercept,
+                           bet_results.slope,
+                           bet_results.r,
+                           mask_results.mask,
+                           mask_results.check1,
+                           mask_results.check2,
+                           mask_results.check3,
+                           mask_results.check4,
+                           mask_results.check5,
+                           bet_results.num_pts)
 
     return results
