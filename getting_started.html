@@ -296,32 +296,35 @@ guide</a>.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
-<p>The following code snippets illustrate how to import data, perform BET analysis, evaluate Rouquerol criteria, and produce figures in BEaTmap. A set of examples
-is included in this repo, and can be <a class="reference external" href="https://github.com/PMEAL/beatmap/tree/master/examples">browsed
+<p>The following code snippets illustrate how to import data, perform BET analysis, evaluate Rouquerol criteria, and produce figures in BEaTmap. An example is included in this repo, and can be <a class="reference external" href="https://github.com/PMEAL/beatmap/blob/main/examples/BEaTmap_example.ipynb">browsed
 here</a>.</p>
-<section id="using-the-beatmap-envelope-function">
-<h3>Using the BEaTmap ‘envelope function’<a class="headerlink" href="#using-the-beatmap-envelope-function" title="Link to this heading">#</a></h3>
+</section>
+<section id="automated-bet-analysis">
+<h2>Automated BET analysis<a class="headerlink" href="#automated-bet-analysis" title="Link to this heading">#</a></h2>
 <p>An “envelope” function, that will import data, perform BET analysis, evaluate the Rouquerol criteria, and produce all figures for the user has been built. The file path, information about the data (later used for naming exported files), and the adsorbate cross sectional area in square Angstrom need to be specified. It allows the user to access much of BEaTmap’s functionality in one line.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">beatmap</span> <span class="k">as</span> <span class="nn">bt</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pylot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="n">bt</span><span class="o">.</span><span class="n">run_beatmap</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;vulcan_chex.csv&#39;</span><span class="p">,</span>
+<span class="n">bt</span><span class="o">.</span><span class="n">run_beatmap</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;examples/vulcan_chex.csv&#39;</span><span class="p">,</span>
                <span class="n">info</span><span class="o">=</span><span class="s1">&#39;chex on vulcan&#39;</span><span class="p">,</span>
                <span class="n">a_o</span><span class="o">=</span><span class="mi">39</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
+<section id="manual-bet-analysis">
+<h2>Manual BET analysis<a class="headerlink" href="#manual-bet-analysis" title="Link to this heading">#</a></h2>
+<p>Alternatively, you can use the individual functions in BEaTmap to perform BET analysis and evaluate the Rouquerol criteria. This allows the user to access more of BEaTmap’s functionality, and to customize the analysis.</p>
 <section id="loading-a-dataset-from-csv">
 <h3>Loading a dataset from .csv<a class="headerlink" href="#loading-a-dataset-from-csv" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">import_data</span></code> function can be used to import a isotherm data from a .csv file where the first column is relative pressure and the second column is the amount adsorbed.</p>
 <p>The function returns a named tuple where the first entry is a dataframe of the imported isotherm, and the 2nd-4th fields are the cross sectional area of the adsorbate, information about the data, and file path, respectively. Indexing of named tuple elements is in order of priority, data used by other function are given priority.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">isotherm_data</span> <span class="o">=</span> <span class="n">bt</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">import_data</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;vulcan_chex.csv&#39;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">isotherm_data</span> <span class="o">=</span> <span class="n">bt</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">import_data</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;examples/vulcan_chex.csv&#39;</span><span class="p">,</span>
                                   <span class="n">info</span><span class="o">=</span><span class="s1">&#39;chex on vulcan&#39;</span><span class="p">,</span>
                                   <span class="n">a_o</span><span class="o">=</span><span class="mi">39</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
-<section id="performing-bet-analysis">
-<h3>Performing BET analysis<a class="headerlink" href="#performing-bet-analysis" title="Link to this heading">#</a></h3>
+<section id="bet-analysis">
+<h3>BET analysis<a class="headerlink" href="#bet-analysis" title="Link to this heading">#</a></h3>
 <p>BET analysis is performed on every relative pressure range within the isotherm data by the <code class="docutils literal notranslate"><span class="pre">bet</span></code> function. The function accepts the dataframe of isotherm data, cross sectional area of the adsorbate, and information about the data (information stored in the named tuple created by the import_data function). Rather than pass individual parameters, this function can accept *isotherm_data (where isotherm_data is a named tuple output by a data import function).</p>
 <p>The function returns a named tuple containing the results of BET analysis as well as information about the isotherm (raw data, file path, etc). Again, the indexing of named tuple elements is in order of priority, data used by other function are given priority.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bet_results</span> <span class="o">=</span> <span class="n">bt</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">bet</span><span class="p">(</span><span class="n">isotherm_data</span><span class="o">.</span><span class="n">iso_df</span><span class="p">,</span>
@@ -330,8 +333,8 @@ here</a>.</p>
 </pre></div>
 </div>
 </section>
-<section id="evaluating-the-rouquerol-criteria">
-<h3>Evaluating the Rouquerol criteria<a class="headerlink" href="#evaluating-the-rouquerol-criteria" title="Link to this heading">#</a></h3>
+<section id="rouquerol-criteria">
+<h3>Rouquerol criteria<a class="headerlink" href="#rouquerol-criteria" title="Link to this heading">#</a></h3>
 <p>The Rouquerol criteria, used to mask out results of BET analysis for invalid relative pressure ranges are evaluated by the <code class="docutils literal notranslate"><span class="pre">rouq_mask</span></code> function. Rather than pass individual parameters, this function can accept <code class="docutils literal notranslate"><span class="pre">*bet_results</span></code> (where bet_results is a named tuple output by the bet function).</p>
 <p>The function returns a named tuple containing a numpy mask array, and individual arrays corresponding to the results of each criterion.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mask_results</span> <span class="o">=</span> <span class="n">bt</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">rouq_mask</span><span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">intercept</span><span class="p">,</span>
@@ -341,8 +344,8 @@ here</a>.</p>
 </pre></div>
 </div>
 </section>
-<section id="creating-a-specific-surface-area-heatmap-and-other-figures">
-<h3>Creating a specific surface area heatmap and other figures<a class="headerlink" href="#creating-a-specific-surface-area-heatmap-and-other-figures" title="Link to this heading">#</a></h3>
+<section id="supplementary-analysis">
+<h3>Supplementary analysis<a class="headerlink" href="#supplementary-analysis" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">bet_results</span></code> and <code class="docutils literal notranslate"><span class="pre">mask_results</span></code> can used to create a heatmap of specific surface area values for each relative pressure range. This visualization concept is the central idea of BEaTmap. The <code class="docutils literal notranslate"><span class="pre">ssa_heatmap</span></code> function requires the named tuples produced by the bet function and the rouq_mask function.</p>
 <p>Other figures, such as a plot of experimental data and the model isotherm can be created in this manner. See the documentation for a full summary of figures.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bt</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">ssa_heatmap</span><span class="p">(</span><span class="n">bet_results</span><span class="p">,</span> <span class="n">mask_results</span><span class="p">)</span>
@@ -353,8 +356,8 @@ here</a>.</p>
         <img src="https://user-images.githubusercontent.com/14086031/92957429-83827e00-f436-11ea-9be7-cda8aacd4569.png" width="100%"></img>
 </p>
 </section>
-<section id="exporting-xlsx-files-of-results">
-<h3>Exporting .xlsx files of results<a class="headerlink" href="#exporting-xlsx-files-of-results" title="Link to this heading">#</a></h3>
+<section id="export-the-results">
+<h3>Export the results<a class="headerlink" href="#export-the-results" title="Link to this heading">#</a></h3>
 <p>It might be desireable to have a spreadsheet that contains all results of BET analysis and the Rouquerol criteria. This sheet can be created and saved in the parent directory with the <code class="docutils literal notranslate"><span class="pre">export_processed_data</span></code> function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bt</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">export_processed_data</span><span class="p">(</span><span class="n">bet_results</span><span class="p">)</span>
 </pre></div>
@@ -423,13 +426,14 @@ here</a>.</p>
 <li><a class="reference internal" href="#capabilities">Capabilities</a></li>
 <li><a class="reference internal" href="#try-it-live">Try It Live</a></li>
 <li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#examples">Examples</a><ul>
-<li><a class="reference internal" href="#using-the-beatmap-envelope-function">Using the BEaTmap ‘envelope function’</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#automated-bet-analysis">Automated BET analysis</a></li>
+<li><a class="reference internal" href="#manual-bet-analysis">Manual BET analysis</a><ul>
 <li><a class="reference internal" href="#loading-a-dataset-from-csv">Loading a dataset from .csv</a></li>
-<li><a class="reference internal" href="#performing-bet-analysis">Performing BET analysis</a></li>
-<li><a class="reference internal" href="#evaluating-the-rouquerol-criteria">Evaluating the Rouquerol criteria</a></li>
-<li><a class="reference internal" href="#creating-a-specific-surface-area-heatmap-and-other-figures">Creating a specific surface area heatmap and other figures</a></li>
-<li><a class="reference internal" href="#exporting-xlsx-files-of-results">Exporting .xlsx files of results</a></li>
+<li><a class="reference internal" href="#bet-analysis">BET analysis</a></li>
+<li><a class="reference internal" href="#rouquerol-criteria">Rouquerol criteria</a></li>
+<li><a class="reference internal" href="#supplementary-analysis">Supplementary analysis</a></li>
+<li><a class="reference internal" href="#export-the-results">Export the results</a></li>
 </ul>
 </li>
 </ul>
