@@ -1,10 +1,6 @@
 ﻿:noindex:
 
-.. raw:: html
-
-   <p hidden>This is a module</p>
-
-Core
+core
 ====
 
 .. automodule:: beatmap.core

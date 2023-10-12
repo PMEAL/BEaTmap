@@ -1,8 +1,8 @@
 .. _modules_index:
 
-#############################
-Module and Function Reference
-#############################
+#############
+API Reference
+#############
 
 BEaTmap consists of four main modules.
 
