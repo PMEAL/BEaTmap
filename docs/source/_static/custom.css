@@ -41,7 +41,7 @@ div.highlight > pre {
 } */
 
 .toctree-l3 > a.reference.internal {
-    font-family: 'Fira Code', monospace;
+    /* font-family: 'Fira Code', monospace; */
     list-style-position: inside;
     white-space: nowrap;
     overflow: hidden;

@@ -1,10 +1,6 @@
 :noindex:
 
-.. raw:: html
-
-   <p hidden>This is a module</p>
-
-{{ name | capitalize | escape | underline }}
+{{ name | escape | underline }}
 
 .. automodule:: {{ fullname }}
 

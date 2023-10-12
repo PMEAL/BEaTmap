@@ -35,7 +35,7 @@ We have created a web-based GUI for BEaTmap using Streamlit.  This app is hosted
 BEaTmap depends heavily on the Scipy Stack. The best way to get a fully
 functional environment is the [Anaconda
 distribution](https://www.anaconda.com/download/). Be sure to get the
-**Python 3.8+ version**.
+**Python 3.9+ version**.
 
 Once you've installed `conda`, you can then install BEaTmap. It is
 available on the [Python Package
@@ -144,4 +144,3 @@ It might be desireable to have a spreadsheet that contains all results of BET an
 ```python
 bt.io.export_processed_data(bet_results)
 ```
-

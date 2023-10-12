@@ -2,8 +2,7 @@ import os
 import sys
 from distutils.util import convert_path
 
-from setuptools import setup, find_packages
-
+from setuptools import find_packages, setup
 
 sys.path.append(os.getcwd())
 
