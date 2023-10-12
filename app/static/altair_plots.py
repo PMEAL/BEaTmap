@@ -234,7 +234,7 @@ def plot_bet(bet_results, mask_results, ssa_answer):
             "1/(n(P/Po-1))": np.round(df.bet[start : stop + 1], 2),
             " ": len(df.bet[start : stop + 1])
             * [
-                "min error (exp. data)"
+                "min error"
             ],
         }
     )
@@ -279,7 +279,7 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
     ppo_expnnm_min_used = df.relp[stop : start + 1]
 
     model_source = pd.DataFrame(
-        {"P/Po": ppo, "n/nm": synth, " ": len(synth) * ["model isotherm"]}
+        {"P/Po": ppo, "n/nm": synth, " ": len(synth) * ["isotherm"]}
     )
     model = (
         alt.Chart(model_source)
@@ -296,7 +296,7 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
         {
             "P/Po": bet_results.iso_df.relp,
             "n/nm": np.round(expnnm, 2),
-            " ": len(expnnm) * ["experimental data"],
+            " ": len(expnnm) * ["experiment"],
         }
     )
     experimental = (
@@ -315,7 +315,7 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
         {
             "P/Po": ppo_expnnm_min_used,
             "n/nm": expnnm_min_used,
-            " ": len(expnnm_min_used) * ["min error (exp. data)"],
+            " ": len(expnnm_min_used) * ["min error"],
         }
     )
     experimental_used = (
@@ -334,7 +334,7 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
             labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True
         )
         .configure_title(fontSize=figure_title_size)
-        .configure_legend(labelFontSize=legend_label_size)
+        .configure_legend(labelFontSize=legend_label_size, padding=0, titlePadding=0)
     )
 
     st.altair_chart(chart)
@@ -400,7 +400,7 @@ def plot_bet_combo(bet_results, mask_results):
             "1/(n(P/Po-1))": np.round(df.bet[min_start : min_stop + 1], 2),
             " ": len(df.bet[min_start : min_stop + 1])
             * [
-                "min error (exp. data)"
+                "min error"
             ],
         }
     )
@@ -457,7 +457,7 @@ def plot_bet_combo(bet_results, mask_results):
             labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True
         )
         .configure_title(fontSize=figure_title_size)
-        .configure_legend(labelFontSize=legend_label_size)
+        .configure_legend(labelFontSize=legend_label_size, padding=0, titlePadding=0)
     )
 
     st.altair_chart(chart)
