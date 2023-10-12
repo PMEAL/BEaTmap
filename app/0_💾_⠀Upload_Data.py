@@ -84,5 +84,9 @@ if ("df" in state) and ("a_o" in state):
     # Fetch and analyze the uploaded data
     state.isotherm_data = fetch_isotherm_data(file=state.df, a_o=state.a_o)
     state.bet_results = fetch_bet_results(state.isotherm_data)
-    # Plot isotherm data
-    plots.plot_isotherm_data(state.isotherm_data)
+    # Plot/show isoterm data    
+    tabs = st.tabs(["Plot", "Data"])
+    with tabs[0]:
+        plots.plot_isotherm_data(state.isotherm_data)
+    with tabs[1]:
+        st.dataframe(state.isotherm_data.iso_df)

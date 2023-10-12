@@ -25,7 +25,7 @@ axis_title_size = 16
 
 
 def plot_isotherm_data(isotherm_data):
-    r"""Plot BET experimental isotherm data"""
+    """Plot BET experimental isotherm data"""
     source = pd.DataFrame(
         {"P/Po": isotherm_data.iso_df.relp, "n (mol/g)": isotherm_data.iso_df.n}
     )
@@ -42,7 +42,7 @@ def plot_isotherm_data(isotherm_data):
             labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True
         )
         .configure_point(size=100)
-        .properties(title="Experimental isotherm data", height=500, width=500)
+        .properties(title="", height=500, width=500)
         .configure_title(fontSize=figure_title_size)
         .interactive()
     )
@@ -51,7 +51,7 @@ def plot_isotherm_data(isotherm_data):
 
 
 def plot_ssa_heatmap(bet_results, mask_results):
-    r"""Plot SSA heatmap"""
+    """Plot SSA heatmap"""
     x, y = np.meshgrid(bet_results.iso_df.relp, bet_results.iso_df.relp)
     temp = np.round(bet_results.ssa.copy(), 2)
     temp[mask_results.mask] = 0
@@ -96,7 +96,7 @@ def plot_ssa_heatmap(bet_results, mask_results):
             titleFontSize=axis_title_size,
             domainColor="white",
         )
-        .properties(title="Specific surface area [m^2/g]", height=600, width=670)
+        .properties(title="", height=600, width=670)
         .configure_title(fontSize=figure_title_size)
         .configure_legend(
             padding=10,
@@ -115,7 +115,7 @@ def plot_ssa_heatmap(bet_results, mask_results):
 
 
 def plot_err_heatmap(bet_results, mask_results):
-    r"""Plot Error heatmap"""
+    """Plot Error heatmap"""
     x, y = np.meshgrid(bet_results.iso_df.relp, bet_results.iso_df.relp)
     temp = np.round(bet_results.err.copy(), 2)
     temp[mask_results.mask] = 0
@@ -160,7 +160,7 @@ def plot_err_heatmap(bet_results, mask_results):
             titleFontSize=axis_title_size,
             domainColor="white",
         )
-        .properties(title="Error", height=600, width=670,)
+        .properties(title="", height=600, width=670,)
         .configure_title(fontSize=figure_title_size)
         .configure_legend(
             padding=10,
@@ -179,7 +179,6 @@ def plot_err_heatmap(bet_results, mask_results):
 
 
 def plot_bet(bet_results, mask_results, ssa_answer):
-    r""""""
     mask = mask_results.mask
 
     df = bet_results.iso_df
@@ -217,7 +216,7 @@ def plot_bet(bet_results, mask_results, ssa_answer):
             y=alt.Y("1/(n(P/Po-1))", axis=alt.Axis(grid=False)),
             x=alt.X("P/Po", axis=alt.Axis(format=".2", grid=False)),
         )
-        .properties(title="BET plot", height=500, width=500)
+        .properties(title="", height=500, width=500)
     )
 
     line = (
@@ -257,7 +256,7 @@ def plot_bet(bet_results, mask_results, ssa_answer):
 
 
 def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
-    r"""Plot BET experimental isotherm data"""
+    """Plot BET experimental isotherm data"""
     mask = mask_results.mask
 
     df = bet_results.iso_df
@@ -290,7 +289,7 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
             x=alt.X("P/Po", axis=alt.Axis(format=".2", grid=False)),
             color=" ",
         )
-        .properties(title="Experimental data and model isotherm", height=480, width=622)
+        .properties(title="", height=480, width=622)
     )
 
     experimental_source = pd.DataFrame(
@@ -342,7 +341,6 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
 
 
 def plot_bet_combo(bet_results, mask_results):
-    r""""""
     mask = mask_results.mask
 
     df = bet_results.iso_df
@@ -393,7 +391,7 @@ def plot_bet_combo(bet_results, mask_results):
             y=alt.Y("1/(n(P/Po-1))", axis=alt.Axis(grid=False)),
             x=alt.X("P/Po", axis=alt.Axis(format=".2", grid=False)),
         )
-        .properties(title="Minimum and maximum error BET plot", height=480, width=622)
+        .properties(title="", height=480, width=622)
     )
 
     mindata_source = pd.DataFrame(

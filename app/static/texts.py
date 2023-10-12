@@ -139,7 +139,7 @@ data point and the BET isotherm for that relative pressure range.
 """
 
 bet_plot_instruction = r"""
-The BET plot for the specific answer value displayed above.
+The BET plot for the SSA value displayed above.
 """
 
 bet_combo_instruction = r"""
