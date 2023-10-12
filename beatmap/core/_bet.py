@@ -577,11 +577,11 @@ def ssa_answer(bet_results, mask_results, criterion="error"):
 def run_beatmap(file=None,
                 info=None,
                 a_o=None,
-                check1=True,
-                check2=True,
-                check3=True,
-                check4=True,
-                check5=True,
+                enforce_y_intercept_positive=True,
+                enforce_pressure_increasing=True,
+                enforce_absorbed_amount=True,
+                enforce_relative_pressure=True,
+                enforce_enough_datapoints=True,
                 points=5,
                 save_figures=True,
                 export_data=False,
@@ -615,23 +615,23 @@ def run_beatmap(file=None,
         Adsorbate-adsorbent information.
     a_o : float
         Cross sectional area of adsorbate, in square Angstrom.
-    check1 : bool
+    enforce_y_intercept_positive : bool
         If check1 is True any relative pressure ranges with a negative y
         intercept are considered invalid.
-    check2 : bool
+    enforce_pressure_increasing : bool
         If check2 is True any relative pressure ranges where n(p-po) is
         decreasing are considered invalid.
-    check3 : bool
+    enforce_absorbed_amount : bool
         If check3 is True any relative pressure ranges where the monolayer
         amount falls outside of the relative pressure range are considered
         invalid.
-    check4 : bool
+    enforce_relative_pressure : bool
         If check4 is True any relative pressure range where there is
         disagreement of more than 10% between the actual relative pressure
         where monolayer coverage occurs and the relative pressure where
         monolayer coverage occurs on the theoretical isotherm are considered
         invalid.
-    check5 : bool
+    enforce_enough_datapoints : bool
         If check5 is True relative pressure ranges that contain fewer points
         than specified by the user are considered invalid.
     points : int
@@ -679,11 +679,11 @@ def run_beatmap(file=None,
                              bet_results.iso_df,
                              bet_results.nm,
                              bet_results.slope,
-                             enforce_y_intercept_positive=check1,
-                             enforce_pressure_increasing=check2,
-                             enforce_absorbed_amount=check3,
-                             enforce_relative_pressure=check4,
-                             enforce_enough_datapoints=check5,
+                             enforce_y_intercept_positive=enforce_y_intercept_positive,
+                             enforce_pressure_increasing=enforce_pressure_increasing,
+                             enforce_absorbed_amount=enforce_absorbed_amount,
+                             enforce_relative_pressure=enforce_relative_pressure,
+                             enforce_enough_datapoints=enforce_enough_datapoints,
                              points=points)
 
     # mask_results are used to highlight the valid bet_results in the

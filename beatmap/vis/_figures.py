@@ -39,13 +39,13 @@ def experimental_data_plot(isotherm_data, save_file=False):
     """
 
     df = isotherm_data.iso_df
-    fig, ax = plt.subplots(1, 1, figsize=(10, 10))
+    fig, ax = plt.subplots(1, 1, figsize=(6, 5))
     ax.set_xlim(0, 1.0)
     # ax.set_ylim(0, df['n'].iloc[-1] * 1.05)
-    ax.set_title("Experimental Isotherm")
+    ax.set_title("experimental isotherm")
     ax.set_ylabel("n [mol/g]")
     ax.set_xlabel("P/Po")
-    ax.grid(b=True, which="major", color="gray", linestyle=":")
+    ax.grid(which="major", color="gray", linestyle=":")
     ax.plot(df.relp, df.n, c="k", marker="o", markerfacecolor="w", linewidth=0)
 
     if save_file is True:
@@ -59,7 +59,7 @@ def experimental_data_plot(isotherm_data, save_file=False):
     return
 
 
-def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="greens"):
+def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="Greens"):
     """Creates a heatmap of specific surface areas.
 
     Shading corresponds to specific surface area, normalized for the minimum
@@ -70,32 +70,27 @@ def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="greens"):
     bet_results : namedtuple
         The bet_results.ssa element is used to create a heatmap of specific
         surface area answers.
-
     mask_results : namedtuple
         The mask_results.mask element is used to mask the
         specific surface area heatmap so that only valid results are
         displayed.
-
-    save_file : boolean
+    save_file : bool
         When save_file = True a png of the figure is created in the
         working directory.
-
-    gradient : string
+    gradient : str
         Color gradient for heatmap, must be a vaild color gradient name
         in the seaborn package.
 
     Returns
     -------
+    None
 
     """
-
     mask = mask_results.mask
 
     if mask.all():
-        logging.warning(
-            "No valid relative pressure ranges. Specific surface area"
-            " heatmap not created."
-        )
+        logging.warning("No valid relative pressure ranges. Specific surface area "
+                        " heatmap not created.")
         return
 
     df = bet_results.iso_df
@@ -106,7 +101,7 @@ def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="greens"):
     # finding max and min sa to normalize heatmap colours
     ssamax, ssa_max_idx, ssamin, ssa_min_idx = util.max_min(ssa)
     hm_labels = round(df.relp * 100, 1)
-    fig, (ax) = plt.subplots(1, 1, figsize=(13, 13))
+    fig, (ax) = plt.subplots(1, 1, figsize=(8, 8))
     sns.heatmap(
         ssa,
         vmin=ssamin,
@@ -121,24 +116,24 @@ def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="greens"):
         cbar_kws={"shrink": 0.78, "aspect": len(df.relp)},
     )
     ax.invert_yaxis()
-    ax.set_title(
-        "Specific Surface Area m^2/g"
-    )
+    ax.set_title(r"specific surface area (m$^2$/g)")
     plt.xticks(rotation=45, horizontalalignment="right")
     plt.xlabel("Start Relative Pressure")
     plt.yticks(rotation=45, horizontalalignment="right")
     plt.ylabel("End Relative Pressure")
 
+    # remove every second label to make plot more readable
+    for label in ax.xaxis.get_ticklabels()[::2]:
+        label.set_visible(False)
+    for label in ax.yaxis.get_ticklabels()[::2]:
+        label.set_visible(False)
+
     if save_file is True:
         fig.savefig("ssa_heatmap_%s.png" % (bet_results.info), bbox_inches="tight")
-        logging.info(
-            "Specific surface area heatmap saved as: ssa_heatmap_%s.png"
-            % (bet_results.info)
-        )
-    return
+        logging.info(f"Specific surface area heatmap saved as: ssa_heatmap_{bet_results.info}.png")
 
 
-def err_heatmap(bet_results, mask_results, save_file=True, gradient="greys"):
+def err_heatmap(bet_results, mask_results, save_file=True, gradient="Greys"):
     """Creates a heatmap of error values.
 
     Shading corresponds to average error between experimental data and the
@@ -171,9 +166,7 @@ def err_heatmap(bet_results, mask_results, save_file=True, gradient="greys"):
     mask = mask_results.mask
 
     if mask.all():
-        logging.warning(
-            "No valid relative pressure ranges. Error heat map not created."
-        )
+        logging.warning("No valid relative pressure ranges. Error heat map not created.")
         return
 
     df = bet_results.iso_df
@@ -184,7 +177,7 @@ def err_heatmap(bet_results, mask_results, save_file=True, gradient="greys"):
     errormax, error_max_idx, errormin, error_min_idx = util.max_min(err)
 
     hm_labels = round(df.relp * 100, 1)
-    fig, (ax) = plt.subplots(1, 1, figsize=(13, 13))
+    fig, (ax) = plt.subplots(1, 1, figsize=(8, 8))
     sns.heatmap(
         err,
         vmin=0,
@@ -200,12 +193,18 @@ def err_heatmap(bet_results, mask_results, save_file=True, gradient="greys"):
     )
     ax.invert_yaxis()
     ax.set_title(
-        "Average Error per Point Between Experimental and" " Theoretical Isotherms"
+        "error between experiment and isotherm"
     )
     plt.xticks(rotation=45, horizontalalignment="right")
     plt.xlabel("Start Relative Pressure")
     plt.yticks(rotation=45, horizontalalignment="right")
     plt.ylabel("End Relative Pressure")
+
+    # remove every second label to make plot more readable
+    for label in ax.xaxis.get_ticklabels()[::2]:
+        label.set_visible(False)
+    for label in ax.yaxis.get_ticklabels()[::2]:
+        label.set_visible(False)
 
     if save_file is True:
         fig.savefig("error_heatmap_%s.png" % (bet_results.info), bbox_inches="tight")
@@ -284,14 +283,14 @@ def bet_combo_plot(bet_results, mask_results, save_file=True):
     max_linex[0] = df.relp[max_start] - 0.01
     max_linex[1] = df.relp[max_stop] + 0.01
 
-    figure, ax1 = plt.subplots(1, figsize=(10, 10))
+    figure, ax1 = plt.subplots(1, figsize=(6, 6))
 
-    ax1.set_title("BET Plot")
+    ax1.set_title("BET plot")
     ax1.set_xlim(0, max(min_linex[1], max_linex[1]) * 1.1)
     ax1.set_ylabel("1/[n(P/Po-1)]")
     ax1.set_ylim(0, max(min_liney[1] * 1.1, max_liney[1] * 1.1))
     ax1.set_xlabel("P/Po")
-    ax1.grid(b=True, which="major", color="gray", linestyle="-")
+    ax1.grid(which="major", color="gray", linestyle="-")
     ax1.plot(
         df.relp[min_start : min_stop + 1],
         df.bet[min_start : min_stop + 1],
@@ -325,7 +324,7 @@ def bet_combo_plot(bet_results, mask_results, save_file=True):
         % (slope, intercept, r_val, slope_max, intercept_max, r_value_max),
         bbox=dict(boxstyle="round", fc="white", ec="gray", alpha=1),
         textcoords="axes fraction",
-        xytext=(0.695, 0.017),
+        xytext=(1.1, 0.35),
         xy=(df.relp[min_stop], df.bet[min_start]),
         size=11,
     )
@@ -364,9 +363,7 @@ def iso_combo_plot(bet_results, mask_results, save_file=True):
     mask = mask_results.mask
 
     if mask.all():
-        logging.warning(
-            "No valid relative pressure ranges. BET isotherm combo plot not created."
-        )
+        logging.warning("No valid relative pressure ranges. BET isotherm combo plot not created.")
         return
 
     df = bet_results.iso_df
@@ -386,14 +383,14 @@ def iso_combo_plot(bet_results, mask_results, save_file=True):
     expnnm_min_used = expnnm_min[err_min_j:err_min_i]
     ppo_expnnm_min_used = df.relp[err_min_j:err_min_i]
 
-    f, ax1 = plt.subplots(1, 1, figsize=(10, 10))
+    f, ax1 = plt.subplots(1, 1, figsize=(6, 5))
 
-    ax1.set_title("BET Isotherm and Experimental data")
+    ax1.set_title("BET isotherm vs. experiment")
     ax1.set_ylim(0, synth_min[-2] + 1)
     ax1.set_xlim(0, 1)
     ax1.set_ylabel("n/nm")
     ax1.set_xlabel("P/Po")
-    ax1.grid(b=True, which="major", color="gray", linestyle="-")
+    ax1.grid(which="major", color="gray", linestyle="-")
     ax1.plot(
         ppo,
         synth_min,
