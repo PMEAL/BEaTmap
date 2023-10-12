@@ -33,7 +33,7 @@ jobs:
           pip install -e .
 
       - name: Running tests
-        run: pytest --cov=./ --cov-report=xml
+        run: pytest tests/ --cov=./ --cov-report=xml
 
       - name: Upload coverage to Codecov
         if: (matrix.python-version == 3.9) && (matrix.os == 'ubuntu-latest')

@@ -201,8 +201,8 @@ def plot_bet(bet_results, mask_results, ssa_answer):
     linex[1] = df.relp[stop] + 0.01
 
     linreg_dict = {
-        " ": ["Slope", "Intercept", "r"],
-        "Trendline": [slope, intercept, r_val],
+        " ": ["slope", "intercept", "r"],
+        "trendline": [slope, intercept, r_val],
     }
 
     linreg_table = pd.DataFrame(data=linreg_dict)
@@ -375,9 +375,9 @@ def plot_bet_combo(bet_results, mask_results):
     max_linex[1] = df.relp[max_stop] + 0.01
 
     linreg_dict = {
-        " ": ["Slope", "Intercept", "r"],
-        "Min. Error Trendline": [slope, intercept, r_val],
-        "Max. Error Trendline": [slope_max, intercept_max, r_val_max],
+        " ": ["slope", "intercept", "r"],
+        "min error fit": [slope, intercept, r_val],
+        "max error fit": [slope_max, intercept_max, r_val_max],
     }
 
     linreg_table = pd.DataFrame(data=linreg_dict)
@@ -434,7 +434,7 @@ def plot_bet_combo(bet_results, mask_results):
             "1/(n(P/Po-1))": np.round(df.bet[max_start : max_stop + 1], 2),
             " ": len(df.bet[max_start : max_stop + 1])
             * [
-                "max error (exp. data)"
+                "max error"
             ],
         }
     )

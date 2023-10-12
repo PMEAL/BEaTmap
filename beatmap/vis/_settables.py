@@ -202,7 +202,7 @@ def dataframe_tables(bet_results, mask_results):
     mask = mask_results.mask
 
     if mask.all():
-        logging.warning("No valid relative pressure ranges. Tables not created.")
+        logging.warning("No valid relative pressure ranges; Abroting.")
 
         ssa_dict = {
             " ": ["Min SSA", "Max SSA", "Mean SSA", "Median SSA"],
@@ -211,7 +211,6 @@ def dataframe_tables(bet_results, mask_results):
             "Start P/Po": ["n/a", "n/a", "n/a", "n/a"],
             "End P/Po": ["n/a", "n/a", "n/a", "n/a"],
         }
-
         ssa_table = pd.DataFrame(data=ssa_dict)
 
         c_dict = {
@@ -222,11 +221,11 @@ def dataframe_tables(bet_results, mask_results):
             "End P/Po": ["n/a", "n/a", "n/a", "n/a", "n/a", "n/a"],
             "Error": ["n/a", "n/a", "n/a", "n/a", "n/a", "n/a"],
         }
-        msg = "No valid relative pressure ranges. Standard deviations not calculated."
-        logging.warning(msg)
         c_table = pd.DataFrame(data=c_dict)
+        
         ssa_sdev = 0
         c_sdev = 0
+
         return ssa_table, c_table, ssa_sdev, c_sdev
 
     df = bet_results.iso_df
@@ -252,56 +251,57 @@ def dataframe_tables(bet_results, mask_results):
     cmax_err = float(c[err_max_idx[0], err_max_idx[1]])
     cmin_err = float(c[err_min_idx[0], err_min_idx[1]])
 
-    # these are just variables to print in tables
-    ssa_min = round(ssamin, 3)
-    ssa_min_c = round(float(c[ssa_min_idx[0], ssa_min_idx[1]]), 3)
-    ssa_min_start_ppo = round(float(df.relp[ssa_min_idx[1]].iloc[0]), 3)
-    ssa_min_end_ppo = round(float(df.relp[ssa_min_idx[0]].iloc[0]), 3)
-    ssa_max = round(ssamax, 3)
-    ssa_max_c = round(float(c[ssa_max_idx[0], ssa_max_idx[1]]), 3)
-    ssa_max_start_ppo = round(float(df.relp[ssa_max_idx[1]].iloc[0]), 3)
-    ssa_max_end_ppo = round(float(df.relp[ssa_max_idx[0]].iloc[0]), 3)
-    ssa_mean = round(ssamean, 3)
-    ssa_median = round(ssamedian, 3)
+    nsigfig = 1
 
-    c_min = round(cmin, 3)
-    c_min_sa = round(float(ssa[c_min_idx[0], c_min_idx[1]]), 3)
-    c_min_start_ppo = round(float(df.relp[c_min_idx[1]].iloc[0]), 3)
-    c_min_end_ppo = round(float(df.relp[c_min_idx[0]].iloc[0]), 3)
-    c_min_err = round(float(err[c_min_idx[0], c_min_idx[1]]), 3)
-    c_max = round(cmax, 3)
-    c_max_sa = round(float(ssa[c_max_idx[0], c_max_idx[1]]), 3)
-    c_max_start_ppo = round(float(df.relp[c_max_idx[1]].iloc[0]), 3)
-    c_max_end_ppo = round(float(df.relp[c_max_idx[0]].iloc[0]), 3)
-    c_max_err = round(float(err[c_max_idx[0], c_max_idx[1]]), 3)
-    c_mean = round(cmean, 3)
-    c_median = round(cmedian, 3)
-    cmin_err = round(cmin_err, 3)
-    c_min_err_sa = round(float(ssa[err_min_idx[0], err_min_idx[1]]), 3)
-    c_min_err_start_ppo = round(float(df.relp[err_min_idx[1]].iloc[0]), 3)
-    c_min_err_end_ppo = round(float(df.relp[err_min_idx[0]].iloc[0]), 3)
-    err_min = round(err_min, 3)
-    cmax_err = round(cmax_err, 3)
-    c_max_err_sa = round(float(ssa[err_max_idx[0], err_max_idx[1]]), 3)
-    c_max_err_start_ppo = round(float(df.relp[err_max_idx[1]].iloc[0]), 3)
-    c_max_err_end_ppo = round(float(df.relp[err_max_idx[0]].iloc[0]), 3)
-    err_max = round(err_max, 3)
+    ssa_min = round(ssamin, nsigfig)
+    ssa_min_c = round(float(c[ssa_min_idx[0], ssa_min_idx[1]]), nsigfig)
+    ssa_min_start_ppo = round(float(df.relp[ssa_min_idx[1]].iloc[0]), nsigfig+1)
+    ssa_min_end_ppo = round(float(df.relp[ssa_min_idx[0]].iloc[0]), nsigfig+1)
+    ssa_max = round(ssamax, nsigfig)
+    ssa_max_c = round(float(c[ssa_max_idx[0], ssa_max_idx[1]]), nsigfig)
+    ssa_max_start_ppo = round(float(df.relp[ssa_max_idx[1]].iloc[0]), nsigfig+1)
+    ssa_max_end_ppo = round(float(df.relp[ssa_max_idx[0]].iloc[0]), nsigfig+1)
+    ssa_mean = round(ssamean, nsigfig)
+    ssa_median = round(ssamedian, nsigfig)
+
+    c_min = round(cmin, nsigfig)
+    c_min_sa = round(float(ssa[c_min_idx[0], c_min_idx[1]]), nsigfig)
+    c_min_start_ppo = round(float(df.relp[c_min_idx[1]].iloc[0]), nsigfig+1)
+    c_min_end_ppo = round(float(df.relp[c_min_idx[0]].iloc[0]), nsigfig+1)
+    c_min_err = round(float(err[c_min_idx[0], c_min_idx[1]]), nsigfig+1)
+    c_max = round(cmax, nsigfig)
+    c_max_sa = round(float(ssa[c_max_idx[0], c_max_idx[1]]), nsigfig)
+    c_max_start_ppo = round(float(df.relp[c_max_idx[1]].iloc[0]), nsigfig+1)
+    c_max_end_ppo = round(float(df.relp[c_max_idx[0]].iloc[0]), nsigfig+1)
+    c_max_err = round(float(err[c_max_idx[0], c_max_idx[1]]), nsigfig+1)
+    c_mean = round(cmean, nsigfig)
+    c_median = round(cmedian, nsigfig)
+    cmin_err = round(cmin_err, nsigfig)
+    c_min_err_sa = round(float(ssa[err_min_idx[0], err_min_idx[1]]), nsigfig)
+    c_min_err_start_ppo = round(float(df.relp[err_min_idx[1]].iloc[0]), nsigfig+1)
+    c_min_err_end_ppo = round(float(df.relp[err_min_idx[0]].iloc[0]), nsigfig+1)
+    err_min = round(err_min, nsigfig+1)
+    cmax_err = round(cmax_err, nsigfig)
+    c_max_err_sa = round(float(ssa[err_max_idx[0], err_max_idx[1]]), nsigfig)
+    c_max_err_start_ppo = round(float(df.relp[err_max_idx[1]].iloc[0]), nsigfig+1)
+    c_max_err_end_ppo = round(float(df.relp[err_max_idx[0]].iloc[0]), nsigfig+1)
+    err_max = round(err_max, nsigfig+1)
 
     ssa_dict = {
-        " ": ["Min SSA", "Max SSA", "Mean SSA", "Median SSA"],
-        "SSA m2/g": [ssa_min, ssa_max, ssa_mean, ssa_median],
+        " ": ["min", "max", "mean", "median"],
+        "SSA": [ssa_min, ssa_max, ssa_mean, ssa_median],
         "C": [ssa_min_c, ssa_max_c, "n/a", "n/a"],
-        "Start P/Po": [ssa_min_start_ppo, ssa_max_start_ppo, "n/a", "n/a"],
-        "End P/Po": [ssa_min_end_ppo, ssa_max_end_ppo, "n/a", "n/a"],
+        "(P/Po)s": [ssa_min_start_ppo, ssa_max_start_ppo, "n/a", "n/a"],
+        "(P/Po)e": [ssa_min_end_ppo, ssa_max_end_ppo, "n/a", "n/a"],
     }
 
     ssa_table = pd.DataFrame(data=ssa_dict)
 
     c_dict = {
-        " ": ["Min C", "Max C", "Mean C", "Median C", "Min Error C", "Max Error C"],
+        " ": ["min", "max", "mean", "median", "min error", "max error"],
         "C": [c_min, c_max, c_mean, c_median, cmin_err, cmax_err],
         "SSA": [c_min_sa, c_max_sa, "n/a", "n/a", c_min_err_sa, c_max_err_sa],
-        "Start P/Po": [
+        "(P/Po)s": [
             c_min_start_ppo,
             c_max_start_ppo,
             "n/a",
@@ -309,7 +309,7 @@ def dataframe_tables(bet_results, mask_results):
             c_min_err_start_ppo,
             c_max_err_start_ppo,
         ],
-        "End P/Po": [
+        "(P/Po)e": [
             c_min_end_ppo,
             c_max_end_ppo,
             "n/a",
@@ -317,7 +317,7 @@ def dataframe_tables(bet_results, mask_results):
             c_min_err_end_ppo,
             c_max_err_end_ppo,
         ],
-        "Error": [c_min_err, c_max_err, "n/a", "n/a", err_min, err_max],
+        "error": [c_min_err, c_max_err, "n/a", "n/a", err_min, err_max],
     }
 
     c_table = pd.DataFrame(data=c_dict)

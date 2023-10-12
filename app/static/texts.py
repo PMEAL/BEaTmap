@@ -150,7 +150,7 @@ apparent, demonstrating the importance of selection criteria.
 
 iso_combo_instruction = r"""
 Experimental isotherm data and the BET model isotherm corresponding to the
-specific surface area value displayed above. Data points used in the BET
+SSA value displayed above. Data points used in the BET
 analysis are highlighted. The point at which monolayer coverage occurs is
 where n/nm = 1.
 """
