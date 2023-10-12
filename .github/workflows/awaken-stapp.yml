@@ -1,0 +1,15 @@
+name: Awaken Streamlit App
+
+on:
+  schedule:
+    # Run every 6 days
+    - cron: '0 0 */6 * *'
+
+jobs:
+  keep_awake:
+    name: Hit Streamlit App URL
+    runs-on: ubuntu-latest
+    steps:
+    - name: Making a request to Streamlit App
+      run: |
+        curl https://beatmap.streamlit.io/
