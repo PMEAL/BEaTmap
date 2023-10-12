@@ -327,7 +327,7 @@ def export_processed_data(bet_results, points=5):
         columns=[
             "begin relative pressure",
             "end relative pressure",
-            "spec sa [m2/g]",
+            "SSA [m2/g]",
             "bet constant",
             "nm [mol/g]",
             "error",
