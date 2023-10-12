@@ -1,8 +1,8 @@
 """
-Utils
------
+utils
+=====
 
-``utils`` is a module!
+``utils`` contains helper functions used throughout the library.
 
 """
 

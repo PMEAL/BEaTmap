@@ -1,8 +1,8 @@
 """
-Vis
+vis
 ===
 
-``vis`` is a module!
+``vis`` contains functions for visualizing data and results.
 
 """
 

@@ -1,8 +1,8 @@
 """
-Core
+core
 ====
 
-``core`` is a module!
+``core`` contains the core functions for performing BET analysis.
 
 """
 

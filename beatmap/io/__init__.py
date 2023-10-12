@@ -1,8 +1,8 @@
 """
-IO
+io
 ==
 
-``io`` is a module!
+``io`` contains functions for reading and writing data.
 
 """
 
