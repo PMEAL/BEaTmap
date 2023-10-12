@@ -367,7 +367,6 @@ def check_enough_datapoints(df, points=5):
     ----------
     df : dataframe
         Dataframe of imported experimental isothermal adsorption data.
-
     points : int
         Minimum number of data points required for BET analysis to be
         considered valid, default value is 5.
@@ -659,7 +658,6 @@ def run_beatmap(file=None,
     None
 
     """
-
     # run_beatmap_import_data imports isotherm data from a .csv file and returns
     # the results in the isotherm_data namedtuple
     isotherm_data = io.import_data(file, info, a_o)
