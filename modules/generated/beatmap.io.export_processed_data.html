@@ -10,7 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=4b35d38f" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=42246f4c" />
     
     
 
@@ -236,16 +236,15 @@
 <h1>export_processed_data<a class="headerlink" href="#export-processed-data" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="beatmap.io.export_processed_data">
-<span class="sig-prename descclassname"><span class="pre">beatmap.io.</span></span><span class="sig-name descname"><span class="pre">export_processed_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bet_results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beatmap.io.export_processed_data" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">beatmap.io.</span></span><span class="sig-name descname"><span class="pre">export_processed_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bet_results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_num_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beatmap.io.export_processed_data" title="Link to this definition">#</a></dt>
 <dd><p>Exports processed isothermal adsoprtion data.</p>
 <p>Exported data is saved as a .csv file in the parent directory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>bet_results</strong><span class="classifier">namedtuple</span></dt><dd><p>Contains all information required for BET analysis.
-Relevant fields are:</p>
+<dt><strong>bet_results</strong><span class="classifier">namedtuple</span></dt><dd><p>Contains all information required for BET analysis.</p>
 </dd>
-<dt><strong>points</strong><span class="classifier">int</span></dt><dd><p>The minimum number of experimental data points for a relative pressure
+<dt><strong>min_num_points</strong><span class="classifier">int</span></dt><dd><p>The minimum number of experimental data points for a relative pressure
 interval to be considered valid. Default is 5.</p>
 </dd>
 </dl>

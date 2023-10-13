@@ -49,3 +49,21 @@ div.highlight > pre {
     margin-top: -5px;
     margin-bottom: -5px;
 }
+
+img#banner {
+    float: right;
+    opacity: 1;
+    display: block;
+    margin-right: auto;
+    margin-left: 20px;
+    height: 200px;
+}
+
+img#logo {
+    float: left;
+    opacity: 1;
+    display: block;
+    margin-left: auto;
+    margin-right: 20px;
+    height: 110px;
+}

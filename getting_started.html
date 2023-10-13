@@ -3,14 +3,14 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="API Reference" href="modules/index.html" /><link rel="prev" title="Welcome to BEaTmap documentation" href="index.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="API Reference" href="modules/index.html" /><link rel="prev" title="BEaTmap: BET Analysis Tool" href="index.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
         <title>Getting Started - BEaTmap 0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=4b35d38f" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=42246f4c" />
     
     
 
@@ -239,17 +239,12 @@
 <p><a class="reference external" href="https://github.com/PMEAL/beatmap/actions"><img alt="image" src="https://github.com/PMEAL/beatmap/actions/workflows/tests.yml/badge.svg" /></a>
 <a class="reference external" href="https://codecov.io/gh/PMEAL/beatmap"><img alt="codecov" src="https://codecov.io/gh/PMEAL/beatmap/branch/main/graph/badge.svg?token=3ZBPKC3QXW" /></a>
 <a class="reference external" href="https://pypi.python.org/pypi/beatmap/"><img alt="image" src="https://img.shields.io/pypi/v/beatmap.svg" /></a></p>
-<p>Obtaining surface area of a porous sample from the interpretation of gas
-adsorption isotherms is very widely done using the theory developed by Brunauer,
-Emmett, and Teller in the 1950s.  The BET (or BEaT) theory is so commonly place
-that the acronym has is synonymous with surface area.</p>
-<p>The BET theory was derived with several assumptions, and these must be met for
-the predicted surface area to be valid.</p>
+<p>Obtaining surface area of a porous sample from the interpretation of gas adsorption isotherms is very widely done using the theory developed by Brunauer, Emmett, and Teller in the 1950s. The BET (or BEaT) theory is so commonly place
+that the acronym has is synonymous with surface area. The BET theory was derived with several assumptions, and these must be met for the predicted surface area to be valid.</p>
 <p>Rouquerol et al have put forth criteria to evaluate whether isothermal adsoprtion data meets the assumptions of BET analysis. Applying these criteria to all relative pressure ranges of an isotherm allows one to eliminate relative pressure ranges that do not adhere to BET theory. Visualizing the results of BET analysis as a heatmap where “invalid” relative pressure ranges are masked provides a quick and comprehensive representation of BET results for an isotherm.</p>
 <p>BEaTmap was developed as a conceptulization and vizualization tool for BET analysis utilizing the “Rouquerol criteria”.</p>
-</section>
 <section id="capabilities">
-<h2>Capabilities<a class="headerlink" href="#capabilities" title="Link to this heading">#</a></h2>
+<h3>Capabilities<a class="headerlink" href="#capabilities" title="Link to this heading">#</a></h3>
 <p>BEaTmap consists of the following modules:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">core</span></code>: Functions that perform BET analysis, evaluate Rouquerol critieria, and provide a single specific surface area answer</p></li>
@@ -259,93 +254,87 @@ the predicted surface area to be valid.</p>
 </ul>
 </section>
 <section id="try-it-live">
-<h2>Try It Live<a class="headerlink" href="#try-it-live" title="Link to this heading">#</a></h2>
-<p>We have created a web-based GUI for BEaTmap using Streamlit.  This app is hosted on the Streamlit servers and is available <a class="reference external" href="https://beatmap.streamlit.app">here</a>.  If the app is not used for a certain period then Streamlit will hibernate it then wake it up on request, so it may take a few moments to load.  The app includes a link to some sample data which you can use to explore the interface. Enjoy.</p>
+<h3>Try It Live<a class="headerlink" href="#try-it-live" title="Link to this heading">#</a></h3>
+<p>We have created a web-based GUI for BEaTmap using Streamlit.  This app is hosted on the Streamlit servers and is available <a class="reference external" href="https://beatmap.streamlit.app">here</a>. If the app is not used for a certain period then Streamlit will hibernate it then wake it up on request, so it may take a few moments to load. The app includes a link to some sample data which you can use to explore the interface. Enjoy.</p>
 </section>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
-<p>BEaTmap depends heavily on the Scipy Stack. The best way to get a fully
-functional environment is the <a class="reference external" href="https://www.anaconda.com/download/">Anaconda
-distribution</a>. Be sure to get the
-<strong>Python 3.9+ version</strong>.</p>
-<p>Once you’ve installed <code class="docutils literal notranslate"><span class="pre">conda</span></code>, you can then install BEaTmap. It is
-available on the <a class="reference external" href="https://pypi.org/project/beatmap/">Python Package
-Index</a> and can be installed by typing
-the following at the <em>conda</em> prompt:</p>
+<h3>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h3>
+<p>BEaTmap depends heavily on the Scipy Stack. The best way to get a fully functional environment is the <a class="reference external" href="https://www.anaconda.com/download/">Anaconda distribution</a>. Be sure to get the <strong>Python 3.9+ version</strong>.</p>
+<p>Once you’ve installed <code class="docutils literal notranslate"><span class="pre">conda</span></code>, you can then install BEaTmap. It is available on the <a class="reference external" href="https://pypi.org/project/beatmap/">Python Package Index</a> and can be installed by typing the following at the <em>conda</em> prompt:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install beatmap
 </pre></div>
 </div>
-<p>On Windows, you should have a shortcut to the “anaconda prompt” in the
-Anaconda program group in the start menu. This will open a Windows
-command console with access to the Python features added by <code class="docutils literal notranslate"><span class="pre">conda</span></code>,
-such as installing things via <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
-<p>On Mac or Linux, you need to open a normal terminal window, then type
-<code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">activate</span> <span class="pre">{env}</span></code> where you replace <code class="docutils literal notranslate"><span class="pre">{env}</span></code> with the name of the
-environment you want to install BEaTmap. If you don’t know what this
-means, then use <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">activate</span> <span class="pre">root</span></code>, which will install BEaTmap in
-the root environment which is the default.</p>
-<p>If you think you may be interested in contributing to BEaTmap and wish
-to both <em>use</em> and <em>edit</em> the source code, then you should clone the
-<a class="reference external" href="https://github.com/PMEAL/beatmap">repository</a> to your local machine,
-and install it using the following <code class="docutils literal notranslate"><span class="pre">pip</span></code> command:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install -e &quot;PATH_TO_BEATMAP_ROOT_FOLDER&quot;
+<p>On Windows, you should have a shortcut to the “Anaconda Prompt” in the start menu. This will open a Windows command console with access to the Python features added by <code class="docutils literal notranslate"><span class="pre">conda</span></code>, such as installing things via <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
+<p>On Mac or Linux, you need to open a normal terminal window, then type <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">activate</span> <span class="pre">{env}</span></code> where you replace <code class="docutils literal notranslate"><span class="pre">{env}</span></code> with the name of the environment you want to install BEaTmap. If you don’t know what this means, then use <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">activate</span> <span class="pre">base</span></code>, which will install BEaTmap in the base environment which is the default.</p>
+<p>If you think you may be interested in contributing to BEaTmap and wish to both <em>use</em> and <em>edit</em> the source code, then you should clone the <a class="reference external" href="https://github.com/PMEAL/beatmap">repository</a> to your local machine, and install it using the following <code class="docutils literal notranslate"><span class="pre">pip</span></code> command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install -e path/to/beatmap/root/folder
 </pre></div>
 </div>
-<p>For information about contributing, refer to the <a class="reference external" href="https://github.com/PMEAL/beatmap/blob/master/CONTRIBUTING.md">contributors
-guide</a>.</p>
+<p>For information about contributing, refer to the <a class="reference external" href="https://github.com/PMEAL/beatmap/blob/master/CONTRIBUTING.md">contributors guide</a>.</p>
 </section>
 <section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
-<p>The following code snippets illustrate how to import data, perform BET analysis, evaluate Rouquerol criteria, and produce figures in BEaTmap. An example is included in this repo, and can be <a class="reference external" href="https://github.com/PMEAL/beatmap/blob/main/examples/BEaTmap_example.ipynb">browsed
-here</a>.</p>
+<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
+<p>The following code snippets illustrate how to import data, perform BET analysis, evaluate Rouquerol criteria, and produce figures in BEaTmap. An example is included in this repo, and can be <a class="reference external" href="https://github.com/PMEAL/beatmap/blob/main/examples/BEaTmap_example.ipynb">browsed here</a>.</p>
 </section>
 <section id="automated-bet-analysis">
-<h2>Automated BET analysis<a class="headerlink" href="#automated-bet-analysis" title="Link to this heading">#</a></h2>
+<h3>Automated BET analysis<a class="headerlink" href="#automated-bet-analysis" title="Link to this heading">#</a></h3>
 <p>An “envelope” function, that will import data, perform BET analysis, evaluate the Rouquerol criteria, and produce all figures for the user has been built. The file path, information about the data (later used for naming exported files), and the adsorbate cross sectional area in square Angstrom need to be specified. It allows the user to access much of BEaTmap’s functionality in one line.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">beatmap</span> <span class="k">as</span> <span class="nn">bt</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pylot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="n">bt</span><span class="o">.</span><span class="n">run_beatmap</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;examples/vulcan_chex.csv&#39;</span><span class="p">,</span>
-               <span class="n">info</span><span class="o">=</span><span class="s1">&#39;chex on vulcan&#39;</span><span class="p">,</span>
-               <span class="n">a_o</span><span class="o">=</span><span class="mi">39</span><span class="p">)</span>
+
+<span class="n">fpath</span> <span class="o">=</span> <span class="n">bt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_fixtures_path</span><span class="p">()</span> <span class="o">/</span> <span class="s1">&#39;vulcan_chex.csv&#39;</span>
+<span class="n">bt</span><span class="o">.</span><span class="n">run_beatmap</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="s1">&#39;chex on vulcan&#39;</span><span class="p">,</span> <span class="n">a_o</span><span class="o">=</span><span class="mi">39</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="manual-bet-analysis">
-<h2>Manual BET analysis<a class="headerlink" href="#manual-bet-analysis" title="Link to this heading">#</a></h2>
+<h3>Manual BET analysis<a class="headerlink" href="#manual-bet-analysis" title="Link to this heading">#</a></h3>
 <p>Alternatively, you can use the individual functions in BEaTmap to perform BET analysis and evaluate the Rouquerol criteria. This allows the user to access more of BEaTmap’s functionality, and to customize the analysis.</p>
 <section id="import-the-dataset">
-<h3>Import the dataset<a class="headerlink" href="#import-the-dataset" title="Link to this heading">#</a></h3>
+<h4>Import the dataset<a class="headerlink" href="#import-the-dataset" title="Link to this heading">#</a></h4>
 <p>The <code class="docutils literal notranslate"><span class="pre">import_data</span></code> function can be used to import a isotherm data from a .csv file where the first column is relative pressure and the second column is the amount adsorbed.</p>
 <p>The function returns a named tuple where the first entry is a dataframe of the imported isotherm, and the 2nd-4th fields are the cross sectional area of the adsorbate, information about the data, and file path, respectively. Indexing of named tuple elements is in order of priority, data used by other function are given priority.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">isotherm_data</span> <span class="o">=</span> <span class="n">bt</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">import_data</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;examples/vulcan_chex.csv&#39;</span><span class="p">,</span>
-                                  <span class="n">info</span><span class="o">=</span><span class="s1">&#39;chex on vulcan&#39;</span><span class="p">,</span>
-                                  <span class="n">a_o</span><span class="o">=</span><span class="mi">39</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">beatmap</span> <span class="k">as</span> <span class="nn">bt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pylot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">fpath</span> <span class="o">=</span> <span class="n">bt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_fixtures_path</span><span class="p">()</span> <span class="o">/</span> <span class="s1">&#39;vulcan_chex.csv&#39;</span>
+<span class="n">isotherm_data</span> <span class="o">=</span> <span class="n">bt</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">import_data</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="s1">&#39;chex on vulcan&#39;</span><span class="p">,</span> <span class="n">a_o</span><span class="o">=</span><span class="mi">39</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="bet-analysis">
-<h3>BET analysis<a class="headerlink" href="#bet-analysis" title="Link to this heading">#</a></h3>
+<h4>BET analysis<a class="headerlink" href="#bet-analysis" title="Link to this heading">#</a></h4>
 <p>BET analysis is performed on every relative pressure range within the isotherm data by the <code class="docutils literal notranslate"><span class="pre">bet</span></code> function. The function accepts the dataframe of isotherm data, cross sectional area of the adsorbate, and information about the data (information stored in the named tuple created by the import_data function). Rather than pass individual parameters, this function can accept *isotherm_data (where isotherm_data is a named tuple output by a data import function).</p>
 <p>The function returns a named tuple containing the results of BET analysis as well as information about the isotherm (raw data, file path, etc). Again, the indexing of named tuple elements is in order of priority, data used by other function are given priority.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bet_results</span> <span class="o">=</span> <span class="n">bt</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">bet</span><span class="p">(</span><span class="n">isotherm_data</span><span class="o">.</span><span class="n">iso_df</span><span class="p">,</span>
-                          <span class="n">isotherm_data</span><span class="o">.</span><span class="n">a_o</span><span class="p">,</span>
-                          <span class="n">isotherm_data</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bet_results</span> <span class="o">=</span> <span class="n">bt</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">bet</span><span class="p">(</span>
+    <span class="n">iso_df</span><span class="o">=</span><span class="n">isotherm_data</span><span class="o">.</span><span class="n">iso_df</span><span class="p">,</span>
+    <span class="n">a_o</span><span class="o">=</span><span class="n">isotherm_data</span><span class="o">.</span><span class="n">a_o</span><span class="p">,</span>
+    <span class="n">info</span><span class="o">=</span><span class="n">isotherm_data</span><span class="o">.</span><span class="n">info</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="rouquerol-criteria">
-<h3>Rouquerol criteria<a class="headerlink" href="#rouquerol-criteria" title="Link to this heading">#</a></h3>
+<h4>Rouquerol criteria<a class="headerlink" href="#rouquerol-criteria" title="Link to this heading">#</a></h4>
 <p>The Rouquerol criteria, used to mask out results of BET analysis for invalid relative pressure ranges are evaluated by the <code class="docutils literal notranslate"><span class="pre">rouq_mask</span></code> function. Rather than pass individual parameters, this function can accept <code class="docutils literal notranslate"><span class="pre">*bet_results</span></code> (where bet_results is a named tuple output by the bet function).</p>
 <p>The function returns a named tuple containing a numpy mask array, and individual arrays corresponding to the results of each criterion.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mask_results</span> <span class="o">=</span> <span class="n">bt</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">rouq_mask</span><span class="p">(</span><span class="n">bet_results</span><span class="o">.</span><span class="n">intercept</span><span class="p">,</span>
-                                 <span class="n">bet_results</span><span class="o">.</span><span class="n">iso_df</span><span class="p">,</span>
-                                 <span class="n">bet_results</span><span class="o">.</span><span class="n">nm</span><span class="p">,</span>
-                                 <span class="n">bet_results</span><span class="o">.</span><span class="n">slope</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mask_results</span> <span class="o">=</span> <span class="n">bt</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">rouq_mask</span><span class="p">(</span>
+    <span class="n">intercept</span><span class="o">=</span><span class="n">bet_results</span><span class="o">.</span><span class="n">intercept</span><span class="p">,</span>
+    <span class="n">iso_df</span><span class="o">=</span><span class="n">bet_results</span><span class="o">.</span><span class="n">iso_df</span><span class="p">,</span>
+    <span class="n">nm</span><span class="o">=</span><span class="n">bet_results</span><span class="o">.</span><span class="n">nm</span><span class="p">,</span>
+    <span class="n">slope</span><span class="o">=</span><span class="n">bet_results</span><span class="o">.</span><span class="n">slope</span><span class="p">,</span>
+    <span class="n">enforce_y_intercept_positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">enforce_pressure_increasing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">enforce_absorbed_amount</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">enforce_relative_pressure</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">enforce_enough_datapoints</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">min_num_points</span><span class="o">=</span><span class="mi">5</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="supplementary-analysis">
-<h3>Supplementary analysis<a class="headerlink" href="#supplementary-analysis" title="Link to this heading">#</a></h3>
+<h4>Supplementary analysis<a class="headerlink" href="#supplementary-analysis" title="Link to this heading">#</a></h4>
 <p>The <code class="docutils literal notranslate"><span class="pre">bet_results</span></code> and <code class="docutils literal notranslate"><span class="pre">mask_results</span></code> can used to create a heatmap of specific surface area values for each relative pressure range. This visualization concept is the central idea of BEaTmap. The <code class="docutils literal notranslate"><span class="pre">ssa_heatmap</span></code> function requires the named tuples produced by the bet function and the rouq_mask function.</p>
 <p>Other figures, such as a plot of experimental data and the model isotherm can be created in this manner. See the documentation for a full summary of figures.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bt</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">ssa_heatmap</span><span class="p">(</span><span class="n">bet_results</span><span class="p">,</span> <span class="n">mask_results</span><span class="p">)</span>
@@ -357,11 +346,12 @@ here</a>.</p>
 </p>
 </section>
 <section id="export-the-results">
-<h3>Export the results<a class="headerlink" href="#export-the-results" title="Link to this heading">#</a></h3>
+<h4>Export the results<a class="headerlink" href="#export-the-results" title="Link to this heading">#</a></h4>
 <p>It might be desireable to have a spreadsheet that contains all results of BET analysis and the Rouquerol criteria. This sheet can be created and saved in the parent directory with the <code class="docutils literal notranslate"><span class="pre">export_processed_data</span></code> function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bt</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">export_processed_data</span><span class="p">(</span><span class="n">bet_results</span><span class="p">)</span>
 </pre></div>
 </div>
+</section>
 </section>
 </section>
 </section>
@@ -422,7 +412,7 @@ here</a>.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Getting Started</a><ul>
-<li><a class="reference internal" href="#what-is-beatmap">What is BEaTmap?</a></li>
+<li><a class="reference internal" href="#what-is-beatmap">What is BEaTmap?</a><ul>
 <li><a class="reference internal" href="#capabilities">Capabilities</a></li>
 <li><a class="reference internal" href="#try-it-live">Try It Live</a></li>
 <li><a class="reference internal" href="#installation">Installation</a></li>
@@ -434,6 +424,8 @@ here</a>.</p>
 <li><a class="reference internal" href="#rouquerol-criteria">Rouquerol criteria</a></li>
 <li><a class="reference internal" href="#supplementary-analysis">Supplementary analysis</a></li>
 <li><a class="reference internal" href="#export-the-results">Export the results</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

@@ -3,9 +3,12 @@
 .. module:: beatmap
    :noindex:
 
-################################
-Welcome to BEaTmap documentation
-################################
+.. image:: ./_static/beatmap_logo.png
+   :name: logo
+
+##########################
+BEaTmap: BET Analysis Tool
+##########################
 
 What is BEaTmap?
 ################
@@ -14,6 +17,9 @@ Obtaining surface area of a porous sample from the interpretation of gas
 adsorption isotherms is very widely done using the theory developed by
 Brunauer, Emmett, and Teller in the 1950s. The BET (or BEaT) theory is so
 commonly place that the acronym has is synonymous with surface area.
+
+.. image:: ./_static/beatmap_logo.png
+   :name: banner
 
 The BET theory was derived with several assumptions, and these must be met
 for the predicted surface area to be valid. Rouquerol et al have put forth
