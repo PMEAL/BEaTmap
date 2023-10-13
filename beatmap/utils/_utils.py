@@ -1,8 +1,9 @@
 import importlib
+import logging
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
+from rich.logging import RichHandler
 
 __all__ = [
     "index_of_value",
@@ -10,6 +11,7 @@ __all__ = [
     "lin_interp",
     "get_fixtures_path",
     "find_package_root",
+    "get_logger",
 ]
 
 
@@ -118,3 +120,20 @@ def find_package_root(package_name: str):
     package_dir = Path(package_spec.origin).parent
 
     return package_dir.parent
+
+
+
+
+
+def get_logger(name: str) -> logging.Logger:
+    """Get a logger with the given name."""
+    logger = logging.getLogger(name)
+    if logger.hasHandlers():
+        # If logger has handlers, do not add another to avoid duplicate logs
+        return logger
+    
+    logger.setLevel(logging.WARNING)  # Set the logging level to INFO for this logger.
+    handler = RichHandler(rich_tracebacks=True)
+    handler.setFormatter(logging.Formatter("%(message)s", datefmt="[%X]"))
+    logger.addHandler(handler)
+    return logger
