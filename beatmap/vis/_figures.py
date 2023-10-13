@@ -104,8 +104,8 @@ def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="Greens"):
         xticklabels=hm_labels,
         yticklabels=hm_labels,
         linewidths=1,
-        linecolor="lightgrey",
-        cbar_kws={"shrink": 0.78, "aspect": len(df.relp)},
+        linecolor="whitesmoke",
+        cbar_kws={"shrink": 0.73, "aspect": len(df.relp)},
     )
     ax.invert_yaxis()
     ax.set_title(r"specific surface area (m$^2$/g)")
@@ -128,7 +128,11 @@ def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="Greens"):
     # Set the tick labels with desired rotation and horizontal alignment
     ax.set_xticklabels(labels=xticklabels, rotation=45, ha='right')
     ax.set_yticklabels(labels=yticklabels, rotation=45, ha='right')
-    
+
+    # add borders
+    for _, spine in ax.spines.items():
+        spine.set_visible(True)
+
     fig.tight_layout()
     
     if save_file is True:
@@ -190,8 +194,8 @@ def err_heatmap(bet_results, mask_results, save_file=True, gradient="Greys"):
         xticklabels=hm_labels,
         yticklabels=hm_labels,
         linewidths=1,
-        linecolor="lightgrey",
-        cbar_kws={"shrink": 0.78, "aspect": len(df.relp)},
+        linecolor="whitesmoke",
+        cbar_kws={"shrink": 0.73, "aspect": len(df.relp)},
     )
     ax.invert_yaxis()
     ax.set_title("isotherm error")
