@@ -33,6 +33,10 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
+    "Development Status :: 5 - Production/Stable",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Physics",    
 ]
 dependencies = [
     "matplotlib",
@@ -41,6 +45,7 @@ dependencies = [
     "prettytable",
     "scipy",
     "seaborn",
+    "rich",
 ]
 
 [project.urls]
@@ -53,6 +58,7 @@ path = "beatmap/version.py"
 [tool.hatch.build.targets.sdist]
 include = [
     "/beatmap",
+    "/examples",
 ]
 
 [tool.pytest.ini_options]
