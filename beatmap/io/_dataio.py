@@ -1,4 +1,3 @@
-import logging
 from collections import namedtuple
 
 import numpy as np
@@ -6,6 +5,9 @@ import pandas as pd
 import scipy as sp
 
 from beatmap import core as bet
+from beatmap import utils as utils
+
+log = utils.get_logger(__name__)
 
 __all__ = [
     "import_data",
@@ -72,7 +74,7 @@ def import_data(file=None, info=None, a_o=None):
 
     """
     msg = f"Adsorbate has an adsorbed cross sectional area of {a_o:.2f} sq. Angstrom."
-    logging.info(msg)
+    log.info(msg)
 
     if not isinstance(file, pd.DataFrame):  # workaround for streamlit app cache to work
         data = pd.read_csv(file, header="infer")
@@ -105,7 +107,7 @@ def import_data(file=None, info=None, a_o=None):
     test = data.n - minus1
     test_sum = sum(x < 0 for x in test)
     if test_sum > 0:
-        logging.warning("Isotherm data is suspect. Moles do not consistently "
+        log.warning("Isotherm data is suspect. Moles do not consistently "
                         "increase as P/P0 increases.")
 
     # checking isotherm type
@@ -129,17 +131,17 @@ def import_data(file=None, info=None, a_o=None):
     zero_crossings = np.where(np.diff(np.sign(spline_2deriv)))[0]
 
     if len(zero_crossings) == 0 and np.sign(spline_2deriv[0]) == -1:
-        logging.info("Isotherm is type I.")
+        log.info("Isotherm is type I.")
     elif len(zero_crossings) == 0 and np.sign(spline_2deriv[0]) == 1:
-        logging.info("Isotherm is type III.")
+        log.info("Isotherm is type III.")
     elif len(zero_crossings) == 1 and np.sign(spline_2deriv[0]) == -1:
-        logging.info("Isotherm is type II.")
+        log.info("Isotherm is type II.")
     elif len(zero_crossings) == 1 and np.sign(spline_2deriv[0]) == 1:
-        logging.info("Isotherm is type V.")
+        log.info("Isotherm is type V.")
     elif len(zero_crossings) == 2 and np.sign(spline_2deriv[0]) == -1:
-        logging.info("Isotherm is type IV.")
+        log.info("Isotherm is type IV.")
     else:
-        logging.info("Isotherm is type VI.")
+        log.info("Isotherm is type VI.")
 
     isotherm_data = iso_data(data, a_o, info, file)
 
@@ -173,7 +175,7 @@ def import_list_data(relp, n, a_o=None, file=None, info=None):
     if not isinstance(a_o, (int, float)):
         raise ValueError("a_o must be int or float.")
 
-    logging.info(f"Adsorbate has an adsorbed cross sectional area of {a_o:.2f} sq. Angstrom.")
+    log.info(f"Adsorbate has an adsorbed cross sectional area of {a_o:.2f} sq. Angstrom.")
 
     # importing data and creating 'bet' and 'check2' data points
     dict_from_lists = {"relp": relp, "n": n}
@@ -186,7 +188,7 @@ def import_list_data(relp, n, a_o=None, file=None, info=None):
     test = data.n - minus1
     test_sum = sum(x < 0 for x in test)
     if test_sum > 0:
-        logging.warning("Isotherm data is suspect. Moles do not consistently "
+        log.warning("Isotherm data is suspect. Moles do not consistently "
                         "increase as P/P0 increases.")
 
     # checking isotherm type
@@ -210,17 +212,17 @@ def import_list_data(relp, n, a_o=None, file=None, info=None):
     zero_crossings = np.where(np.diff(np.sign(spline_2deriv)))[0]
 
     if len(zero_crossings) == 0 and np.sign(spline_2deriv[0]) == -1:
-        logging.info("Isotherm is type I.")
+        log.info("Isotherm is type I.")
     elif len(zero_crossings) == 0 and np.sign(spline_2deriv[0]) == 1:
-        logging.info("Isotherm is type III.")
+        log.info("Isotherm is type III.")
     elif len(zero_crossings) == 1 and np.sign(spline_2deriv[0]) == -1:
-        logging.info("Isotherm is type II.")
+        log.info("Isotherm is type II.")
     elif len(zero_crossings) == 1 and np.sign(spline_2deriv[0]) == 1:
-        logging.info("Isotherm is type V.")
+        log.info("Isotherm is type V.")
     elif len(zero_crossings) == 2 and np.sign(spline_2deriv[0]) == -1:
-        logging.info("Isotherm is type IV.")
+        log.info("Isotherm is type IV.")
     else:
-        logging.info("Isotherm is type VI.")
+        log.info("Isotherm is type VI.")
 
     isotherm_data = iso_data(data, a_o, info, file)
 
@@ -249,7 +251,7 @@ def export_raw_data(isotherm_data):
     export_file_name = isotherm_data.info + "_raw_data_export.csv"
     df = isotherm_data.iso_df
     df.to_csv(export_file_name, index=None, header=True)
-    logging.info(f"Raw data saved as: {export_file_name}")
+    log.info(f"Raw data saved as: {export_file_name}")
 
 
 def export_processed_data(bet_results, min_num_points=5):
@@ -325,4 +327,4 @@ def export_processed_data(bet_results, min_num_points=5):
 
     export_file_name = bet_results.info + "_processed_data_export.csv"
     processed_data.to_csv(export_file_name, index=None, header=True)
-    logging.info("Processed data saved as: %s" % (export_file_name))
+    log.info("Processed data saved as: %s" % (export_file_name))

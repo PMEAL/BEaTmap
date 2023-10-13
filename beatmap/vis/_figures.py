@@ -1,5 +1,3 @@
-import logging
-
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy as sp
@@ -7,6 +5,8 @@ import seaborn as sns
 from matplotlib.ticker import AutoMinorLocator, MaxNLocator
 
 from beatmap import utils as util
+
+log = util.get_logger(__name__)
 
 __all__ = [
     "experimental_data_plot",
@@ -49,7 +49,7 @@ def experimental_data_plot(isotherm_data, save_file=False):
 
     if save_file is True:
         fig.savefig(f"expdata_{isotherm_data.info}.png", bbox_inches="tight")
-        logging.info(f"Experimental data plot saved as: expdata_{isotherm_data.info}.png")
+        log.info(f"Experimental data plot saved as: expdata_{isotherm_data.info}.png")
 
 
 def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="Greens"):
@@ -82,7 +82,7 @@ def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="Greens"):
     mask = mask_results.mask
 
     if mask.all():
-        logging.warning("No valid relative pressure range found; Aborting.")
+        log.warning("No valid relative pressure range found; Aborting.")
         return
 
     df = bet_results.iso_df
@@ -133,7 +133,7 @@ def ssa_heatmap(bet_results, mask_results, save_file=True, gradient="Greens"):
     
     if save_file is True:
         fig.savefig("ssa_heatmap_%s.png" % (bet_results.info), bbox_inches="tight")
-        logging.info(f"Specific surface area heatmap saved as: ssa_heatmap_{bet_results.info}.png")
+        log.info(f"Specific surface area heatmap saved as: ssa_heatmap_{bet_results.info}.png")
     
     return fig, ax
 
@@ -168,7 +168,7 @@ def err_heatmap(bet_results, mask_results, save_file=True, gradient="Greys"):
     mask = mask_results.mask
 
     if mask.all():
-        logging.warning("No valid relative pressure ranges found; Aborting.")
+        log.warning("No valid relative pressure ranges found; Aborting.")
         return
 
     df = bet_results.iso_df
@@ -223,7 +223,7 @@ def err_heatmap(bet_results, mask_results, save_file=True, gradient="Greys"):
 
     if save_file is True:
         fig.savefig("error_heatmap_%s.png" % (bet_results.info), bbox_inches="tight")
-        logging.info("Error heatmap saved as: error_heatmap_%s.png" % (bet_results.info))
+        log.info("Error heatmap saved as: error_heatmap_%s.png" % (bet_results.info))
 
     return fig, ax
 
@@ -257,7 +257,7 @@ def bet_combo_plot(bet_results, mask_results, save_file=True):
     mask = mask_results.mask
 
     if mask.all():
-        logging.warning("No valid relative pressure ranges; Aborting.")
+        log.warning("No valid relative pressure ranges; Aborting.")
         return
 
     df = bet_results.iso_df
@@ -347,7 +347,7 @@ def bet_combo_plot(bet_results, mask_results, save_file=True):
 
     if save_file is True:
         figure.savefig("betplot_%s.png" % (bet_results.info), bbox_inches="tight")
-        logging.info("BET plot saved as: betplot_%s.png" % (bet_results.info))
+        log.info("BET plot saved as: betplot_%s.png" % (bet_results.info))
 
     return ax.figure, ax
 
@@ -380,7 +380,7 @@ def iso_combo_plot(bet_results, mask_results, save_file=True):
     mask = mask_results.mask
 
     if mask.all():
-        logging.warning("No valid relative pressure ranges; Aborting.")
+        log.warning("No valid relative pressure ranges; Aborting.")
         return
 
     df = bet_results.iso_df
@@ -439,6 +439,6 @@ def iso_combo_plot(bet_results, mask_results, save_file=True):
 
     if save_file is True:
         f.savefig("isothermcomp_%s.png" % (bet_results.info), bbox_inches="tight")
-        logging.info(f"Experimental and theoretical isotherm plot saved as: isothermcomp_{bet_results.info}.png")
+        log.info(f"Experimental and theoretical isotherm plot saved as: isothermcomp_{bet_results.info}.png")
     
     return ax.figure, ax

@@ -526,7 +526,7 @@ def ssa_answer(bet_results, mask_results, criterion="error"):
         max_pts = np.max(pts)
         ssa_ans_array = np.ma.masked_where(pts < max_pts, ssa)
         try:
-            ssa_ans = float(ssa_ans_array.compressed())
+            ssa_ans = float(ssa_ans_array.compressed().squeeze())
         except ValueError:
             raise Exception(
                 "Error, so single specific surface area answer. Multiple"
@@ -541,7 +541,7 @@ def ssa_answer(bet_results, mask_results, criterion="error"):
     if criterion == "error":
         err = np.ma.array(bet_results.err, mask=mask)
         errormax, error_max_idx, errormin, error_min_idx = util.max_min(err)
-        ssa_ans = ssa[int(error_min_idx[0]), int(error_min_idx[1])]
+        ssa_ans = ssa[int(error_min_idx[0].squeeze()), int(error_min_idx[1].squeeze())]
         log.info(
             "The specific surface area value, based on %s is %.2f m2/g."
             % (criterion, ssa_ans)

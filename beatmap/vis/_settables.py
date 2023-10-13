@@ -1,10 +1,10 @@
-import logging
-
 import numpy as np
 import pandas as pd
 from prettytable import PrettyTable
 
 from beatmap import utils as util
+
+log = util.get_logger(__name__)
 
 __all__ = ["ascii_tables", "dataframe_tables"]
 
@@ -48,7 +48,7 @@ def ascii_tables(bet_results, mask_results):
     mask = mask_results.mask
     if mask.all():
         msg = "No valid relative pressure ranges. ASCII tables not created."
-        logging.warning(msg)
+        log.warning(msg)
         return
 
     df = bet_results.iso_df
@@ -117,8 +117,8 @@ def ascii_tables(bet_results, mask_results):
     )
     table.add_row(["Mean SSA", ssa_mean, "n/a", "n/a", "n/a"])
     table.add_row(["Median SSA", ssa_median, "n/a", "n/a", "n/a"])
-    logging.info(table)
-    logging.info("Standard deviation of specific surface area = %.3f" %
+    log.info(table)
+    log.info("Standard deviation of specific surface area = %.3f" %
                  (ssa_std))
 
     table2 = PrettyTable()
@@ -158,8 +158,8 @@ def ascii_tables(bet_results, mask_results):
             err_max,
         ]
     )
-    logging.info(table2)
-    logging.info("Standard deviation of BET constant (C) = %.5f" % (c_std))
+    log.info(table2)
+    log.info("Standard deviation of BET constant (C) = %.5f" % (c_std))
     return table, table2, ssa_std, c_std
 
 
@@ -202,7 +202,7 @@ def dataframe_tables(bet_results, mask_results):
     mask = mask_results.mask
 
     if mask.all():
-        logging.warning("No valid relative pressure ranges; Abroting.")
+        log.warning("No valid relative pressure ranges; Abroting.")
 
         ssa_dict = {
             " ": ["Min SSA", "Max SSA", "Mean SSA", "Median SSA"],
