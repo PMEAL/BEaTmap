@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="check_pressure_consistency" href="beatmap.core.check_pressure_consistency.html" /><link rel="prev" title="check_absorbed_amount" href="beatmap.core.check_absorbed_amount.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="index_of_value" href="beatmap.utils.index_of_value.html" /><link rel="prev" title="get_fixtures_path" href="beatmap.utils.get_fixtures_path.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
-        <title>check_enough_datapoints - BEaTmap 0.2 documentation</title>
+        <title>get_logger - BEaTmap 0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
@@ -158,10 +158,10 @@
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 current has-children"><a class="reference internal" href="beatmap.core.html">core</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of core</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="beatmap.core.html">core</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of core</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.core.bet.html">bet</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.core.check_absorbed_amount.html">check_absorbed_amount</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">check_enough_datapoints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="beatmap.core.check_enough_datapoints.html">check_enough_datapoints</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.core.check_pressure_consistency.html">check_pressure_consistency</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.core.check_pressure_increasing.html">check_pressure_increasing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.core.check_y_intercept_positive.html">check_y_intercept_positive</a></li>
@@ -178,10 +178,10 @@
 <li class="toctree-l3"><a class="reference internal" href="beatmap.io.import_list_data.html">import_list_data</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="beatmap.utils.html">utils</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="beatmap.utils.html">utils</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.find_package_root.html">find_package_root</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.get_fixtures_path.html">get_fixtures_path</a></li>
-<li class="toctree-l3"><a class="reference internal" href="beatmap.utils.get_logger.html">get_logger</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">get_logger</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.index_of_value.html">index_of_value</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.lin_interp.html">lin_interp</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.max_min.html">max_min</a></li>
@@ -233,30 +233,12 @@
           </label>
         </div>
         <article role="main">
-          <section id="check-enough-datapoints">
-<h1>check_enough_datapoints<a class="headerlink" href="#check-enough-datapoints" title="Link to this heading">#</a></h1>
+          <section id="get-logger">
+<h1>get_logger<a class="headerlink" href="#get-logger" title="Link to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="beatmap.core.check_enough_datapoints">
-<span class="sig-prename descclassname"><span class="pre">beatmap.core.</span></span><span class="sig-name descname"><span class="pre">check_enough_datapoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beatmap.core.check_enough_datapoints" title="Link to this definition">#</a></dt>
-<dd><p>Checks that relative pressure ranges contain a minimum number of data points.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>df</strong><span class="classifier">dataframe</span></dt><dd><p>Dataframe of imported experimental isothermal adsorption data.</p>
-</dd>
-<dt><strong>points</strong><span class="classifier">int</span></dt><dd><p>Minimum number of data points required for BET analysis to be
-considered valid, default value is 5.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>ndarray</dt><dd><p>Array of 1s and 0s where 0 corresponds to ranges of experimental data
-that contain less than the minimum number of points.</p>
-</dd>
-</dl>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="beatmap.utils.get_logger">
+<span class="sig-prename descclassname"><span class="pre">beatmap.utils.</span></span><span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Logger</span></span></span><a class="headerlink" href="#beatmap.utils.get_logger" title="Link to this definition">#</a></dt>
+<dd><p>Get a logger with the given name.</p>
 </dd></dl>
 
 </section>
@@ -266,23 +248,23 @@ that contain less than the minimum number of points.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="beatmap.core.check_pressure_consistency.html">
+          <a class="next-page" href="beatmap.utils.index_of_value.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">check_pressure_consistency</div>
+                <div class="title">index_of_value</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="beatmap.core.check_absorbed_amount.html">
+          <a class="prev-page" href="beatmap.utils.get_fixtures_path.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">check_absorbed_amount</div>
+                <div class="title">get_fixtures_path</div>
                 
               </div>
             </a>
@@ -316,8 +298,8 @@ that contain less than the minimum number of points.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">check_enough_datapoints</a><ul>
-<li><a class="reference internal" href="#beatmap.core.check_enough_datapoints"><code class="docutils literal notranslate"><span class="pre">check_enough_datapoints()</span></code></a></li>
+<li><a class="reference internal" href="#">get_logger</a><ul>
+<li><a class="reference internal" href="#beatmap.utils.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -18,6 +18,7 @@ utils
    
       find_package_root
       get_fixtures_path
+      get_logger
       index_of_value
       lin_interp
       max_min

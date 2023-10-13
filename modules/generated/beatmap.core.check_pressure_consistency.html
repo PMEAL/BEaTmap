@@ -181,6 +181,7 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="beatmap.utils.html">utils</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.find_package_root.html">find_package_root</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.get_fixtures_path.html">get_fixtures_path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="beatmap.utils.get_logger.html">get_logger</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.index_of_value.html">index_of_value</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.lin_interp.html">lin_interp</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.max_min.html">max_min</a></li>
@@ -239,11 +240,10 @@
 <span class="sig-prename descclassname"><span class="pre">beatmap.core.</span></span><span class="sig-name descname"><span class="pre">check_pressure_consistency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slope</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intercept</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beatmap.core.check_pressure_consistency" title="Link to this definition">#</a></dt>
 <dd><p>Checks that relative pressure is consistent.</p>
 <p>The relative pressure corresponding to nm is found from linear
-interpolation of the experiemental data.</p>
-<p>A second relative pressure is found by setting n to nm in the BET equation
-and solving for relative pressure.</p>
-<p>The two relative pressures are compared and must agree within 10% to pass
-this check.</p>
+interpolation of the experiemental data. A second relative pressure is
+found by setting n to nm in the BET equation and solving for relative
+pressure. The two relative pressures are compared and must agree within
+10% to pass this check.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -253,18 +253,18 @@ this check.</p>
 the coordinates of the array corresponding to relative pressures,
 units [moles / gram].</p>
 </dd>
-<dt><strong>slope</strong><span class="classifier">array</span></dt><dd><p>2D array of slope values resulting from linear regression applied to
-relevant experimental data.</p>
-</dd>
-<dt><strong>intercept</strong><span class="classifier">array</span></dt><dd><p>2D array of y-intercept values resulting from linear regression applied
+<dt><strong>slope</strong><span class="classifier">array</span></dt><dd><p>2D array of slope values resulting from linear regression applied
 to relevant experimental data.</p>
+</dd>
+<dt><strong>intercept</strong><span class="classifier">array</span></dt><dd><p>2D array of y-intercept values resulting from linear regression
+applied to relevant experimental data.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>ndarray</dt><dd><p>Array of 1s and 0s where 0 corresponds to relative pressure values that
-do not agree within 10%, ie ranges that fail this check.</p>
+<dt>ndarray</dt><dd><p>Array of 1s and 0s where 0 corresponds to relative pressure values
+that do not agree within 10%, ie ranges that fail this check.</p>
 </dd>
 </dl>
 </dd>

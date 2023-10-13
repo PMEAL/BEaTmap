@@ -1,0 +1,6 @@
+get\_logger
+===========
+
+.. currentmodule:: beatmap.utils
+
+.. autofunction:: get_logger
