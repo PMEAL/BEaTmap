@@ -1,4 +1,3 @@
-import logging
 from collections import namedtuple
 
 import numpy as np
@@ -7,6 +6,8 @@ import scipy as sp
 from beatmap import io as io
 from beatmap import utils as util
 from beatmap import vis as figs
+
+log = util.get_logger(__name__)
 
 __all__ = [
     "bet",
@@ -178,7 +179,6 @@ def single_point_bet(df, a_o):
           used in the analysis.
 
     """
-
     ssa_array = np.zeros((len(df), len(df)))
     nm_array = np.zeros((len(df), len(df)))
 
@@ -216,7 +216,7 @@ def check_y_intercept_positive(intercept):
     check1 = intercept[:, :] > 0
 
     if np.any(check1) is False:
-        logging.warning("All relative pressure ranges fail check 1.")
+        log.warning("All relative pressure ranges fail criterion 1: positive y intercept")
 
     return check1
 
@@ -249,7 +249,7 @@ def check_pressure_increasing(df):
     check2 = check2.T
 
     if np.any(check2) is False:
-        logging.warning("All relative pressure ranges fail check 2.")
+        log.warning("All relative pressure ranges fail criterion 2: increasing pressure")
 
     return check2
 
@@ -276,7 +276,6 @@ def check_absorbed_amount(df, nm):
         fail this check.
 
     """
-
     check3 = np.zeros((len(df), len(df)))
 
     for i in range(np.shape(check3)[0]):
@@ -285,7 +284,7 @@ def check_absorbed_amount(df, nm):
                 check3[i, j] = 1
 
     if np.any(check3) is False:
-        logging.warning("All relative pressure ranges fail check 3.")
+        log.warning("All relative pressure ranges fail criterion 3: monolayer amount")
 
     return check3
 
@@ -295,13 +294,10 @@ def check_pressure_consistency(df, nm, slope, intercept):
     Checks that relative pressure is consistent.
 
     The relative pressure corresponding to nm is found from linear
-    interpolation of the experiemental data.
-
-    A second relative pressure is found by setting n to nm in the BET equation
-    and solving for relative pressure.
-
-    The two relative pressures are compared and must agree within 10% to pass
-    this check.
+    interpolation of the experiemental data. A second relative pressure is
+    found by setting n to nm in the BET equation and solving for relative
+    pressure. The two relative pressures are compared and must agree within
+    10% to pass this check.
 
     Parameters
     ----------
@@ -312,20 +308,19 @@ def check_pressure_consistency(df, nm, slope, intercept):
         the coordinates of the array corresponding to relative pressures,
         units [moles / gram].
     slope : array
-        2D array of slope values resulting from linear regression applied to
-        relevant experimental data.
-    intercept : array
-        2D array of y-intercept values resulting from linear regression applied
+        2D array of slope values resulting from linear regression applied
         to relevant experimental data.
+    intercept : array
+        2D array of y-intercept values resulting from linear regression
+        applied to relevant experimental data.
 
     Returns
     -------
     ndarray
-        Array of 1s and 0s where 0 corresponds to relative pressure values that
-        do not agree within 10%, ie ranges that fail this check.
+        Array of 1s and 0s where 0 corresponds to relative pressure values
+        that do not agree within 10%, ie ranges that fail this check.
 
     """
-
     check4 = np.zeros((len(df), len(df)))
 
     for i in range(np.shape(check4)[0]):
@@ -354,14 +349,14 @@ def check_pressure_consistency(df, nm, slope, intercept):
                     check4[i, j] = 1
 
     if np.any(check4) is False:
-        logging.warning("All relative pressure ranges fail check 4.")
+        log.warning("All relative pressure ranges fail criterion 4: pressure consistency")
 
     return check4
 
 
 def check_enough_datapoints(df, points=5):
     """
-    Checks that relative pressure ranges contain a minium number of data points.
+    Checks that relative pressure ranges contain a minimum number of data points.
 
     Parameters
     ----------
@@ -386,7 +381,7 @@ def check_enough_datapoints(df, points=5):
                 check5[i, j] = 0
 
     if np.any(check5) is False:
-        logging.warning("All relative pressure ranges fail check 5.")
+        log.warning("All relative pressure ranges fail criterion 5: enough data points")
 
     return check5
 
@@ -537,7 +532,7 @@ def ssa_answer(bet_results, mask_results, criterion="error"):
                 "Error, so single specific surface area answer. Multiple"
                 + "relative pressure ranges with the maximum number of points."
             )
-        logging.info(
+        log.info(
             "The specific surface area value, based on %s is %.2f m2/g."
             % (criterion, ssa_ans)
         )
@@ -547,7 +542,7 @@ def ssa_answer(bet_results, mask_results, criterion="error"):
         err = np.ma.array(bet_results.err, mask=mask)
         errormax, error_max_idx, errormin, error_min_idx = util.max_min(err)
         ssa_ans = ssa[int(error_min_idx[0]), int(error_min_idx[1])]
-        logging.info(
+        log.info(
             "The specific surface area value, based on %s is %.2f m2/g."
             % (criterion, ssa_ans)
         )
@@ -555,7 +550,7 @@ def ssa_answer(bet_results, mask_results, criterion="error"):
 
     if criterion == "max":
         ssa_ans = np.max(ssa)
-        logging.info(
+        log.info(
             "The specific surface area value, based on %s is %.2f m2/g."
             % (criterion, ssa_ans)
         )
@@ -563,7 +558,7 @@ def ssa_answer(bet_results, mask_results, criterion="error"):
 
     if criterion == "min":
         ssa_ans = np.min(ssa)
-        logging.info(
+        log.info(
             "The specific surface area value, based on %s is %.2f m2/g."
             % (criterion, ssa_ans)
         )
