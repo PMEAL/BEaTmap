@@ -397,7 +397,7 @@ def rouq_mask(intercept, iso_df, nm, slope, *args,
               enforce_absorbed_amount=True,
               enforce_relative_pressure=True,
               enforce_enough_datapoints=True,
-              points=5):
+              min_num_points=5):
     """
     Calls all check functions and combines their masks into one "rouqerol mask".
 
@@ -425,7 +425,7 @@ def rouq_mask(intercept, iso_df, nm, slope, *args,
         If True, this check will be evaluated, otherwise skipped.
     enforce_enough_datapoints : bool
         If True, this check will be evaluated, otherwise skipped.
-    points : int
+    min_num_points : int
         The minimum number of experimental data points for a relative pressure
         interval to be considered valid.
 
@@ -477,7 +477,7 @@ def rouq_mask(intercept, iso_df, nm, slope, *args,
         check4 = np.ones((len(iso_df), len(iso_df)))
 
     if enforce_enough_datapoints is True:
-        check5 = check_enough_datapoints(iso_df, points)
+        check5 = check_enough_datapoints(iso_df, min_num_points)
     else:
         check5 = np.ones((len(iso_df), len(iso_df)))
 
@@ -581,7 +581,7 @@ def run_beatmap(file=None,
                 enforce_absorbed_amount=True,
                 enforce_relative_pressure=True,
                 enforce_enough_datapoints=True,
-                points=5,
+                min_num_points=5,
                 save_figures=True,
                 export_data=False,
                 ssa_criterion="error",
@@ -633,7 +633,7 @@ def run_beatmap(file=None,
     enforce_enough_datapoints : bool
         If check5 is True relative pressure ranges that contain fewer points
         than specified by the user are considered invalid.
-    points : int
+    min_num_points : int
         The minimum number of points for a valid relative pressure range.
     save_figures : bool
         If save_figures is True any figures created by this function will be
@@ -682,7 +682,7 @@ def run_beatmap(file=None,
                              enforce_absorbed_amount=enforce_absorbed_amount,
                              enforce_relative_pressure=enforce_relative_pressure,
                              enforce_enough_datapoints=enforce_enough_datapoints,
-                             points=points)
+                             min_num_points=min_num_points)
 
     # mask_results are used to highlight the valid bet_results in the
     # following functions
@@ -697,7 +697,7 @@ def run_beatmap(file=None,
 
     if export_data is True:
         io.export_raw_data(isotherm_data)
-        io.export_processed_data(bet_results, points)
+        io.export_processed_data(bet_results, min_num_points)
 
     results = ComboResults(bet_results.ssa,
                            bet_results.c,

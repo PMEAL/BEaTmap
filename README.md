@@ -1,17 +1,11 @@
-
-## What is BEaTmap?
+# What is BEaTmap?
 
 [![image](https://github.com/PMEAL/beatmap/actions/workflows/tests.yml/badge.svg)](https://github.com/PMEAL/beatmap/actions)
 [![codecov](https://codecov.io/gh/PMEAL/beatmap/branch/main/graph/badge.svg?token=3ZBPKC3QXW)](https://codecov.io/gh/PMEAL/beatmap)
 [![image](https://img.shields.io/pypi/v/beatmap.svg)](https://pypi.python.org/pypi/beatmap/)
 
-Obtaining surface area of a porous sample from the interpretation of gas
-adsorption isotherms is very widely done using the theory developed by Brunauer,
-Emmett, and Teller in the 1950s.  The BET (or BEaT) theory is so commonly place
-that the acronym has is synonymous with surface area.
-
-The BET theory was derived with several assumptions, and these must be met for
-the predicted surface area to be valid.
+Obtaining surface area of a porous sample from the interpretation of gas adsorption isotherms is very widely done using the theory developed by Brunauer, Emmett, and Teller in the 1950s. The BET (or BEaT) theory is so commonly place
+that the acronym has is synonymous with surface area. The BET theory was derived with several assumptions, and these must be met for the predicted surface area to be valid.
 
 Rouquerol et al have put forth criteria to evaluate whether isothermal adsoprtion data meets the assumptions of BET analysis. Applying these criteria to all relative pressure ranges of an isotherm allows one to eliminate relative pressure ranges that do not adhere to BET theory. Visualizing the results of BET analysis as a heatmap where "invalid" relative pressure ranges are masked provides a quick and comprehensive representation of BET results for an isotherm.
 
@@ -28,47 +22,29 @@ BEaTmap consists of the following modules:
   
 ## Try It Live
 
-We have created a web-based GUI for BEaTmap using Streamlit.  This app is hosted on the Streamlit servers and is available [here](https://beatmap.streamlit.app).  If the app is not used for a certain period then Streamlit will hibernate it then wake it up on request, so it may take a few moments to load.  The app includes a link to some sample data which you can use to explore the interface. Enjoy.
+We have created a web-based GUI for BEaTmap using Streamlit.  This app is hosted on the Streamlit servers and is available [here](https://beatmap.streamlit.app). If the app is not used for a certain period then Streamlit will hibernate it then wake it up on request, so it may take a few moments to load. The app includes a link to some sample data which you can use to explore the interface. Enjoy.
 
 ## Installation
 
-BEaTmap depends heavily on the Scipy Stack. The best way to get a fully
-functional environment is the [Anaconda
-distribution](https://www.anaconda.com/download/). Be sure to get the
-**Python 3.9+ version**.
+BEaTmap depends heavily on the Scipy Stack. The best way to get a fully functional environment is the [Anaconda distribution](https://www.anaconda.com/download/). Be sure to get the **Python 3.9+ version**.
 
-Once you've installed `conda`, you can then install BEaTmap. It is
-available on the [Python Package
-Index](https://pypi.org/project/beatmap/) and can be installed by typing
-the following at the *conda* prompt:
+Once you've installed `conda`, you can then install BEaTmap. It is available on the [Python Package Index](https://pypi.org/project/beatmap/) and can be installed by typing the following at the *conda* prompt:
 
     pip install beatmap
 
-On Windows, you should have a shortcut to the "anaconda prompt" in the
-Anaconda program group in the start menu. This will open a Windows
-command console with access to the Python features added by `conda`,
-such as installing things via `pip`.
+On Windows, you should have a shortcut to the "Anaconda Prompt" in the start menu. This will open a Windows command console with access to the Python features added by `conda`, such as installing things via `pip`.
 
-On Mac or Linux, you need to open a normal terminal window, then type
-`source activate {env}` where you replace `{env}` with the name of the
-environment you want to install BEaTmap. If you don't know what this
-means, then use `source activate root`, which will install BEaTmap in
-the root environment which is the default.
+On Mac or Linux, you need to open a normal terminal window, then type `source activate {env}` where you replace `{env}` with the name of the environment you want to install BEaTmap. If you don't know what this means, then use `source activate base`, which will install BEaTmap in the base environment which is the default.
 
-If you think you may be interested in contributing to BEaTmap and wish
-to both *use* and *edit* the source code, then you should clone the
-[repository](https://github.com/PMEAL/beatmap) to your local machine,
-and install it using the following `pip` command:
+If you think you may be interested in contributing to BEaTmap and wish to both *use* and *edit* the source code, then you should clone the [repository](https://github.com/PMEAL/beatmap) to your local machine, and install it using the following `pip` command:
 
-    pip install -e "PATH_TO_BEATMAP_ROOT_FOLDER"
+    pip install -e path/to/beatmap/root/folder
 
-For information about contributing, refer to the [contributors
-guide](https://github.com/PMEAL/beatmap/blob/master/CONTRIBUTING.md).
+For information about contributing, refer to the [contributors guide](https://github.com/PMEAL/beatmap/blob/master/CONTRIBUTING.md).
 
 ## Examples
 
-The following code snippets illustrate how to import data, perform BET analysis, evaluate Rouquerol criteria, and produce figures in BEaTmap. An example is included in this repo, and can be [browsed
-here](https://github.com/PMEAL/beatmap/blob/main/examples/BEaTmap_example.ipynb).
+The following code snippets illustrate how to import data, perform BET analysis, evaluate Rouquerol criteria, and produce figures in BEaTmap. An example is included in this repo, and can be [browsed here](https://github.com/PMEAL/beatmap/blob/main/examples/BEaTmap_example.ipynb).
 
 ## Automated BET analysis
 
@@ -77,9 +53,9 @@ An "envelope" function, that will import data, perform BET analysis, evaluate th
 ```python
 import beatmap as bt
 import matplotlib.pylot as plt
-bt.run_beatmap(file='examples/vulcan_chex.csv',
-               info='chex on vulcan',
-               a_o=39)
+
+fpath = bt.utils.get_fixtures_path() / 'vulcan_chex.csv'
+bt.run_beatmap(file=fpath, info='chex on vulcan', a_o=39)
 ```
 
 ## Manual BET analysis
@@ -93,9 +69,11 @@ The function returns a named tuple where the first entry is a dataframe of the i
 
 
 ``` python
-isotherm_data = bt.io.import_data(file='examples/vulcan_chex.csv',
-                                  info='chex on vulcan',
-                                  a_o=39)
+import beatmap as bt
+import matplotlib.pylot as plt
+
+fpath = bt.utils.get_fixtures_path() / 'vulcan_chex.csv'
+isotherm_data = bt.io.import_data(file=fpath, info='chex on vulcan', a_o=39)
 ```
 
 ### BET analysis
@@ -105,9 +83,11 @@ BET analysis is performed on every relative pressure range within the isotherm d
 The function returns a named tuple containing the results of BET analysis as well as information about the isotherm (raw data, file path, etc). Again, the indexing of named tuple elements is in order of priority, data used by other function are given priority.
 
 ```python
-bet_results = bt.core.bet(isotherm_data.iso_df,
-                          isotherm_data.a_o,
-                          isotherm_data.info)
+bet_results = bt.core.bet(
+    iso_df=isotherm_data.iso_df,
+    a_o=isotherm_data.a_o,
+    info=isotherm_data.info
+)
 ```
 
 ### Rouquerol criteria
@@ -118,10 +98,18 @@ The function returns a named tuple containing a numpy mask array, and individual
 
 
 ```python
-mask_results = bt.core.rouq_mask(bet_results.intercept,
-                                 bet_results.iso_df,
-                                 bet_results.nm,
-                                 bet_results.slope)
+mask_results = bt.core.rouq_mask(
+    intercept=bet_results.intercept,
+    iso_df=bet_results.iso_df,
+    nm=bet_results.nm,
+    slope=bet_results.slope,
+    enforce_y_intercept_positive=True,
+    enforce_pressure_increasing=True,
+    enforce_absorbed_amount=True,
+    enforce_relative_pressure=True,
+    enforce_enough_datapoints=True,
+    min_num_points=5
+)
 ```
 
 ### Supplementary analysis

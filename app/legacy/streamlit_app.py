@@ -101,7 +101,7 @@ def page_beatmap():
         enforce_absorbed_amount=state.checks[2],
         enforce_relative_pressure=state.checks[3],
         enforce_enough_datapoints=state.checks[4],
-        points=state.min_num_points,
+        min_num_points=state.min_num_points,
     )
 
     if state.mask_results.mask.all():

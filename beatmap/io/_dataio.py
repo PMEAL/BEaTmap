@@ -1,6 +1,5 @@
 import logging
 from collections import namedtuple
-from re import I
 
 import numpy as np
 import pandas as pd
@@ -106,11 +105,8 @@ def import_data(file=None, info=None, a_o=None):
     test = data.n - minus1
     test_sum = sum(x < 0 for x in test)
     if test_sum > 0:
-        logging.info("Isotherm data is suspect. moles do not consistantly"
-                     " increase as relative pressure increases.")
-    else:
-        logging.info("Isotherm data quality appears good. Adsorbed molar"
-                     " amounts are increasing as relative pressure increases.")
+        logging.warning("Isotherm data is suspect. Moles do not consistently "
+                        "increase as P/P0 increases.")
 
     # checking isotherm type
     x = data.relp.values
@@ -177,9 +173,7 @@ def import_list_data(relp, n, a_o=None, file=None, info=None):
     if not isinstance(a_o, (int, float)):
         raise ValueError("a_o must be int or float.")
 
-    logging.info(
-        f"Adsorbate has an adsorbed cross sectional area of {a_o:.2f} sq. Angstrom."
-    )
+    logging.info(f"Adsorbate has an adsorbed cross sectional area of {a_o:.2f} sq. Angstrom.")
 
     # importing data and creating 'bet' and 'check2' data points
     dict_from_lists = {"relp": relp, "n": n}
@@ -192,15 +186,8 @@ def import_list_data(relp, n, a_o=None, file=None, info=None):
     test = data.n - minus1
     test_sum = sum(x < 0 for x in test)
     if test_sum > 0:
-        logging.info(
-            "Isotherm data is suspect. Adsorbed moles do not consistantly"
-            " increase as relative pressure increases"
-        )
-    else:
-        logging.info(
-            "Isotherm data quality appears good. Adsorbed molar amounts"
-            " are increasing as relative pressure increases."
-        )
+        logging.warning("Isotherm data is suspect. Moles do not consistently "
+                        "increase as P/P0 increases.")
 
     # checking isotherm type
     x = data.relp.values
@@ -247,7 +234,6 @@ def export_raw_data(isotherm_data):
 
     Parameters
     ----------
-
     isotherm_data : namedtuple
         Contains all information required for BET analysis. Relevant fields are:
 
@@ -260,27 +246,22 @@ def export_raw_data(isotherm_data):
     None
 
     """
-
     export_file_name = isotherm_data.info + "_raw_data_export.csv"
     df = isotherm_data.iso_df
     df.to_csv(export_file_name, index=None, header=True)
-    logging.info("Raw data saved as: %s" % (export_file_name))
-    return
+    logging.info(f"Raw data saved as: {export_file_name}")
 
 
-def export_processed_data(bet_results, points=5):
+def export_processed_data(bet_results, min_num_points=5):
     """Exports processed isothermal adsoprtion data.
 
     Exported data is saved as a .csv file in the parent directory.
 
     Parameters
     ----------
-
     bet_results : namedtuple
         Contains all information required for BET analysis.
-        Relevant fields are:
-
-    points : int
+    min_num_points : int
         The minimum number of experimental data points for a relative pressure
         interval to be considered valid. Default is 5.
 
@@ -302,25 +283,25 @@ def export_processed_data(bet_results, points=5):
     mask1 = bet.check_y_intercept_positive(bet_results.intercept)
     mask2 = bet.check_pressure_increasing(df)
     mask3 = bet.check_absorbed_amount(df, bet_results.nm)
-    mask4 = bet.check_pressure_consistency(df,
-                                              bet_results.nm,
-                                              bet_results.slope,
-                                              bet_results.intercept)
-    mask5 = bet.check_enough_datapoints(df, points)
+    mask4 = bet.check_pressure_consistency(df, bet_results.nm, bet_results.slope, bet_results.intercept)
+    mask5 = bet.check_enough_datapoints(df, min_num_points)
 
-    processed_data = np.column_stack((begin_relp.flatten(), end_relp.flatten()))
-    processed_data = np.column_stack((processed_data, bet_results.ssa.flatten()))
-    processed_data = np.column_stack((processed_data, bet_results.nm.flatten()))
-    processed_data = np.column_stack((processed_data, bet_results.c.flatten()))
-    processed_data = np.column_stack((processed_data, bet_results.err.flatten()))
-    processed_data = np.column_stack((processed_data, bet_results.slope.flatten()))
-    processed_data = np.column_stack((processed_data, bet_results.intercept.flatten()))
-    processed_data = np.column_stack((processed_data, bet_results.r.flatten()))
-    processed_data = np.column_stack((processed_data, mask1.flatten()))
-    processed_data = np.column_stack((processed_data, mask2.flatten()))
-    processed_data = np.column_stack((processed_data, mask3.flatten()))
-    processed_data = np.column_stack((processed_data, mask4.flatten()))
-    processed_data = np.column_stack((processed_data, mask5.flatten()))
+    processed_data = np.column_stack((
+        begin_relp.flatten(),
+        end_relp.flatten(),
+        bet_results.ssa.flatten(),
+        bet_results.nm.flatten(),
+        bet_results.c.flatten(),
+        bet_results.err.flatten(),
+        bet_results.slope.flatten(),
+        bet_results.intercept.flatten(),
+        bet_results.r.flatten(),
+        mask1.flatten(),
+        mask2.flatten(),
+        mask3.flatten(),
+        mask4.flatten(),
+        mask5.flatten()
+    ))
 
     processed_data = pd.DataFrame(
         data=processed_data,
