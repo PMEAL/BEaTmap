@@ -288,7 +288,7 @@ def dataframe_tables(bet_results, mask_results):
     err_max = round(err_max, nsigfig+1)
 
     ssa_dict = {
-        " ": ["min", "max", "mean", "median"],
+        " ": ["Min", "Max", "Mean", "Median"],
         "SSA": [ssa_min, ssa_max, ssa_mean, ssa_median],
         "C": [ssa_min_c, ssa_max_c, "n/a", "n/a"],
         "(P/Po)s": [ssa_min_start_ppo, ssa_max_start_ppo, "n/a", "n/a"],
@@ -298,7 +298,7 @@ def dataframe_tables(bet_results, mask_results):
     ssa_table = pd.DataFrame(data=ssa_dict)
 
     c_dict = {
-        " ": ["min", "max", "mean", "median", "min error", "max error"],
+        " ": ["Min", "Max", "Mean", "Median", "Min error", "Max error"],
         "C": [c_min, c_max, c_mean, c_median, cmin_err, cmax_err],
         "SSA": [c_min_sa, c_max_sa, "n/a", "n/a", c_min_err_sa, c_max_err_sa],
         "(P/Po)s": [
@@ -317,7 +317,7 @@ def dataframe_tables(bet_results, mask_results):
             c_min_err_end_ppo,
             c_max_err_end_ppo,
         ],
-        "error": [c_min_err, c_max_err, "n/a", "n/a", err_min, err_max],
+        "Error": [c_min_err, c_max_err, "n/a", "n/a", err_min, err_max],
     }
 
     c_table = pd.DataFrame(data=c_dict)
