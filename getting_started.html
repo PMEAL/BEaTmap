@@ -284,7 +284,31 @@ that the acronym has is synonymous with surface area. The BET theory was derived
 <span class="kn">import</span> <span class="nn">matplotlib.pylot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="n">fpath</span> <span class="o">=</span> <span class="n">bt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_fixtures_path</span><span class="p">()</span> <span class="o">/</span> <span class="s1">&#39;vulcan_chex.csv&#39;</span>
-<span class="n">bt</span><span class="o">.</span><span class="n">run_beatmap</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="s1">&#39;chex on vulcan&#39;</span><span class="p">,</span> <span class="n">a_o</span><span class="o">=</span><span class="mi">39</span><span class="p">)</span>
+
+<span class="n">rouq_criteria</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;enforce_y_intercept_positive&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;enforce_pressure_increasing&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;enforce_absorbed_amount&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;enforce_relative_pressure&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;enforce_enough_datapoints&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;min_num_points&quot;</span><span class="p">:</span> <span class="mi">5</span>
+<span class="p">}</span>
+
+<span class="n">aux_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;save_figures&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;export_data&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;ssa_gradient&quot;</span><span class="p">:</span> <span class="s2">&quot;Greens&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;err_gradient&quot;</span><span class="p">:</span> <span class="s2">&quot;Greys&quot;</span>
+<span class="p">}</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">bt</span><span class="o">.</span><span class="n">run_beatmap</span><span class="p">(</span>
+    <span class="n">file</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
+    <span class="n">info</span><span class="o">=</span><span class="s2">&quot;chex on vulcan&quot;</span>
+    <span class="n">a_o</span><span class="o">=</span><span class="mi">39</span><span class="p">,</span>
+    <span class="n">ssa_criterion</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">rouq_criteria</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">aux_params</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </section>
