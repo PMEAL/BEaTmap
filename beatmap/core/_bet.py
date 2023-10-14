@@ -580,8 +580,8 @@ def run_beatmap(file=None,
                 save_figures=True,
                 export_data=False,
                 ssa_criterion="error",
-                ssa_gradient="greens",
-                err_gradient="greys"):
+                ssa_gradient="Greens",
+                err_gradient="Greys"):
     """
     A single function that executes all necessary BEaTmap algorithims.
 

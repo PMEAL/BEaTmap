@@ -16,12 +16,11 @@ __all__ = [
     "plot_bet_combo",
 ]
 
-
-figure_title_size = 18
-legend_label_size = 14
-legend_title_size = 16
-axis_label_size = 16
-axis_title_size = 16
+figure_title_size = 18*1.25
+legend_label_size = 14*1.25
+legend_title_size = 16*1.25
+axis_label_size = 16*1.25
+axis_title_size = 16*1.25
 
 
 def plot_isotherm_data(isotherm_data):
@@ -39,7 +38,8 @@ def plot_isotherm_data(isotherm_data):
         )
         .configure_mark(opacity=0.7)
         .configure_axis(
-            labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True
+            labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True,
+            labelColor="black", titleColor="black", domain=True, domainColor="black"          
         )
         .configure_point(size=100)
         .properties(title="", height=500, width=500)
@@ -74,14 +74,14 @@ def plot_ssa_heatmap(bet_results, mask_results):
                     "Start relative pressure", order="ascending",
                 ),
                 axis=alt.Axis(
-                    tickMinStep=2, tickCount=10, labelSeparation=5, format=",.2r"
+                    tickMinStep=2, tickCount=10, labelSeparation=5, format=",.2f", titlePadding=30
                 ),
             ),
             y=alt.Y(
                 "End relative pressure:O",
                 sort=alt.EncodingSortField("End relative pressure", order="descending"),
                 axis=alt.Axis(
-                    tickMinStep=2, tickCount=10, labelSeparation=5, format=",.2r"
+                    tickMinStep=2, tickCount=10, labelSeparation=5, format=",.2f", titlePadding=30
                 ),
             ),
             color=alt.Color(
@@ -95,6 +95,8 @@ def plot_ssa_heatmap(bet_results, mask_results):
             labelFontSize=axis_label_size,
             titleFontSize=axis_title_size,
             domainColor="white",
+            labelColor="black",
+            titleColor="black"
         )
         .properties(title="", height=600, width=670)
         .configure_title(fontSize=figure_title_size)
@@ -104,9 +106,11 @@ def plot_ssa_heatmap(bet_results, mask_results):
             cornerRadius=10,
             labelFontSize=legend_label_size,
             titleFontSize=legend_title_size,
-            gradientLength=250,
+            gradientLength=425,
             tickCount=5,
             offset=40,
+            labelColor="black",
+            titleColor="black"
         )
         .interactive()
     )
@@ -130,7 +134,7 @@ def plot_err_heatmap(bet_results, mask_results):
     )
     hmap = (
         alt.Chart(source)
-        .mark_rect(stroke="gray", strokeWidth=0.5)
+        .mark_rect(stroke="white", strokeWidth=0.5)
         .encode(
             x=alt.X(
                 "Start relative pressure:O",
@@ -138,14 +142,14 @@ def plot_err_heatmap(bet_results, mask_results):
                     "Start relative pressure", order="ascending",
                 ),
                 axis=alt.Axis(
-                    tickMinStep=2, tickCount=10, labelSeparation=5, format=",.2r"
+                    tickMinStep=2, tickCount=10, labelSeparation=5, format=",.2f", titlePadding=30
                 ),
             ),
             y=alt.Y(
                 "End relative pressure:O",
                 sort=alt.EncodingSortField("End relative pressure", order="descending"),
                 axis=alt.Axis(
-                    tickMinStep=2, tickCount=10, labelSeparation=5, format=",.2r"
+                    tickMinStep=2, tickCount=10, labelSeparation=5, format=",.2f", titlePadding=30
                 ),
             ),
             color=alt.Color(
@@ -159,6 +163,8 @@ def plot_err_heatmap(bet_results, mask_results):
             labelFontSize=axis_label_size,
             titleFontSize=axis_title_size,
             domainColor="white",
+            labelColor="black",
+            titleColor="black"            
         )
         .properties(title="", height=600, width=670,)
         .configure_title(fontSize=figure_title_size)
@@ -168,9 +174,11 @@ def plot_err_heatmap(bet_results, mask_results):
             cornerRadius=10,
             labelFontSize=legend_label_size,
             titleFontSize=legend_title_size,
-            gradientLength=250,
+            gradientLength=425,
             tickCount=5,
             offset=40,
+            labelColor="black",
+            titleColor="black"            
         )
         .interactive()
     )
@@ -214,7 +222,7 @@ def plot_bet(bet_results, mask_results, ssa_answer):
         .mark_line()
         .encode(
             y=alt.Y("1/(n(P/Po-1))", axis=alt.Axis(grid=False)),
-            x=alt.X("P/Po", axis=alt.Axis(format=".2", grid=False)),
+            x=alt.X("P/Po", axis=alt.Axis(format=".2f", grid=False)),
         )
         .properties(title="", height=500, width=500)
     )
@@ -222,7 +230,8 @@ def plot_bet(bet_results, mask_results, ssa_answer):
     line = (
         alt.layer(line)
         .configure_axis(
-            labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True
+            labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True,
+            labelColor="black", titleColor="black", domain=True, domainColor="black" 
         )
         .configure_title(fontSize=figure_title_size)
         .configure_point(size=100)
@@ -243,8 +252,8 @@ def plot_bet(bet_results, mask_results, ssa_answer):
         alt.Chart(data_source)
         .mark_point(filled=True)
         .encode(
-            y=alt.Y("1/(n(P/Po-1))", axis=alt.Axis(grid=False)),
-            x=alt.X("P/Po", axis=alt.Axis(format=".2", grid=False)),
+            y=alt.Y("1/(n(P/Po-1))", axis=alt.Axis(grid=False, ticks=True, titlePadding=20)),
+            x=alt.X("P/Po", axis=alt.Axis(format=".2f", grid=False, ticks=True, titlePadding=20)),
             tooltip=["1/(n(P/Po-1))", "P/Po"],
         )
         .interactive()
@@ -285,8 +294,8 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
         alt.Chart(model_source)
         .mark_line()
         .encode(
-            y=alt.Y("n/nm", axis=alt.Axis(grid=False)),
-            x=alt.X("P/Po", axis=alt.Axis(format=".2", grid=False)),
+            y=alt.Y("n/nm", axis=alt.Axis(grid=False, ticks=True, titlePadding=20)),
+            x=alt.X("P/Po", axis=alt.Axis(format=".2f", grid=False, ticks=True, titlePadding=20)),
             color=" ",
         )
         .properties(title="", height=480, width=622)
@@ -304,7 +313,7 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
         .mark_point()
         .encode(
             y=alt.Y("n/nm", axis=alt.Axis(grid=False)),
-            x=alt.X("P/Po", axis=alt.Axis(format=".2", grid=False)),
+            x=alt.X("P/Po", axis=alt.Axis(format=".2f", grid=False)),
             opacity=" ",
             tooltip=["n/nm", "P/Po"],
         )
@@ -323,7 +332,7 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
         .mark_point(filled=True)
         .encode(
             y=alt.Y("n/nm", axis=alt.Axis(grid=False)),
-            x=alt.X("P/Po", axis=alt.Axis(format=".2", grid=False)),
+            x=alt.X("P/Po", axis=alt.Axis(format=".2f", grid=False)),
             shape=" ",
         )
     )
@@ -331,7 +340,8 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
     chart = (
         alt.layer(model, experimental, experimental_used)
         .configure_axis(
-            labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True
+            labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True,
+            labelColor="black", titleColor="black", domain=True, domainColor="black"
         )
         .configure_title(fontSize=figure_title_size)
         .configure_legend(labelFontSize=legend_label_size, padding=0, titlePadding=0)
@@ -389,7 +399,7 @@ def plot_bet_combo(bet_results, mask_results):
         .mark_line()
         .encode(
             y=alt.Y("1/(n(P/Po-1))", axis=alt.Axis(grid=False)),
-            x=alt.X("P/Po", axis=alt.Axis(format=".2", grid=False)),
+            x=alt.X("P/Po", axis=alt.Axis(format=".2f", grid=False)),
         )
         .properties(title="", height=480, width=622)
     )
@@ -424,7 +434,7 @@ def plot_bet_combo(bet_results, mask_results):
         .mark_line(color="grey")
         .encode(
             y=alt.Y("1/(n(P/Po-1))", axis=alt.Axis(grid=False)),
-            x=alt.X("P/Po", axis=alt.Axis(format=".2", grid=False)),
+            x=alt.X("P/Po", axis=alt.Axis(format=".2f", grid=False)),
         )
     )
 
@@ -443,8 +453,8 @@ def plot_bet_combo(bet_results, mask_results):
         alt.Chart(maxdata_source)
         .mark_point(color="grey")
         .encode(
-            y=alt.Y("1/(n(P/Po-1))", axis=alt.Axis(grid=False)),
-            x=alt.X("P/Po", axis=alt.Axis(format=".2", grid=False)),
+            y=alt.Y("1/(n(P/Po-1))", axis=alt.Axis(grid=False, ticks=True, titlePadding=20)),
+            x=alt.X("P/Po", axis=alt.Axis(format=".2f", grid=False, ticks=True, titlePadding=20)),
             opacity=" ",
             tooltip=["1/(n(P/Po-1))", "P/Po"],
         )
@@ -454,7 +464,8 @@ def plot_bet_combo(bet_results, mask_results):
     chart = (
         alt.layer(minline, mindata, maxline, maxdata)
         .configure_axis(
-            labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True
+            labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True,
+            labelColor="black", titleColor="black", domain=True, domainColor="black"
         )
         .configure_title(fontSize=figure_title_size)
         .configure_legend(labelFontSize=legend_label_size, padding=0, titlePadding=0)
