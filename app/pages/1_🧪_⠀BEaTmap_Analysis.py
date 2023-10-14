@@ -80,7 +80,7 @@ def main():
         st.markdown(texts.err_instruction)
         plots.plot_err_heatmap(state.bet_results, state.mask_results)
 
-    # to know if bet has been performed
+    # Track if BET has been performed
     state.bet_analysis = True
 
 
