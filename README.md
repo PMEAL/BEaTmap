@@ -55,7 +55,31 @@ import beatmap as bt
 import matplotlib.pylot as plt
 
 fpath = bt.utils.get_fixtures_path() / 'vulcan_chex.csv'
-bt.run_beatmap(file=fpath, info='chex on vulcan', a_o=39)
+
+rouq_criteria = {
+    "enforce_y_intercept_positive": True,
+    "enforce_pressure_increasing": True,
+    "enforce_absorbed_amount": True,
+    "enforce_relative_pressure": True,
+    "enforce_enough_datapoints": True,
+    "min_num_points": 5
+}
+
+aux_params = {
+    "save_figures": True,
+    "export_data": False,
+    "ssa_gradient": "Greens",
+    "err_gradient": "Greys"
+}
+
+results = bt.run_beatmap(
+    file=fpath,
+    info="chex on vulcan"
+    a_o=39,
+    ssa_criterion="error",
+    **rouq_criteria,
+    **aux_params
+)
 ```
 
 ## Manual BET analysis
