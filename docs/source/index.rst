@@ -38,4 +38,5 @@ Contents
     :maxdepth: 1
 
     getting_started.rst
+    streamlit.rst
     modules/index.rst
