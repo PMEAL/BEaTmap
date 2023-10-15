@@ -147,9 +147,9 @@ bt.vis.ssa_heatmap(bet_results, mask_results)
 bt.vis.iso_combo_plot(bet_results, mask_results, save_file=True)
 ```
 
-<p align="center">
-	<img src="https://user-images.githubusercontent.com/14086031/92957429-83827e00-f436-11ea-9be7-cda8aacd4569.png" width="100%"></img>
-</p>
+| Specific Surface Area Heatmap | Model Isotherm vs. Experimental Data |
+| --- | --- | 
+| <p>&nbsp;</p> ![](https://github.com/PMEAL/beatmap/assets/14086031/f785b6e4-3df4-4fa6-a6e6-b2bd2da92f96) | <p>&nbsp;</p>![](https://github.com/PMEAL/beatmap/assets/14086031/33efdd0d-9992-4aed-888e-6e7e401037b0) |
 
 ### Export the results
 
