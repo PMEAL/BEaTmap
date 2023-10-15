@@ -56,7 +56,7 @@ img#banner {
     display: block;
     margin-right: auto;
     margin-left: 20px;
-    height: 200px;
+    /* height: 200px; */
 }
 
 img#logo {

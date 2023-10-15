@@ -17,6 +17,7 @@ commonly place that the acronym has is synonymous with surface area.
 
 .. image:: ./_static/logo-old.png
    :name: banner
+   :width: 35%
 
 The BET theory was derived with several assumptions, and these must be met
 for the predicted surface area to be valid. Rouquerol et al have put forth
