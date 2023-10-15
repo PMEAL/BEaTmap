@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://github.com/PMEAL/beatmap/raw/main/docs/source/_static/logo-light-mode.png" width="50%"></img>
+</p>
+
 # What is BEaTmap?
 
 [![image](https://github.com/PMEAL/beatmap/actions/workflows/tests.yml/badge.svg)](https://github.com/PMEAL/beatmap/actions)
