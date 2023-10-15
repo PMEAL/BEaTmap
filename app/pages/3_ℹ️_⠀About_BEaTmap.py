@@ -1,10 +1,5 @@
-import pandas as pd
 import streamlit as st
-from matplotlib import rcParams
-from static import altair_plots as plots
-from static import texts
-
-import beatmap as bt
+from static import texts, utils
 
 st.set_page_config(
     page_title="About BEaTmap",
@@ -13,10 +8,9 @@ st.set_page_config(
     initial_sidebar_state="auto"
 )
 
-st.sidebar.title(":maple_leaf: BEaTmap")
-st.sidebar.markdown(texts.intro_sidebar)
+utils.fill_sidebar()
 
-st.markdown("# :maple_leaf: About BEaTmap")
+st.markdown("# About BEaTmap")
 st.markdown(texts.intro)
 st.markdown("# :books: References")
 st.markdown(texts.references)

@@ -8,7 +8,7 @@ import pandas as pd
 import streamlit as st
 from matplotlib import rcParams
 from static import altair_plots as plots
-from static import texts
+from static import texts, utils
 from static.sample_data import data
 from streamlit_extras.switch_page_button import switch_page
 
@@ -30,12 +30,11 @@ rcParams["font.sans-serif"] = [
     "Tahoma"
 ]
 
+# st.markdown("# :duck: Getting started")
+# st.markdown(texts.getting_started)
 
-st.sidebar.title(":maple_leaf: BEaTmap")
-st.sidebar.markdown(texts.intro_sidebar)
-
-st.markdown("# :duck: Getting started")
-st.markdown(texts.getting_started)
+utils.fill_sidebar()
+utils.fill_header()
 
 st.markdown("## Upload Isotherm Data")
 st.markdown(texts.upload_instruction)

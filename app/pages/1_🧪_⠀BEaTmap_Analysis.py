@@ -1,8 +1,7 @@
-import pandas as pd
 import streamlit as st
 from matplotlib import rcParams
 from static import altair_plots as plots
-from static import texts
+from static import texts, utils
 
 import beatmap as bt
 
@@ -24,10 +23,9 @@ rcParams["font.sans-serif"] = [
 
 
 def main():
-    st.sidebar.title(":maple_leaf: BEaTmap")
-    st.sidebar.markdown(texts.intro_sidebar)
+    utils.fill_sidebar()
 
-    st.markdown("# :maple_leaf: BEaTmap Analysis")
+    st.markdown("# BEaTmap Analysis")
 
     # Bypass calculations if no data is found
     if "bet_results" not in state:
