@@ -149,7 +149,7 @@ bt.vis.iso_combo_plot(bet_results, mask_results, save_file=True)
 
 | Specific Surface Area Heatmap | Model Isotherm vs. Experimental Data |
 | --- | --- | 
-| <p>&nbsp;</p> ![](https://github.com/PMEAL/beatmap/assets/14086031/f785b6e4-3df4-4fa6-a6e6-b2bd2da92f96) | <p>&nbsp;</p>![](https://github.com/PMEAL/beatmap/assets/14086031/33efdd0d-9992-4aed-888e-6e7e401037b0) |
+| ![](https://github.com/PMEAL/beatmap/assets/14086031/f785b6e4-3df4-4fa6-a6e6-b2bd2da92f96) | ![](https://github.com/PMEAL/beatmap/assets/14086031/33efdd0d-9992-4aed-888e-6e7e401037b0) |
 
 ### Export the results
 
