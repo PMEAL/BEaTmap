@@ -2,10 +2,12 @@
 <html class="no-js" lang="en" data-content_root="./">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="User Guide" href="user_guide.html" /><link rel="prev" title="BEaTmap: BET Analysis Tool" href="index.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 --><title>Python Module Index - BEaTmap 0.2 documentation</title>
-<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+        <title>Installation - BEaTmap 0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=6d1593ab" />
@@ -156,8 +158,8 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+  <ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Installation</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="user_guide.html">User Guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
@@ -225,7 +227,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -239,58 +242,47 @@
           </label>
         </div>
         <article role="main">
-          
-<section class="domainindex-section">
-  <h1>Python Module Index</h1>
-  <div class="domainindex-jumpbox"><a href="#cap-b"><strong>b</strong></a></div>
+          <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h1>
+<p>BEaTmap depends heavily on the Scipy Stack. The best way to get a fully functioning environment is to install the <a class="reference external" href="https://www.anaconda.com/download/">Anaconda Python distribution</a>. Be sure to get the <strong>Python 3.9+ version</strong>.</p>
+<p>Once you’ve installed the Anaconda distribution (or the Python distribution of your choice), type and enter the following in a terminal (on Unix-based machines) or a command prompt (on Windows):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install beatmap
+</pre></div>
+</div>
+<p>Note that on Unix-based machines, <code class="docutils literal notranslate"><span class="pre">conda</span></code> is usually automatically initialized in the terminal. On Windows, you should have a shortcut to the “Anaconda Prompt” in the start menu, which is basically a command prompt initialized with <code class="docutils literal notranslate"><span class="pre">conda</span></code>.</p>
+<p>Once initialized, the terminal points to the <code class="docutils literal notranslate"><span class="pre">base</span></code> environment. While you can install BEaTmap in the <code class="docutils literal notranslate"><span class="pre">base</span></code> environment, it is recommended that you create a new environment to avoid accidentally breaking your <code class="docutils literal notranslate"><span class="pre">base</span></code> environment.</p>
+<p>If you think you may be interested in contributing to BEaTmap and wish to both <em>use</em> and <em>edit</em> the source code, then you should clone the <a class="reference external" href="https://github.com/PMEAL/beatmap">repository</a> to your local machine, and install it using the following <code class="docutils literal notranslate"><span class="pre">pip</span></code> command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install -e path/to/beatmap/root/folder
+</pre></div>
+</div>
+<p>For information about contributing, refer to the <a class="reference external" href="https://github.com/PMEAL/beatmap/blob/main/CONTRIBUTING.md">contributors guide</a>.</p>
 </section>
-<table class="domainindex-table">
-  <tr class="pcap">
-    <td></td><td>&#160;</td><td></td>
-  </tr>
-  <tr class="cap" id="cap-b">
-    <td></td><td><strong>b</strong></td><td></td>
-  </tr>
-  <tr>
-    <td><img src="_static/minus.png" class="toggler"
-              id="toggle-1" style="display: none" alt="-" /></td>
-    <td>
-        <a href="modules/index.html#module-beatmap"><code class="xref">beatmap</code></a></td><td>
-    <em></em></td>
-  </tr>
-  <tr class="cg-1">
-    <td></td>
-    <td>&#160;&#160;&#160;
-        <a href="modules/generated/beatmap.core.html#module-beatmap.core"><code class="xref">beatmap.core</code></a></td><td>
-    <em></em></td>
-  </tr>
-  <tr class="cg-1">
-    <td></td>
-    <td>&#160;&#160;&#160;
-        <a href="modules/generated/beatmap.io.html#module-beatmap.io"><code class="xref">beatmap.io</code></a></td><td>
-    <em></em></td>
-  </tr>
-  <tr class="cg-1">
-    <td></td>
-    <td>&#160;&#160;&#160;
-        <a href="modules/generated/beatmap.utils.html#module-beatmap.utils"><code class="xref">beatmap.utils</code></a></td><td>
-    <em></em></td>
-  </tr>
-  <tr class="cg-1">
-    <td></td>
-    <td>&#160;&#160;&#160;
-        <a href="modules/generated/beatmap.vis.html#module-beatmap.vis"><code class="xref">beatmap.vis</code></a></td><td>
-    <em></em></td>
-  </tr>
-</table>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="user_guide.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">User Guide</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Home</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
