@@ -60,7 +60,11 @@ exclude_patterns = []
 # a list of builtin themes.
 
 html_theme = 'furo'
-# html_logo = '_static/beatmap_logo.png'
+html_theme_options = {
+    "sidebar_hide_name": True,
+    "light_logo": "logo-light-mode.png",
+    "dark_logo": "logo-dark-mode.png",
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
