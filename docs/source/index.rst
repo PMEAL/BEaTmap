@@ -36,8 +36,9 @@ Contents
 ########
 
 .. toctree::
-    :maxdepth: 1
+   :maxdepth: 1
 
-    getting_started.rst
-    streamlit.rst
-    modules/index.rst
+   installation.md
+   user_guide.rst
+   streamlit.rst
+   modules/index.rst
