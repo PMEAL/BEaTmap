@@ -56,14 +56,12 @@ img#banner-dark, img#banner-light {
     display: block;
     margin-right: auto;
     margin-left: 20px;
-    /* height: 200px; */
+    width: auto;
+    max-width: 100%;  /* This ensures the image doesn't overflow its container */
 }
 
-img#logo {
-    float: left;
-    opacity: 1;
-    display: block;
-    margin-left: auto;
-    margin-right: 20px;
-    height: 110px;
+@media only screen and (max-width: 500px) {
+    img#banner-dark, img#banner-light {
+        float: none;  /* To no longer share the same line with the text */
+    }
 }
