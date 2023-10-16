@@ -21,6 +21,7 @@ legend_label_size = 14*1.25
 legend_title_size = 16*1.25
 axis_label_size = 16*1.25
 axis_title_size = 16*1.25
+label_color = "gray"
 
 
 def plot_isotherm_data(isotherm_data):
@@ -39,14 +40,14 @@ def plot_isotherm_data(isotherm_data):
         .configure_mark(opacity=0.7)
         .configure_axis(
             labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True,
-            labelColor="black", titleColor="black", domain=True, domainColor="black"          
+            labelColor=label_color, titleColor=label_color, domain=True, domainColor=label_color          
         )
         .configure_point(size=100)
         .properties(title="", height=500, width=500)
         .configure_title(fontSize=figure_title_size)
         .interactive()
     )
-
+    
     st.altair_chart(temp, use_container_width=True)
 
 
@@ -89,28 +90,28 @@ def plot_ssa_heatmap(bet_results, mask_results):
             ),
             tooltip=["SSA", "Start relative pressure", "End relative pressure"],
         )
-        .configure_view(strokeWidth=0)
+        .configure_view(strokeWidth=0, fill="white")
         .configure_scale(bandPaddingInner=0.15)
         .configure_axis(
             labelFontSize=axis_label_size,
             titleFontSize=axis_title_size,
             domainColor="white",
-            labelColor="black",
-            titleColor="black"
+            labelColor=label_color,
+            titleColor=label_color
         )
         .properties(title="", height=600, width=670)
         .configure_title(fontSize=figure_title_size)
         .configure_legend(
             padding=10,
-            strokeColor="white",
-            cornerRadius=10,
+            strokeColor="transparent",  # border color
+            cornerRadius=10,            # border radius
             labelFontSize=legend_label_size,
             titleFontSize=legend_title_size,
             gradientLength=425,
             tickCount=5,
             offset=40,
-            labelColor="black",
-            titleColor="black"
+            labelColor=label_color,
+            titleColor=label_color
         )
         .interactive()
     )
@@ -157,28 +158,28 @@ def plot_err_heatmap(bet_results, mask_results):
             ),
             tooltip=["Error", "Start relative pressure", "End relative pressure"],
         )
-        .configure_view(strokeWidth=0)
+        .configure_view(strokeWidth=0, fill="white")
         .configure_scale(bandPaddingInner=0.15)
         .configure_axis(
             labelFontSize=axis_label_size,
             titleFontSize=axis_title_size,
             domainColor="white",
-            labelColor="black",
-            titleColor="black"            
+            labelColor=label_color,
+            titleColor=label_color            
         )
-        .properties(title="", height=600, width=670,)
+        .properties(title="", height=600, width=670)
         .configure_title(fontSize=figure_title_size)
         .configure_legend(
             padding=10,
-            strokeColor="white",
+            strokeColor="transparent",
             cornerRadius=10,
             labelFontSize=legend_label_size,
             titleFontSize=legend_title_size,
             gradientLength=425,
             tickCount=5,
             offset=40,
-            labelColor="black",
-            titleColor="black"            
+            labelColor=label_color,
+            titleColor=label_color            
         )
         .interactive()
     )
@@ -231,7 +232,7 @@ def plot_bet(bet_results, mask_results, ssa_answer):
         alt.layer(line)
         .configure_axis(
             labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True,
-            labelColor="black", titleColor="black", domain=True, domainColor="black" 
+            labelColor=label_color, titleColor=label_color, domain=True, domainColor=label_color 
         )
         .configure_title(fontSize=figure_title_size)
         .configure_point(size=100)
@@ -341,7 +342,7 @@ def plot_isotherm_combo(bet_results, mask_results, ssa_answer):
         alt.layer(model, experimental, experimental_used)
         .configure_axis(
             labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True,
-            labelColor="black", titleColor="black", domain=True, domainColor="black"
+            labelColor=label_color, titleColor=label_color, domain=True, domainColor=label_color
         )
         .configure_title(fontSize=figure_title_size)
         .configure_legend(labelFontSize=legend_label_size, padding=0, titlePadding=0)
@@ -465,7 +466,7 @@ def plot_bet_combo(bet_results, mask_results):
         alt.layer(minline, mindata, maxline, maxdata)
         .configure_axis(
             labelFontSize=axis_label_size, titleFontSize=axis_title_size, grid=True,
-            labelColor="black", titleColor="black", domain=True, domainColor="black"
+            labelColor=label_color, titleColor=label_color, domain=True, domainColor=label_color
         )
         .configure_title(fontSize=figure_title_size)
         .configure_legend(labelFontSize=legend_label_size, padding=0, titlePadding=0)

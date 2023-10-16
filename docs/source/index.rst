@@ -15,9 +15,15 @@ adsorption isotherms is very widely done using the theory developed by
 Brunauer, Emmett, and Teller in the 1950s. The BET (or BEaT) theory is so
 commonly place that the acronym has is synonymous with surface area.
 
-.. image:: ./_static/logo-old.png
-   :name: banner
+.. image:: ./_static/logo-old-light.png
+   :name: banner-light
    :width: 35%
+   :class: only-light
+
+.. image:: ./_static/logo-old-dark.png
+   :name: banner-dark
+   :width: 35%
+   :class: only-dark   
 
 The BET theory was derived with several assumptions, and these must be met
 for the predicted surface area to be valid. Rouquerol et al have put forth
