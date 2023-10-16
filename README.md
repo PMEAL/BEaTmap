@@ -58,7 +58,7 @@ An "envelope" function, that will import data, perform BET analysis, evaluate th
 import beatmap as bt
 import matplotlib.pylot as plt
 
-fpath = bt.utils.get_fixtures_path() / 'vulcan_chex.csv'
+fpath = bt.utils.get_datasets_path() / 'vulcan_chex.csv'
 
 rouq_criteria = {
     "enforce_y_intercept_positive": True,
@@ -100,8 +100,11 @@ The function returns a named tuple where the first entry is a dataframe of the i
 import beatmap as bt
 import matplotlib.pylot as plt
 
-fpath = bt.utils.get_fixtures_path() / 'vulcan_chex.csv'
-isotherm_data = bt.io.import_data(file=fpath, info='chex on vulcan', a_o=39)
+isotherm_data = bt.io.load_vulcan_dataset()
+
+# Alternatively, you can manually import the CSV data as shown below
+# fpath = bt.utils.get_datasets_path() / 'vulcan_chex.csv'
+# isotherm_data = bt.io.import_data(file=fpath, info='vulcan-chex', a_o=39)
 ```
 
 ### BET analysis

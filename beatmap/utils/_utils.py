@@ -10,6 +10,7 @@ __all__ = [
     "max_min",
     "lin_interp",
     "get_fixtures_path",
+    "get_datasets_path",
     "find_package_root",
     "get_logger",
 ]
@@ -105,6 +106,11 @@ def lin_interp(df, val):
 def get_fixtures_path():
     """Returns the path to the fixtures directory."""
     return find_package_root("beatmap").joinpath("tests", "unit", "fixtures")
+
+
+def get_datasets_path():
+    """Returns the path to the datasets directory."""
+    return find_package_root("beatmap").joinpath("beatmap", "io")
 
 
 def find_package_root(package_name: str):
