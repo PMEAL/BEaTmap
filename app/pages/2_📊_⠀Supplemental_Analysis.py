@@ -68,11 +68,11 @@ def main():
     st.success(f"The specific surface area value is **{ssa_answer:.2f}** $m^2/g$")
 
     tabs = st.tabs([
-        "BET plot",
-        "Regression statistics",
-        "Isotherm combination plot",
-        "BET min/max error plot",
-        "Error heatmap"
+        "BET",
+        "Regression Statistics",
+        "Isotherm Combination",
+        "BET Min/Max Error",
+        "Error Heatmap"
     ])
 
     with tabs[0]:
