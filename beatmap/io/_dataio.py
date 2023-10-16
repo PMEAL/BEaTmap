@@ -1,9 +1,11 @@
 from collections import namedtuple
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import scipy as sp
 
+import beatmap as bt
 from beatmap import core as bet
 from beatmap import utils as utils
 
@@ -14,6 +16,7 @@ __all__ = [
     "export_raw_data",
     "export_processed_data",
     "import_list_data",
+    "load_vulcan_dataset",
 ]
 
 iso_data = namedtuple("iso_data", "iso_df a_o info file")
@@ -317,14 +320,22 @@ def export_processed_data(bet_results, min_num_points=5):
             "slope",
             "y-int",
             "r value",
-            "check1",
-            "check2",
-            "check3",
-            "check4",
-            "check5",
+            "check 1",
+            "check 2",
+            "check 3",
+            "check 4",
+            "check 5",
         ],
     )
 
     export_file_name = bet_results.info + "_processed_data_export.csv"
     processed_data.to_csv(export_file_name, index=None, header=True)
     log.info("Processed data saved as: %s" % (export_file_name))
+
+
+def load_vulcan_dataset() -> np.ndarray:
+    """Returns the Vulcan example dataset."""
+    cwd = Path(__file__).parent
+    fpath = cwd / 'vulcan_chex.txt'
+    isotherm_data = bt.io.import_data(file=fpath, a_o=39, info="vulcan chex")
+    return isotherm_data

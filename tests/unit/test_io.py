@@ -1,6 +1,7 @@
 import unittest
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 import beatmap as bt
@@ -165,6 +166,13 @@ class TestIO(unittest.TestCase):
         # test non numeric a_o
         with self.assertRaises(ValueError):
             bt.io.import_list_data(**self.ao_not_numeric_list_test)
+
+
+    def test_load_vulcan_dataset(self):
+        data = bt.io.load_vulcan_dataset()
+        assert isinstance(data, bt.io._dataio.iso_data)
+        assert data._fields == ('iso_df', 'a_o', 'info', 'file')
+        assert data.iso_df.shape[0] == 28  # number of data points
 
 
 if __name__ == "__main__":

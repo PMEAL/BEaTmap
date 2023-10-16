@@ -6,8 +6,8 @@ An "envelope" function, that will import data, perform BET analysis, evaluate th
 import beatmap as bt
 import matplotlib.pylot as plt
 
-# The next line might break if you don't have the fixtures folder
-fpath = bt.utils.get_fixtures_path() / 'vulcan_chex.csv'
+# Define path to the Vulcan isotherm dataset
+fpath = bt.utils.get_datasets_path() / 'vulcan_chex.csv'
 
 rouq_criteria = {
     "enforce_y_intercept_positive": True,
