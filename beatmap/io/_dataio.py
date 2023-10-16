@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import scipy as sp
 
+import beatmap as bt
 from beatmap import core as bet
 from beatmap import utils as utils
 
@@ -336,4 +337,5 @@ def load_vulcan_dataset() -> np.ndarray:
     """Returns the Vulcan example dataset."""
     cwd = Path(__file__).parent
     fpath = cwd / 'vulcan_chex.txt'
-    return np.loadtxt(fpath, delimiter=',')
+    isotherm_data = bt.io.import_data(file=fpath, a_o=39, info="vulcan chex")
+    return isotherm_data

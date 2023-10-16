@@ -170,8 +170,9 @@ class TestIO(unittest.TestCase):
 
     def test_load_vulcan_dataset(self):
         data = bt.io.load_vulcan_dataset()
-        assert isinstance(data, np.ndarray)
-        assert data.shape == (28, 2)
+        assert isinstance(data, bt.io._dataio.iso_data)
+        assert data._fields == ('iso_df', 'a_o', 'info', 'file')
+        assert data.iso_df.shape[0] == 28  # number of data points
 
 
 if __name__ == "__main__":
