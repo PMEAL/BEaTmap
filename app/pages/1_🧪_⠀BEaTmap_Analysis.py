@@ -37,7 +37,7 @@ def main():
         if "checks" in state:
             state.check_values = [value for value in state.checks]
         else:
-            state.check_values = [True] * 5
+            state.check_values = [True, True, True, False, True]
         state.checks = [
             st.checkbox(label=texts.checks[i], value=state.check_values[i])
             for i in range(5)
