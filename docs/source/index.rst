@@ -17,13 +17,13 @@ commonly place that the acronym has is synonymous with surface area.
 
 .. image:: ./_static/logo-old-light.png
    :name: banner-light
-   :width: 35%
    :class: only-light
+   :width: 300px
 
 .. image:: ./_static/logo-old-dark.png
    :name: banner-dark
-   :width: 35%
    :class: only-dark   
+   :width: 300px
 
 The BET theory was derived with several assumptions, and these must be met
 for the predicted surface area to be valid. Rouquerol et al have put forth

@@ -154,8 +154,6 @@ bt.vis.ssa_heatmap(bet_results, mask_results)
 bt.vis.iso_combo_plot(bet_results, mask_results, save_file=True)
 ```
 
-![ssa_heatmap-combo_plot](https://github.com/PMEAL/BEaTmap/assets/14086031/fee31e9a-ffac-4b5d-ad3d-685bfe0ab99e)
-
 ### Export the results
 
 It might be desireable to have a spreadsheet that contains all results of BET analysis and the Rouquerol criteria. This sheet can be created and saved in the parent directory with the `export_processed_data` function.
