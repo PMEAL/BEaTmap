@@ -16,7 +16,7 @@ __all__ = [
 
 
 def index_of_value(array, value):
-    """ Finds the index of a value in an array most similar to value passed.
+    """Finds the index of a value in an array most similar to value passed.
 
     Parameters
     ----------
@@ -108,6 +108,7 @@ def get_fixtures_path():
 
 
 def find_package_root(package_name: str):
+    """Finds the root directory of a Python package."""
     # Find the spec of the package
     package_spec = importlib.util.find_spec(package_name)
 
@@ -122,11 +123,8 @@ def find_package_root(package_name: str):
     return package_dir.parent
 
 
-
-
-
 def get_logger(name: str) -> logging.Logger:
-    """Get a logger with the given name."""
+    """Returns a logger with the given name."""
     logger = logging.getLogger(name)
     if logger.hasHandlers():
         # If logger has handlers, do not add another to avoid duplicate logs
