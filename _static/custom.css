@@ -50,7 +50,7 @@ div.highlight > pre {
     margin-bottom: -5px;
 }
 
-img#banner {
+img#banner-dark, img#banner-light {
     float: right;
     opacity: 1;
     display: block;
