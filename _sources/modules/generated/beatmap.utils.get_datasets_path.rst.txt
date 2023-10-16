@@ -1,0 +1,6 @@
+get\_datasets\_path
+===================
+
+.. currentmodule:: beatmap.utils
+
+.. autofunction:: get_datasets_path

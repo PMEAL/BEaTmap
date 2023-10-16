@@ -12,9 +12,11 @@ The function returns a named tuple where the first entry is a dataframe of the i
 import beatmap as bt
 import matplotlib.pylot as plt
 
-# The next line might break if you don't have the fixtures folder
-fpath = bt.utils.get_fixtures_path() / 'vulcan_chex.csv'
-isotherm_data = bt.io.import_data(file=fpath, info='chex on vulcan', a_o=39)
+isotherm_data = bt.io.load_vulcan_dataset()
+
+# Alternatively, you can manually import the CSV data as shown below
+# fpath = bt.utils.get_datasets_path() / 'vulcan_chex.csv'
+# isotherm_data = bt.io.import_data(file=fpath, info='vulcan-chex', a_o=39)
 ```
 
 ## BET analysis

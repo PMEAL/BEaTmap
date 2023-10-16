@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="prev" title="iso_combo_plot" href="beatmap.vis.iso_combo_plot.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="get_fixtures_path" href="beatmap.utils.get_fixtures_path.html" /><link rel="prev" title="find_package_root" href="beatmap.utils.find_package_root.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
-        <title>ssa_heatmap - BEaTmap 0.2 documentation</title>
+        <title>get_datasets_path - BEaTmap 0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
@@ -188,9 +188,9 @@
 <li class="toctree-l3"><a class="reference internal" href="beatmap.io.load_vulcan_dataset.html">load_vulcan_dataset</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="beatmap.utils.html">utils</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="beatmap.utils.html">utils</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.find_package_root.html">find_package_root</a></li>
-<li class="toctree-l3"><a class="reference internal" href="beatmap.utils.get_datasets_path.html">get_datasets_path</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">get_datasets_path</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.get_fixtures_path.html">get_fixtures_path</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.get_logger.html">get_logger</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.index_of_value.html">index_of_value</a></li>
@@ -198,14 +198,14 @@
 <li class="toctree-l3"><a class="reference internal" href="beatmap.utils.max_min.html">max_min</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current has-children"><a class="reference internal" href="beatmap.vis.html">vis</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of vis</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="beatmap.vis.html">vis</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of vis</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.vis.ascii_tables.html">ascii_tables</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.vis.bet_combo_plot.html">bet_combo_plot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.vis.dataframe_tables.html">dataframe_tables</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.vis.err_heatmap.html">err_heatmap</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.vis.experimental_data_plot.html">experimental_data_plot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beatmap.vis.iso_combo_plot.html">iso_combo_plot</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">ssa_heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="beatmap.vis.ssa_heatmap.html">ssa_heatmap</a></li>
 </ul>
 </li>
 </ul>
@@ -244,38 +244,12 @@
           </label>
         </div>
         <article role="main">
-          <section id="ssa-heatmap">
-<h1>ssa_heatmap<a class="headerlink" href="#ssa-heatmap" title="Link to this heading">#</a></h1>
+          <section id="get-datasets-path">
+<h1>get_datasets_path<a class="headerlink" href="#get-datasets-path" title="Link to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="beatmap.vis.ssa_heatmap">
-<span class="sig-prename descclassname"><span class="pre">beatmap.vis.</span></span><span class="sig-name descname"><span class="pre">ssa_heatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bet_results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Greens'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beatmap.vis.ssa_heatmap" title="Link to this definition">#</a></dt>
-<dd><p>Creates a heatmap of specific surface areas.</p>
-<p>Shading corresponds to specific surface area, normalized for the minimum
-and maximum specific sa values.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>bet_results</strong><span class="classifier">namedtuple</span></dt><dd><p>The bet_results.ssa element is used to create a heatmap of specific
-surface area answers.</p>
-</dd>
-<dt><strong>mask_results</strong><span class="classifier">namedtuple</span></dt><dd><p>The mask_results.mask element is used to mask the
-specific surface area heatmap so that only valid results are
-displayed.</p>
-</dd>
-<dt><strong>save_file</strong><span class="classifier">bool</span></dt><dd><p>When save_file = True a png of the figure is created in the
-working directory.</p>
-</dd>
-<dt><strong>gradient</strong><span class="classifier">str</span></dt><dd><p>Color gradient for heatmap, must be a vaild color gradient name
-in the seaborn package.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>None</dt><dd></dd>
-</dl>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="beatmap.utils.get_datasets_path">
+<span class="sig-prename descclassname"><span class="pre">beatmap.utils.</span></span><span class="sig-name descname"><span class="pre">get_datasets_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#beatmap.utils.get_datasets_path" title="Link to this definition">#</a></dt>
+<dd><p>Returns the path to the datasets directory.</p>
 </dd></dl>
 
 </section>
@@ -285,15 +259,23 @@ in the seaborn package.</p>
       <footer>
         
         <div class="related-pages">
-          
-          <a class="prev-page" href="beatmap.vis.iso_combo_plot.html">
+          <a class="next-page" href="beatmap.utils.get_fixtures_path.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">get_fixtures_path</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="beatmap.utils.find_package_root.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">iso_combo_plot</div>
+                <div class="title">find_package_root</div>
                 
               </div>
             </a>
@@ -327,8 +309,8 @@ in the seaborn package.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">ssa_heatmap</a><ul>
-<li><a class="reference internal" href="#beatmap.vis.ssa_heatmap"><code class="docutils literal notranslate"><span class="pre">ssa_heatmap()</span></code></a></li>
+<li><a class="reference internal" href="#">get_datasets_path</a><ul>
+<li><a class="reference internal" href="#beatmap.utils.get_datasets_path"><code class="docutils literal notranslate"><span class="pre">get_datasets_path()</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -1,0 +1,6 @@
+load\_vulcan\_dataset
+=====================
+
+.. currentmodule:: beatmap.io
+
+.. autofunction:: load_vulcan_dataset

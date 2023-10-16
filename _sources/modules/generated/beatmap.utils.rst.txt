@@ -17,6 +17,7 @@ utils
       :toctree:
    
       find_package_root
+      get_datasets_path
       get_fixtures_path
       get_logger
       index_of_value
