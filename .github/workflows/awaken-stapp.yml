@@ -1,15 +1,42 @@
-name: Awaken Streamlit App
+# name: Awaken Streamlit App
+
+# on:
+#   schedule:
+#     # Run every 6 days
+#     - cron: '0 0 */6 * *'
+
+# jobs:
+#   keep_awake:
+#     name: Hit Streamlit App URL
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Making a request to Streamlit App
+#       run: |
+#         curl https://beatmap.streamlit.app/
+
+name: Keep Streamlit App Alive
 
 on:
-  schedule:
-    # Run every 6 days
-    - cron: '0 0 */6 * *'
+  workflow_dispatch:
 
 jobs:
-  keep_awake:
-    name: Hit Streamlit App URL
+  wake-up-streamlit:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Making a request to Streamlit App
-      run: |
-        curl https://beatmap.streamlit.io/
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Setup Chrome Driver
+      uses: nanasess/setup-chromedriver@v2
+
+    - name: Install dependencies
+      run: pip install selenium
+
+    - name: Run Selenium Script
+      run: python app/keep_app_alive.py
