@@ -89,3 +89,4 @@ if ("df" in state) and ("a_o" in state):
         plots.plot_isotherm_data(state.isotherm_data)
     with tabs[1]:
         st.dataframe(state.isotherm_data.iso_df)
+
