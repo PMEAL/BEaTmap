@@ -20,7 +20,7 @@ jobs:
         python-version: '3.10'
     
     - name: Make a trivial change to keep app alive
-      run: echo "" >> app/keep_app_alive.py
+      run: echo "" >> "app/0_💾_⠀Upload_Data.py"
 
     - name: Commit and push changes
       uses: EndBug/add-and-commit@v9
