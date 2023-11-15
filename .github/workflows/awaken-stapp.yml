@@ -19,11 +19,8 @@ jobs:
       with:
         python-version: '3.10'
     
-    - name: Setup Chrome Driver
-      uses: nanasess/setup-chromedriver@v2
+    - name: Make a trivial change to keep app alive
+      run: echo "" >> app/keep_app_alive.py
 
-    - name: Install dependencies
-      run: pip install selenium
-
-    - name: Run Selenium Script
-      run: python app/keep_app_alive.py
+    - name: Commit and push changes
+      uses: EndBug/add-and-commit@v9
