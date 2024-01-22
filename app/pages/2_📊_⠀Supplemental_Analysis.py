@@ -13,7 +13,6 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="auto"
 )
-st.set_option("deprecation.showfileUploaderEncoding", False)
 rcParams["axes.formatter.limits"] = 0, 0
 rcParams["font.sans-serif"] = [
     "Lucida Sans Unicode",
