@@ -10,7 +10,6 @@ from matplotlib import rcParams
 from static import altair_plots as plots
 from static import texts, utils
 from static.sample_data import data
-from streamlit_extras.switch_page_button import switch_page
 
 import beatmap as bt
 
@@ -64,7 +63,7 @@ if st.button("Load sample data"):
     st.success("Sample data loaded!")
 
 if st.button("Analyze"):
-    switch_page("⠀beatmap analysis")
+    st.switch_page("pages/1_🧪_⠀BEaTmap_Analysis.py")
 
 if file:
     state.df = pd.read_csv(file)
@@ -88,4 +87,3 @@ if ("df" in state) and ("a_o" in state):
         plots.plot_isotherm_data(state.isotherm_data)
     with tabs[1]:
         st.dataframe(state.isotherm_data.iso_df)
-
